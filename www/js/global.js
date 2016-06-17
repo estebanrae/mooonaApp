@@ -12,6 +12,7 @@ function onDeviceReady(){
 	console.log("Device is ready...");
 	physicalScreenWidth = window.screen.width;
 	physicalScreenHeight = window.screen.height;
+	navigator.notification.alert("alto: " + physicalScreenHeight + "ancho: " + physicalScreenWidth, null, "Medidas", "Cerrar");
 	allowTransitionChange = true;
 	setSelects();
 	inicializarContenido();
