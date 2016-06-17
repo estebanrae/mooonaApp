@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi" />
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <title>Mooona</title>
+</head>
+
+<body>
+            
+    <!--            *   HEADER    *             -->
+
+    <div class="header" data-role="header">
+        <div class="contenedor-header">
+            <img src="img/back.png" alt="back" class="header-back" id="header-back" />
+            <img src="img/titulo.png" alt="mooona" class="header-titulo" id="header-titulo" />
+            <img src="img/menu.png" alt="Menu" class="header-menu" id="header-menu" />
+        </div><!--/contenedor-header-->
+    </div><!--/header-->
+
+    <div class="contenedor-pagina">
+
+        <!--            *   MENU   *             -->
+
+
+        <div class="menu menu-cerrado" id="menu-lado" data-role="panel" data-display="overlay" data-position="right">
+            <ul class="lista-menu">
+                <li class="sub-menu" id="opciones-siento">
+                    <ul>
+                        <li class="opcion" data-ref="menu-hoy-siento" id="opcion-siento"><h4>HOY ME SIENTO...</h4></li>
+                    </ul>
+                </li>
+                <li class="sub-menu" id="opciones-mi">
+                    <ul>
+                        <li class="opcion" data-ref="id" id="opcion-periodo"><h4>MI PERIODO</h4></li>
+                        <li class="opcion" data-ref="id" id="opcion-ejercicio"><h4>MI EJERCICIO</h4></li>
+                        <li class="opcion" data-ref="id" id="opcion-nutricion"><h4>MI NUTRICIÓN</h4></li>
+                    </ul>
+                </li>
+                <li class="sub-menu" id="opciones-calendario">
+                    <ul>
+                        <li class="opcion" data-ref="id" id="opcion-calendario"><h4>CALENDARIO</h4></li>
+                    </ul>
+                </li>
+                <li class="sub-menu" id="opciones-points">
+                    <ul>
+                        <li class="opcion" data-ref="id" id="opcion-points"><h4>MOOONA POINTS</h4></li>
+                    </ul>
+                </li>
+                <li class="sub-menu" id="lista-vacia">
+                    <ul>
+                        <li class="opcion" data-ref="pagina-registro" id="opcion-vacia"><h4>EDITAR PERFIL</h4></li>
+                    </ul>
+                </li>
+                <li class="sub-menu" id="opciones-about">
+                    <ul>
+                        <li class="opcion" data-ref="id" id="opcion-tutorial"><h4>VER TUTORIAL</h4></li>
+                        <li class="opcion" data-ref="id" id="opcion-about"><h4>ABOUT</h4></li>
+                    </ul>
+                </li>
+                <li class="sub-menu preferencias" id="opciones-preferencias">
+                    <ul>
+                        <li id="iconos-preferencias">
+                            <img class="icono-menu" src="img/icono-mail.png" />
+                            <img class="icono-menu" src="img/icono-settings.png" />
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!--/menu-lado-->
+
+
+
+
+        <!--            *   PAGINA PRINCIPAL    *             -->
+
+        <div class="pagina pagina-principal" id="pagina-principal">
+            <div class="contenedor-general azul">
+                <div class="contenedor-arriba" id="contenedor-superior-principal">
+                    <div class="contenedor-fecha-principal" id="contenedor-fecha-principal">
+                        <h1 class="mes"></h1>
+                        <!--<h1 class="dia"></h1>-->
+                    </div><!--/contenedor-fecha-principal-->                
+                    <div class="contenedor-elementos-principal" id="contenedor-elementos-principal">
+                        <div class="contenedor-bordes">
+                        </div><!--/contenedor-bordes-->
+                        <div class="slider-dias" id="slider-dias-lunas">
+                            <div data-orden="1"></div><!--
+                            --><div data-orden="2"></div><!--
+                            --><div data-orden="3"></div><!--
+                            --><div data-orden="4"></div><!--
+                            --><div data-orden="5"></div><!--
+                            --><div data-orden="6"></div><!--
+                            --><div data-orden="7"></div><!--
+                            --><div data-orden="8"></div><!--
+                            --><div data-orden="9"></div><!--
+                            --><div data-orden="10"></div><!--
+                            --><div data-orden="11"></div><!--
+                            --><div data-orden="12"></div><!--
+                            --><div data-orden="13"></div><!--
+                            --><div data-orden="14"></div><!--
+                        --></div><!--/slider-dias-lunas-->
+                        <div class="contenedor-lunas" id="espiral-lunas">
+                            <canvas id="canvas-espiral-lunas" class="canvas-espiral"></canvas>
+                            <canvas id="canvas-espiral-lunas" class="canvas-espiral"></canvas>
+                        </div><!--/espiral-lunas-->
+                    </div><!--/contenedor-elementos-principal-->
+                </div><!--/contenedor-arriba-->
+            </div><!--/contenedor-general-->
+
+            <div class="footer cerrado pagina-principal" id="footer-principal">
+
+                <div class="barra-footer rosa" id="barra-footer-principal" />
+                    <!--<div class="area-de-swipe" id="area-de-swipe">
+                    </div><!--/area-de-swipe-->
+                    <h2 class="titulo-mooona"></h2>
+                </div><!-- /barra-footer-principal -->
+
+
+                <div class="contenedor-mooona-principal pagina-tipo-2 blanco" id="contenedor-mooona-principal">
+                    <h3 class="rango-fechas-mooona" id="rango-fechas-mooona"><span class="dia-inicial pink"></span> A <span class="dia-final pink"></span> DE <span class="mes"></span></h3>
+                    <img class="imagen-principal" />
+                    <h4 class="descripcion-mooona"></h4>
+                    <div class="boton-detalles" id="boton-detalles-mooona">
+                        <h2>VER DETALLES</h2>
+                    </div><!--/boton-detalles-mooona-->
+                </div><!--/contenedor-mooona-principal-->
+
+                <div class="contenedor-detalles-principal blanco pagina-tipo-2" id="contenedor-detalles-principal">
+
+                    <div class="pagina-tipo-3 sub-pag pagina-manzana-principal" id="pagina-manzana-principal" data-orden="1">
+                    </div><!--/pagina-foco-principal-->
+
+                    <div class="pagina-tipo-3 sub-pag pagina-pesa-principal" id="pagina-pesa-principal" data-orden="2">
+                    </div><!--/pagina-foco-principal-->
+
+                    <div class="pagina-tipo-3 sub-pag sub-activa pagina-foco-principal" id="pagina-foco-principal" data-orden="3">
+                    </div><!--/pagina-foco-principal-->
+                    
+                    <div class="pagina-tipo-3 sub-pag pagina-arpa-principal" id="pagina-arpa-principal" data-orden="4">
+                    </div><!--/pagina-foco-principal-->
+
+                    <div class="pagina-tipo-3 sub-pag pagina-flor-principal" id="pagina-flor-principal" data-orden="5">
+                    </div><!--/pagina-foco-principal-->
+
+                    <div class="sub-menu-footer" id="sub-menu-footer">
+                        
+                        <div class="icono-selector-detalles icono-sub-menu" id="selector-detalles-manzana" data-orden="1">
+                            <img src="img/manzana.png" alt="Manzana" />
+                        </div><!--/selector-detalles-foco-->
+
+                        <div class="icono-selector-detalles icono-sub-menu" id="selector-detalles-pesa" data-orden="2">
+                            <img src="img/pesa.png" alt="Pesa" />
+                        </div><!--/selector-detalles-foco-->
+
+                        <div class="icono-selector-detalles icono-sub-menu icono-activo" id="selector-detalles-foco" data-orden="3">
+                            <img src="img/foco.png" alt="Foco" />
+                        </div><!--/selector-detalles-foco-->
+
+                        <div class="icono-selector-detalles icono-sub-menu" id="selector-detalles-arpa" data-orden="4">
+                            <img src="img/arpa.png" alt="Arpa" />
+                        </div><!--/selector-detalles-arpa-->
+
+                        <div class="icono-selector-detalles icono-sub-menu" id="selector-detalles-flor" data-orden="5">
+                            <img src="img/flor.png" alt="Flor" />
+                        </div><!--/selector-detalles-flor-->
+                        
+                    </div><!--/sub-menu-footer-->
+
+
+                </div><!--/contenedor-detalles-principal-->
+
+            </div><!--/footer-principal-->
+
+        </div><!--/pagina-principal-->
+
+
+
+
+
+
+        <!--            *   PAGINA DE REGISTRO    *             -->
+
+        <div class="registro pagina-tipo-1 shadow pagina azul" id="pagina-registro" data-role="page">
+            <div class="contenedor-formulario">
+                <img class="tache" src="img/tache.png" alt="X" id="tache-registro" />
+                <form id="ingresar-datos">
+
+                    <div class="campo-registro" id="campo-nombre">
+                        <h2 class="titulo">YO</h2>
+                        <input type="text" name="nombre" id="in-nombre" placeholder="Nombre" />
+                    </div><!--/campo-nombre-->
+
+                    <div class="campo-registro" id="campo-fecha-nacimiento">
+                        <h2 class="titulo">FECHA DE NACIMIENTO</h2>
+                        <div class="dia campo-rueda">
+                            <h3 class="subtitulo">Día</h3>
+                            <select id="sel-dia-nacimiento">     
+                            </select>
+                        </div><!--/dia-->
+                        <div class="mes campo-rueda">
+                            <h3 class="subtitulo ">Mes</h3>
+                            <select id="sel-mes-nacimiento">                         
+                            </select>
+                        </div><!--/mes-->
+                        <div class="anio campo-rueda">
+                            <h3 class="subtitulo">Año</h3>
+                            <select id="sel-anio-nacimiento">
+                            </select>
+                        </div><!--/anio-->
+                    </div><!--/campo-fecha-nacimiento-->
+
+                    <div class="campo-registro" id="campo-ultima-regla">
+                        <h2 class="titulo">ÚLTIMA REGLA</h2>
+                        <div class="dia campo-rueda">
+                            <h3 class="subtitulo">Día</h3>
+                            <select id="sel-dia-regla">     
+                            </select>
+                        </div><!--/dia-->
+                        <div class="mes campo-rueda">
+                            <h3 class="subtitulo">Mes</h3>
+                            <select id="sel-mes-regla">                         
+                            </select>
+                        </div><!--/mes-->
+                    </div><!--/campo-ultima-regla-->
+
+                    <div class="campo-registro" id="campo-duracion-regla">
+                        <h2 class="titulo">DURACIÓN DE LA REGLA</h2>
+                        <div class="dias">
+                            <h3 class="subtitulo">Días</h3>
+                            <input type="number" class="texto" id="in-duracion-regla" step="1" min="0" value="30" />
+                        </div><!--/dia-->
+                    </div><!--/campo-duracion-regla-->
+
+                    <div class="campo-registro" id="campo-regularidad-periodo">
+                        <h2 class="titulo">REGULARIDAD DEL PERIODO</h2>
+                        <div class="dias">
+                            <h3 class="subtitulo">Días</h3>
+                            <input type="number" class="texto" id="in-regularidad-periodo" step="1" min="0" value="30" />
+                        </div><!--/dia-->
+                    </div><!--/campo-regularidad-periodo-->
+
+                    <div class="campo-registro" id="campo-boton-registrar">
+                        <input type="submit" id="boton-registrar" value="FINALIZAR" />
+                    </div> 
+
+                </form>
+            </div><!--/contenedor-formulario-->    
+        </div><!--/registro-->
+
+
+
+
+
+
+        <!--            *   MENU HOY ME SIENTO    *             -->
+
+        <div class="pagina-tipo-1 shadow pagina-menu-siento azul" id="menu-hoy-siento">
+
+            <div class="fila fila-menu-siento">
+                <div class="contenedor-boton-siento" id="boton-siento-sex">
+                    <img src="img/boton-sex.png" />
+                    <h3>SEXUALIDAD</h3>
+                </div><!--boton-siento-sex-->
+                <div class="contenedor-boton-siento" id="boton-siento-soc">
+                    <img src="img/boton-soc.png" />
+                    <h3>SOCIABILIDAD</h3>
+                </div><!--boton-siento-soc-->
+                <div class="contenedor-boton-siento" id="boton-siento-ape">
+                    <img src="img/boton-ape.png" />
+                    <h3>APETITO</h3>
+                </div><!--boton-siento-ape-->
+            </div><!--fila-->
+
+            <div class="fila fila-menu-siento">
+                <div class="contenedor-boton-siento" id="boton-siento-act">
+                    <img src="img/boton-act.png" />
+                    <h3>ACTIVIDAD FÍSICA</h3>
+                </div><!--boton-siento-act-->
+                <div class="contenedor-boton-siento" id="boton-siento-hum">
+                    <img src="img/boton-hum.png" />
+                    <h3>HUMOR</h3>
+                </div><!--boton-siento-hum-->
+                <div class="contenedor-boton-siento" id="boton-siento-con">
+                    <img src="img/boton-con.png" />
+                    <h3>CONCENTRACIÓN</h3>
+                </div><!--boton-siento-con-->
+            </div><!--fila-->
+
+            <div class="fila fila-menu-siento">
+                <div class="contenedor-boton-siento" id="boton-siento-cre">
+                    <img src="img/boton-cre.png" />
+                    <h3>CREATIVIDAD</h3>
+                </div><!--boton-siento-cre-->
+                <div class="contenedor-boton-siento" id="boton-siento-dol">
+                    <img src="img/boton-dol.png" />
+                    <h3>DOLOR</h3>
+                </div><!--boton-siento-dol-->
+                <div class="contenedor-boton-siento" id="boton-siento-ene">
+                    <img src="img/boton-ene.png" />
+                    <h3>ENERGÍA</h3>
+                </div><!--boton-siento-ene-->
+            </div><!--fila-->
+
+        </div><!--/menu-hoy-siento-->
+
+
+
+
+        <!--            *   MODAL SIENTO    *             -->
+
+        <div class="pagina-tipo-1 modal pagina-siento blanco" id="pagina-siento">
+
+
+            <!--            *   MENU MODAL SIENTO    *             -->        
+
+            <div class="header-siento" id="header-siento">
+                <div class="imagen-icono" id="icono-notas-siento" data-orden="1">
+                    <img alt="Editar"  src="img/icono-editar-texto.png" />
+                </div><!--/imagen-icono-->
+                <div class="imagen-icono icono-activo" id="icono-estrellas-siento" data-orden="2">
+                    <img alt="Estrella" src="img/icono-estrella-texto.png" />
+                </div><!--/imagen-icono-->
+                <div class="imagen-icono" id="icono-estadistica-siento" data-orden="3">
+                    <img alt="Gráfica" src="img/icono-grafica-texto.png" />
+                </div><!--/imagen-icono-->
+            </div><!--/header-siento-->
+
+
+
+            <!--            *   NOTAS MODAL SIENTO    *             --> 
+
+
+            <div class="sub-pag" data-role="page" id="modal-siento-notas" data-orden="1">
+                <textarea class="campo-texto" id="campo-texto-siento"></textarea>
+            </div><!--/modal-siento-notas-->
+
+
+
+            <!--            *   ESTRELLA MODAL SIENTO    *             --> 
+
+            <div class="sub-pag sub-activa" data-role="page" id="modal-siento-estrella" data-orden="2">
+                
+                <div class="barra-fechas azul" id="barra-fechas-siento">
+                    <img src="img/back.png" alt="back" class="barra-siento-back" id="barra-siento-back" />
+                    <h2><span class="dia-semana bold"></span> <span class="dia-mes bold"></span> DE <span class="mes bold"></span> DE <span class="anio bold"></span></h2>
+                    <img src="img/next.png" alt="next" class="barra-siento-next" id="barra-siento-next" />
+                </div><!--/barra-fechas-siento  -->
+
+                <div class="contenedor-datos" id="contenedor-datos-siento">
+                    <img />
+                    <h1 class="titulo-siento" id="titulo-siento"></h1>
+                    <p class="info-siento" id="info-siento"></p>
+                </div><!--/contenedor-datos -->
+                
+                <div class="contenedor-estrellas" id="contenedor-estrellas">
+                    <div class="estrella" id="estrella1" data-magnitud="1" />*</div>
+                    <div class="estrella" id="estrella2" data-magnitud="2" />*</div>
+                    <div class="estrella" id="estrella3" data-magnitud="3" />*</div>
+                    <div class="estrella" id="estrella4" data-magnitud="4" />*</div>
+                    <div class="estrella" id="estrella5" data-magnitud="5" />*</div>
+                </div><!--/contenedor-estrellas-->
+
+            </div><!--/modal-siento-estrella-->
+
+
+
+            <!--            *   GRAFICA MODAL SIENTO    *             --> 
+
+            <div class="sub-pag" data-role="page" id="modal-siento-grafica" data-orden="3">
+
+                <div class="barra-fechas-graph azul" id="barra-fechas-siento">
+                    <img src="img/back.png" alt="back" class="barra-siento-back" id="barra-siento-back-graph" />
+                    <h2><span class="mes bold"></span> DE <span class="anio bold"></span></h2>
+                     <img src="img/next.png" alt="next" class="barra-siento-next" id="barra-siento-next-graph" />
+                </div><!--/barra-fechas-graph-->
+
+                <div class="contenedor-datos">
+                    <img />
+                    <h2>APETITO MENSUAL: <span></span>%</h2>
+                    <h2>APETITO ANUAL: <span></span>%</h2>
+                </div><!--/contenedor-datos-->
+
+                <div class="contenedor-grafica">
+
+                </div><!--/contenedor-grafica-->
+
+            </div><!--/modal-siento-grafica-->
+
+
+
+
+        </div><!--/pagina-siento-->
+
+
+
+
+
+
+    </div><!--/contenedor-pagina-->
+
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.transit.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script type="text/javascript" src="js/suncalc.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/datos.js"></script>
+
+    <script type="text/javascript">
+       /* $(".slider").slick({
+            accessibility: false
+
+        });*/
+    </script>
+</body>
+
+</html>
