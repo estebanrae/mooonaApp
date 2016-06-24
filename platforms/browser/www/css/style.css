@@ -72,6 +72,14 @@ table {
 	color: #FFF;
 }
 
+body{
+	-webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;  
+}
 
 
 
@@ -531,14 +539,16 @@ textarea#campo-texto-siento {
 }
 
 .contenedor-fecha-principal h1{
-	display: inline-block;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	margin: auto;
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	transform: translateY(-50%);
 }
 
-.contenedor-fecha-principal .dia{
-	-webkit-transform: translateY(-20px);
-	-moz-transform: translateY(-20px);
-	transform: translateY(-20px);
-}
 
 .rango-fechas-mooona .dia-inicial,
 .rango-fechas-mooona .dia-final{
@@ -602,9 +612,17 @@ textarea#campo-texto-siento {
 	opacity: 1;
 }
 
-.slider-dias{
-	width: 200%;
+.contenedor-slider-dias{
+	width: 100%;
 	height: 80px;
+	white-space: nowrap;
+	/*-webkit-transform: translateX(calc(-4*100%/9));
+	-moz-transform: translateX(calc(-4*100%/9));
+	transform: translateX(calc(-4*100%/9));*/
+}
+
+.slider-dias{
+	height: 100%;
 }
 
 .contenedor-lunas{
@@ -617,20 +635,40 @@ textarea#campo-texto-siento {
 	position: absolute;
 	left: 0;
 	right: 0;
-	top: -9px;
-	width: 55px;
 	margin: auto;
-	height: 55px;
-	border-right: 1.5px solid rgba(179,193,200,0.6);
-	border-left: 1.5px solid rgba(179,193,200,0.6);
+	height: 80px;
+
+}
+.contenedor-bordes::before{
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1px;
+	background-color: white;
+	bottom: 0;
+}
+.contenedor-bordes::after{
+	content: "";
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 1px;
+	background-color: white;
+	bottom: 0;
+}
+
+.contenedor-fecha-activa{
+	font-weight: bold;
 }
 
 .slider-dias div{
 	position: relative;
 	display: inline-block;
-	width: 7%;
-	height: 100%;
-	vertical-align: middle;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+  	transform: translateY(-50%);
 }
 
 /*.canvas-espiral{

@@ -7,12 +7,13 @@ $(document).ready(function(){
 var physicalScreenWidth;
 var physicalScreenHeight; 
 var allowTransitionChange;
+var objetoLunas;
 
 function onDeviceReady(){
 	console.log("Device is ready...");
 	physicalScreenWidth = window.screen.width;
 	physicalScreenHeight = window.screen.height;
-	navigator.notification.alert("alto: " + physicalScreenHeight + "ancho: " + physicalScreenWidth, null, "Medidas", "Cerrar");
+	//navigator.notification.alert("alto: " + physicalScreenHeight + "ancho: " + physicalScreenWidth, null, "Medidas", "Cerrar");
 	allowTransitionChange = true;
 	setSelects();
 	inicializarContenido();
@@ -49,11 +50,33 @@ function onDeviceReady(){
 	});
 
 	$("#slider-dias-lunas").on("swipeleft", function(e){
-		cambiarFechaSlider(1);
+		if(!objetoLunas.movimiento){
+			var anchoIndiv = physicalScreenWidth/7;
+			var orden = $("#slider-dias-lunas .contenedor-fecha-activa").attr("data-orden");
+			$("#slider-dias-lunas").transition({x: '-=' + anchoIndiv});		
+			var nuevoOrden = parseInt(orden) + 1;
+			cambiarFechaSlider(orden, nuevoOrden);
+		}
 	});
 
 	$("#slider-dias-lunas").on("swiperight", function(e){
-		cambiarFechaSlider(-1);
+		if(!objetoLunas.movimiento){
+			var anchoIndiv = physicalScreenWidth/7;
+			var orden = $("#slider-dias-lunas .contenedor-fecha-activa").attr("data-orden");
+			$("#slider-dias-lunas").transition({x: '+=' + anchoIndiv});
+			var nuevoOrden = parseInt(orden) - 1;
+			cambiarFechaSlider(orden, nuevoOrden);
+		}
+	});
+
+	$("#slider-dias-lunas div").click(function(e){
+		if(!objetoLunas.movimiento){
+			var anchoIndiv = physicalScreenWidth/7;
+			var orden = $("#slider-dias-lunas .contenedor-fecha-activa").attr("data-orden");
+			var nuevoOrden = $(this).attr("data-orden");
+			$("#slider-dias-lunas").transition({x: '+=' + anchoIndiv*(orden-nuevoOrden)});
+			cambiarFechaSlider(orden, nuevoOrden);
+		}
 	});
 
 	$("#sub-menu-footer .icono-selector-detalles").click(function(){
@@ -426,7 +449,7 @@ function esconderPaginaModal(id){
 
 function inicializarContenido(){
 	cargarFechaPrincipal();
-	espiral();
+	objetoLunas = inicializarDibujo();
 
 }
 
@@ -453,16 +476,25 @@ function cargarFechaPrincipal(){
 }
 
 function cargarSlider(dia, mes, anio){
+	var dias = localStorage.getItem('regularidad_usr');
 	for (var i = 1; i <= 150; i++){
 		var fecha = new Date(anio, mes, dia);		
 		fecha.setDate(dia - 151 + i);
-		$("#slider-dias-lunas").append("<div data-orden='" + i + "'><h2>" + fecha.getDate() + "</h2><img src='" + "sa" + "'/><h3>" + fecha.getMonth() + "</h3></div>");
+		var fase = SunCalc.getMoonIllumination(fecha).phase;
+		var claveUrlLuna = Math.round(fase*dias);
+		$("#slider-dias-lunas").append("<div data-orden='" + i + "'><h2>" + fecha.getDate() + "</h2><img src='/img/luna-" + claveUrlLuna + ".png'/><h3>" + fecha.getMonth() + "</h3></div>");
+		
 	}
-	$("#slider-dias-lunas").append("<div data-orden='151' class='contenedor-fecha-activa'><h2>" + dia + "</h2><img src='" + "sa" + "'/><h3>" + mes + "</h3></div>");
+	var fechaHoy = new Date(anio, mes, dia);
+	var fase = SunCalc.getMoonIllumination(fecha).phase;
+	var claveUrlLuna = Math.round(fase*dias);
+	$("#slider-dias-lunas").append("<div data-orden='151' class='contenedor-fecha-activa'><h2>" + dia + "</h2><img src='/img/luna-" + claveUrlLuna + ".png'/><h3>" + mes + "</h3></div>");
 	for (var i = 152; i <= 300; i++){
 		var fecha = new Date(anio, mes, dia);		
 		fecha.setDate(dia - 151 + i);
-		$("#slider-dias-lunas").append("<div data-orden='" + i + "'><h2>" + fecha.getDate() + "</h2><img src='" + "sa" + "'/><h3>" + fecha.getMonth() + "</h3></div>");
+		var fase = SunCalc.getMoonIllumination(fecha).phase;
+		var claveUrlLuna = Math.round(fase*dias);
+		$("#slider-dias-lunas").append("<div data-orden='" + i + "'><h2>" + fecha.getDate() + "</h2><img src='/img/luna-" + claveUrlLuna + ".png'/><h3>" + fecha.getMonth() + "</h3></div>");
 	}
 	var ancho = 0;
 	var anchoIndiv = physicalScreenWidth/7;
@@ -474,49 +506,8 @@ function cargarSlider(dia, mes, anio){
 	$("#slider-dias-lunas").width(ancho);
 	$("#slider-dias-lunas").css({x: -anchoIndiv*147});
 
-	/*$("#slider-dias-lunas div[data-orden=8]").html("<h2>" + dia + "</h2><img src='" + "sa" + "'/>");
-	console.log($("#slider-dias-lunas div[data-orden=8]"));
-	for (var i = 1; i < 8; i++){
-		var fecha = new Date(anio, mes, dia);		
-		fecha.setDate(dia - 8 + i);
-		console.log(fecha);
-		$("#slider-dias-lunas div[data-orden='" + i + "']").html("<h2>" + fecha.getDate() + "</h2><img src='" + "sa" + "'/>");
-	}
-	for (var i = 1; i < 8; i++){
-		var fecha = new Date(anio, mes, dia);		
-		fecha.setDate(dia + i);
-		console.log(fecha);
-		$("#slider-dias-lunas div[data-orden='" + (i + 8) + "']").html("<h2>" + fecha.getDate() + "</h2><img src='" + "sa" + "'/>");
-	}*/
 }
 
-function espiral(){
-	var c=document.getElementById("canvas-espiral-lunas");
-    var cxt=c.getContext("2d");
-    var ancho = $("#espiral-lunas").width();
-    var alto = $("#espiral-lunas").height();
-    c.width = ancho;
-	c.height = alto;
-    var maxAltura = alto - 30;
-    var alpha = 0;
-    var moveX = 1;
-    var moveY = 1;
-    var valorArb = ancho*0.025;
-    
-    cxt.beginPath();
-    cxt.moveTo(ancho/2 + valorArb, alto/2 );
-    while(moveX > 0){
-    	var moveX = ancho/2 + (valorArb*Math.exp(0.8687*alpha/360))*Math.cos(alpha*Math.PI/180);
-    	var moveY = alto/2 - (valorArb*Math.exp(0.8687*alpha/360))*Math.sin(alpha*Math.PI/180);
-    	cxt.lineTo(moveX, moveY);
-    	alpha++;
-  
-    }
-    //cxt.lineTo(ancho/2 + valorArb, alto/2);
-    cxt.lineWidth = .5;
-    cxt.strokeStyle="rgba(179,193,200,0.6)";
-    cxt.stroke();
-}
 
 function toggleMooonaGeneral(){
 	if($("#footer-principal").hasClass("cerrado")){
@@ -569,20 +560,12 @@ function abrirPaginaDetalles(){
 	$("#contenedor-detalles-principal").transition({y: 0});
 }
 
-function cambiarFechaSlider(direccion){
-	var anchoIndiv = physicalScreenWidth/7;
-	var orden = $("#slider-dias-lunas .contenedor-fecha-activa").attr("data-orden");
-	if(direccion == 1){
-		$("#slider-dias-lunas").transition({x: '-=' + anchoIndiv});		
-		var nuevoOrden = parseInt(orden) + 1;
-	}else{
-		$("#slider-dias-lunas").transition({x: '+=' + anchoIndiv});
-		var nuevoOrden = parseInt(orden) - 1;
-	}
+function cambiarFechaSlider(ordenActual, ordenProximo){
+	
 	$("#slider-dias-lunas .contenedor-fecha-activa").removeClass("contenedor-fecha-activa");
-	$("#slider-dias-lunas div[data-orden=" + nuevoOrden + "]").addClass("contenedor-fecha-activa");
-	var mesPasado = $("#slider-dias-lunas div[data-orden=" + orden + "]").find("h3").html();
-	var mesActual = $("#slider-dias-lunas div[data-orden=" + nuevoOrden + "]").find("h3").html();
+	$("#slider-dias-lunas div[data-orden=" + ordenProximo + "]").addClass("contenedor-fecha-activa");
+	var mesPasado = $("#slider-dias-lunas div[data-orden=" + ordenActual + "]").find("h3").html();
+	var mesActual = $("#slider-dias-lunas div[data-orden=" + ordenProximo + "]").find("h3").html();
 	var contenedorMesPasado;
 	var contenedorMesActual;
 	$("#contenedor-fecha-principal .mes").each(function(){
@@ -599,4 +582,11 @@ function cambiarFechaSlider(direccion){
 			contenedorMesActual.fadeIn(300);
 		});
 	}
+	objetoLunas.moverLunas(ordenProximo - ordenActual);
+	console.log(objetoLunas.movimiento);
+
+	
+	
 }
+
+

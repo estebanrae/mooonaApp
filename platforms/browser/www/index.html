@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi, user-scalable=no" />
 
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <title>Mooona</title>
@@ -83,27 +83,16 @@
                 <div class="contenedor-arriba" id="contenedor-superior-principal">
                     <div class="contenedor-fecha-principal" id="contenedor-fecha-principal">
                         <h1 class="mes"></h1>
+                        <h1 class="mes mes-alterno" style="display:none"></h1>
                         <!--<h1 class="dia"></h1>-->
                     </div><!--/contenedor-fecha-principal-->                
                     <div class="contenedor-elementos-principal" id="contenedor-elementos-principal">
-                        <div class="contenedor-bordes">
-                        </div><!--/contenedor-bordes-->
-                        <div class="slider-dias" id="slider-dias-lunas">
-                            <div data-orden="1"></div><!--
-                            --><div data-orden="2"></div><!--
-                            --><div data-orden="3"></div><!--
-                            --><div data-orden="4"></div><!--
-                            --><div data-orden="5"></div><!--
-                            --><div data-orden="6"></div><!--
-                            --><div data-orden="7"></div><!--
-                            --><div data-orden="8"></div><!--
-                            --><div data-orden="9"></div><!--
-                            --><div data-orden="10"></div><!--
-                            --><div data-orden="11"></div><!--
-                            --><div data-orden="12"></div><!--
-                            --><div data-orden="13"></div><!--
-                            --><div data-orden="14"></div><!--
-                        --></div><!--/slider-dias-lunas-->
+                        <div class="contenedor-slider-dias" id="contenedor-slider-dias">
+                            <div class="contenedor-bordes">
+                            </div><!--/contenedor-bordes-->
+                            <div class="slider-dias" id="slider-dias-lunas">
+                            </div><!--/slider-dias-lunas-->
+                        </div><!--/contenedor-slider-dias-->
                         <div class="contenedor-lunas" id="espiral-lunas">
                             <canvas id="canvas-espiral-lunas" class="canvas-espiral"></canvas>
                             <canvas id="canvas-espiral-lunas" class="canvas-espiral"></canvas>
@@ -229,7 +218,7 @@
                     </div><!--/campo-ultima-regla-->
 
                     <div class="campo-registro" id="campo-duracion-regla">
-                        <h2 class="titulo">DURACIÓN DE LA REGLA</h2>
+                        <h2 class="titulo">DURACIÓN DEL PERIODO</h2>
                         <div class="dias">
                             <h3 class="subtitulo">Días</h3>
                             <input type="number" class="texto" id="in-duracion-regla" step="1" min="0" value="30" />
@@ -406,10 +395,11 @@
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/jquery.transit.js"></script>
-    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript" src="js/suncalc.js"></script>
-    <script type="text/javascript" src="js/global.js"></script>
     <script type="text/javascript" src="js/datos.js"></script>
+    <script type="text/javascript" src="js/lunas.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
 
     <script type="text/javascript">
        /* $(".slider").slick({
