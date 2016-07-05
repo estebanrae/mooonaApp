@@ -96,6 +96,8 @@
     <preference name="HideKeyboardFormAccessoryBar" value="true" />
     <icon src="icon.png" />
     <access origin="*" />
+    <access origin="http://localhost" />
+    <access origin="http://canteraestudio.com" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />

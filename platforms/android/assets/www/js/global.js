@@ -4,49 +4,134 @@ $(document).ready(function(){
 
 });
 
+
 var physicalScreenWidth;
 var physicalScreenHeight; 
 var allowTransitionChange;
 var objetoLunas;
+var db;
+var coneccion;
 
 function onDeviceReady(){
 	console.log("Device is ready...");
 	physicalScreenWidth = window.screen.width;
 	physicalScreenHeight = window.screen.height;
 	//navigator.notification.alert("alto: " + physicalScreenHeight + "ancho: " + physicalScreenWidth, null, "Medidas", "Cerrar");
+	localStorage.setItem('nombre_usr', '');
 	allowTransitionChange = true;
 	setSelects();
-	inicializarContenido();
 	localStorage.setItem('previa', '');
 	if(localStorage.getItem('nombre_usr') == null || !localStorage.getItem('nombre_usr').length){
-		
+		$('#iniciar-sesion').show();
 		cerrarTodo('pagina-registro', desplegarPaginaShadow);
 	}else{
+		inicializarContenido();
 		setPaginaActiva('pagina-principal');
-		llenarCamposRegistro();
-	}
+	}	
+	coneccion = true;
 
-	$('#boton-registrar').click(function(e){
+	document.addEventListener('online', function(){coneccion = true}, false);
+	document.addEventListener('offline', function(){coneccion = false}, false);
+	//eliminarTablaCalendario();
+
+	$('#boton-registrar').on('tap', function(e){
 		e.preventDefault();
-		validarRegistro();
+		validarRegistro();		
 
 	});
 
-	$('#header-menu').click(function(e){
+	$(".abrir-registrar").on('tap',function(e){
+		e.preventDefault();
+		cambioSesion('iniciar-sesion', 'registro-sesion');
+	});
+
+	$(".abrir-iniciar-s").on('tap',function(e){
+		e.preventDefault();
+		cambioSesion('registro-sesion', 'iniciar-sesion');
+	});
+
+	$('#header-menu').on('tap',function(e){
 		toggleMenu();
 	});
 
-	$('#header-back').click(function(){
+	$('#header-back').on('tap',function(){
 		botonBack();
 	});
 
-	$("#icono-notas-siento").click(function(){
+	$("#icono-notas-siento").on('tap',function(){
 		$("#campo-texto-siento").focus();
 	});
 
 	$("#barra-footer-principal").on("swipeup", function(e){
 		abrirMooonaGeneral();
 		//$(this).css({top: '60px'});
+	});
+
+	$("#radio-todo-dia").on('change', function(){
+		if($(this).is(":checked")){
+			cambiarTodoElDia(true);
+		}else{
+			cambiarTodoElDia(false);
+		}
+	});
+
+	$("#boton-guardar-evento").on('tap',function(){
+		validarEventoNuevo();
+	});
+	
+	$("#cerrar-evento-nuevo").on('tap',function(){
+		activarBotonBack('pagina-evento', true);
+		esconderPaginaShadow('pagina-evento-nuevo');
+	});
+
+	$("#repetir-evento img").on('tap',function(){	
+		var hoy = new Date($("#input-anio-escondido").val(), $("#input-mes-escondido").val(), $("#input-dia-escondido").val());
+		$("#dias-repetir").show();
+		$("#dias-repetir select option").each(function(){ $(this).removeAttr("selected");})
+		$("#dias-repetir select option[value='0']").attr("selected", 'true');
+		$(this).hide();
+	});
+
+	$("#dias-repetir select").on('change', function(){
+		if($(this).find("option:selected").val() == '-1'){
+			$("#dias-repetir").hide();
+			$("#repetir-evento img").show();
+		}
+	});
+
+	$("#enviar-inicio-s").on('tap', function(){
+		validarInicioSesion();
+	});
+
+	/*$("#repetir-evento li").on('tap',function(){
+		if($(this).attr('data-active') == 'true'){
+			$(this).attr('data-active', 'false');
+			var activos= false;
+			$("#repetir-evento li").each(function(){
+				if($(this).attr('data-active') == 'true'){
+					activos = true;
+				}
+			});
+			if(!activos){
+				$("#dias-repetir").hide();
+				$("#repetir-evento img").show();
+			}
+		}else{
+			$(this).attr('data-active', 'true');
+		}
+	});*/
+
+	$("#boton-agregar-evento").on('tap',function(){
+		var actual =  localStorage.getItem('activa');
+		var fecha = '';
+		
+		var dia = $("#input-dia-escondido").val();
+		var mes = $("#input-mes-escondido").val();
+		var anio = $("#input-anio-escondido").val();
+		fecha = new Date(anio, mes, dia);
+		activarBotonBack('pagina-evento-nuevo', true);
+		cargarDatosEventoNuevo(fecha);
+		desplegarPaginaShadow('pagina-evento-nuevo');
 	});
 
 	$("#slider-dias-lunas").on("swipeleft", function(e){
@@ -68,18 +153,9 @@ function onDeviceReady(){
 			cambiarFechaSlider(orden, nuevoOrden);
 		}
 	});
+	
 
-	$("#slider-dias-lunas div").click(function(e){
-		if(!objetoLunas.movimiento){
-			var anchoIndiv = physicalScreenWidth/7;
-			var orden = $("#slider-dias-lunas .contenedor-fecha-activa").attr("data-orden");
-			var nuevoOrden = $(this).attr("data-orden");
-			$("#slider-dias-lunas").transition({x: '+=' + anchoIndiv*(orden-nuevoOrden)});
-			cambiarFechaSlider(orden, nuevoOrden);
-		}
-	});
-
-	$("#sub-menu-footer .icono-selector-detalles").click(function(){
+	$("#sub-menu-footer .icono-selector-detalles").on('tap',function(){
 		
 		var orden_prox = $(this).attr("data-orden");
 		var orden_act = $(".sub-activa").attr("data-orden"); 
@@ -108,26 +184,32 @@ function onDeviceReady(){
 		cerrarMenu();
 	});
 
-	$("#barra-footer-principal").click(function(){
+	$("#barra-footer-principal").on('tap',function(){
 		toggleMooonaGeneral();
 	});
 
-	$("#boton-detalles-mooona").click(function(){
+	$("#boton-detalles-mooona").on('tap',function(){
 		abrirPaginaDetalles();
 	});
 
-	$("#header-siento .imagen-icono").click(function(){
+	$("#header-siento .imagen-icono").on('tap',function(){
 		var orden_prox = $(this).attr("data-orden");
 		var orden_act = $(".sub-activa").attr("data-orden");
-		cambiarSubPaginaModal(orden_prox, orden_act, "pagina-siento");
+		if(orden_act == orden_prox){return;}
+		if(allowTransitionChange){
+			allowTransitionChange = false;
+			cambiarSubPaginaModal(orden_prox, orden_act, "pagina-siento", function(){
+				allowTransitionChange = true;
+			});
+		}
 	});
 
-	$('.contenedor-boton-siento').click(function(e){
+	$('.contenedor-boton-siento').on('tap',function(e){
 		var id = $(this).attr('id');
 		cargarSiento(id, desplegarPaginaModal);
 	});
 
-	$(".opcion").click(function(e){
+	$(".opcion").on('tap',function(e){
 		if($(this).hasClass('opcion-seleccionada')){
 			return;
 		}else{
@@ -138,7 +220,7 @@ function onDeviceReady(){
 			}else{
 				$('.opcion-seleccionada').each(function(){
 					$(this).removeClass('opcion-seleccionada');
-				});
+				});			
 				$(this).addClass('opcion-seleccionada');
 				var id = $(this).attr('id');
 
@@ -149,6 +231,45 @@ function onDeviceReady(){
 		}
 	});
 
+	$(".calendario-fecha-prev").on('tap',function(){
+		cambiarMesCalendario(-1);
+	});
+
+	$(".calendario-fecha-next").on('tap',function(){
+		cambiarMesCalendario(1);
+	});
+
+	$(".calendario-eventos-next").on('tap',function(){
+		console.log("AA");
+		cambiarDiaCalendario(1);
+	});
+
+	$(".calendario-eventos-prev").on('tap',function(){
+		cambiarDiaCalendario(-1);
+	});
+
+	$(".pagina-calendario .barra-mes").on("swipeleft", function(e){
+		cambiarMesCalendario(1);
+	});
+
+	$(".pagina-calendario .barra-mes").on("swiperight", function(e){
+		cambiarMesCalendario(-1);
+	});
+}
+
+function cambiarMesCalendario(direc){
+	var fecha = $("#mes-calendario-general").val();
+	var fechaArr = fecha.split('-');
+	var nuevo_mes = parseInt(fechaArr[1]) + direc;
+	fechaJSPrevia = new Date(fechaArr[0], nuevo_mes, fechaArr[2]);
+	cargarCalendario(fechaJSPrevia);
+}
+
+function cambiarDiaCalendario(direc){
+	var diaNuevo = parseInt($("#input-dia-escondido").val()) + direc;
+	var fecha = new Date($("#input-anio-escondido").val(), $("#input-mes-escondido").val(), diaNuevo);
+	var obj = {data: fecha};
+	cargarEvento(obj);
 
 }
 
@@ -162,26 +283,7 @@ function setSelects(){
 		$('#sel-dia-nacimiento, #sel-dia-regla').append("<option value=" + dia + ">" + dia + "</option>");
 	}
 	for(var mes=0; mes < meses.length; mes++){
-		$('#sel-mes-nacimiento, #sel-mes-regla').append("<option value=" + meses[mes] + ">" + meses[mes] + "</option>");
-	}
-}
-
-function validarRegistro(){
-	if($('#in-nombre').val() == ''){
-		navigator.notification.alert("Por favor ingresa tu nombre.", null, "Invalido", "Cerrar");
-		return;
-	}else{
-		localStorage.setItem('nombre_usr', $("#in-nombre").val());
-		localStorage.setItem('nacimiento_d_usr', $("#sel-dia-nacimiento option:selected").val());
-		localStorage.setItem('nacimiento_m_usr', $("#sel-mes-nacimiento option:selected").val());
-		localStorage.setItem('nacimiento_a_usr', $("#sel-anio-nacimiento option:selected").val());
-		localStorage.setItem('ultima_d_usr', $("#sel-dia-regla option:selected").val());
-		localStorage.setItem('ultima_m_usr', $("#sel-mes-regla option:selected").val());
-		localStorage.setItem('duracion_usr', $("#in-duracion-regla").val());
-		localStorage.setItem('regularidad_usr', $("#in-regularidad-periodo").val());
-		esconderPaginaShadow('pagina-registro');
-		//setPaginaActiva('pagina-principal');
-		botonBack();
+		$('#sel-mes-nacimiento, #sel-mes-regla').append("<option value=" + mes + ">" + meses[mes] + "</option>");
 	}
 }
 
@@ -220,11 +322,12 @@ function activarBotonBack(id, mostrar){
 			previa.splice(key, 1);
 		}
 	});
-	if(	$("#" + activa).hasClass("modal")){permite = false}	
+	if(	$("#" + activa).hasClass("modal") || $("#" + activa).hasClass("eventos") || $("#" + activa).hasClass("evento-nuevo")){permite = false}	
 
 	if(permite){
 		previa.push(activa);
 	}
+
 	
 	localStorage.setItem('previa', JSON.stringify(previa));
 	$('.activa').each(function(){
@@ -263,6 +366,11 @@ function desplegarPagina(id, callback){
 		res = true; 
 	}
 
+	if($('#'+id).hasClass('pagina-calendario')){
+		desplegarPaginaCalendario(id);
+		res = true;
+	}
+
 	if($('#'+id).hasClass('pagina-principal')){
 		$('.opcion-seleccionada').each(function(){
 			$(this).removeClass('opcion-seleccionada');
@@ -276,11 +384,11 @@ function desplegarPagina(id, callback){
 
 function llenarCamposRegistro(){
 	$("#in-nombre").val(localStorage.getItem('nombre_usr'));
-	$("#sel-dia-nacimiento option:selected").val(localStorage.getItem('nacimiento_d_usr'));
-	$("#sel-mes-nacimiento option:selected").val(localStorage.getItem('nacimiento_m_usr'));
-	$("#sel-anio-nacimiento option:selected").val(localStorage.getItem('nacimiento_a_usr'));
-	$("#sel-dia-regla option:selected").val(localStorage.getItem('ultima_d_usr'));
-	$("#sel-mes-regla option:selected").val(localStorage.getItem('ultima_m_usr'));
+	$("#sel-dia-nacimiento option[value='" + localStorage.getItem('nacimiento_d_usr') + "']").attr("selected", "selected");
+	$("#sel-mes-nacimiento option[value='" + localStorage.getItem('nacimiento_m_usr') + "']").attr("selected", "selected");
+	$("#sel-anio-nacimiento option[value='" + localStorage.getItem('nacimiento_a_usr') + "']").attr("selected", "selected");
+	$("#sel-dia-regla option[value='" + localStorage.getItem('ultima_d_usr') + "']").attr("selected", "selected");
+	$("#sel-mes-regla option[value='" + localStorage.getItem('ultima_m_usr') + "']").attr("selected", "selected");
 	$("#in-duracion-regla").val(localStorage.getItem('duracion_usr'));
 	$("#in-regularidad-periodo").val(localStorage.getItem('regularidad_usr'));
 }
@@ -321,6 +429,11 @@ function esconderPaginaShadow(id){
 	});
 }
 
+function desplegarPaginaCalendario(id){
+	$("#"+id).show().transition({x:0});
+	cargarCalendario(new Date());
+}
+
 function cerrarTodo(idActual, callback){
 	$(".shadow").each(function(){
 		var id = $(this).attr('id');
@@ -329,13 +442,12 @@ function cerrarTodo(idActual, callback){
 		}	
 	});
 
-	$(".modal").each(function(){
+	$(".desplegar-izquierda").each(function(){
 		var id = $(this).attr('id');
 		if(id !== idActual){
 			esconderPaginaModal(id);
 		}
 	});
-	
 	
 	cerrarMooonaGeneral();
 	cerrarMenu();
@@ -349,9 +461,14 @@ function selectorPaginas(id){
 			activarBotonBack('menu-hoy-siento', true);
 			break;
 		case 'opcion-vacia':
+			$('.contenedor-formulario').show();
 			cerrarTodo('pagina-registro', desplegarPaginaShadow);
 			activarBotonBack('pagina-registro', true);
 			break;
+		case 'opcion-calendario':			
+			cerrarTodo('pagina-calendario', desplegarPaginaCalendario);
+			activarBotonBack('pagina-calendario', true);
+			break; 
 		default:
 			navigator.notification.alert("Sección en construcción", null, "Próximamente", "Cerrar");
 			break;
@@ -365,7 +482,7 @@ function cambiarSubPaginaModal(orden_prox, orden_act, id, callback){
 
 		actual.addClass("mover-a-izquierda");
 		proximo.addClass("mover-de-derecha sub-activa");
-		setTimeout(function() {		
+		actual.on("animationend", function(){
 			actual.removeClass("sub-activa");
 			actual.removeClass("mover-a-izquierda");
 			proximo.removeClass("mover-de-derecha");
@@ -373,12 +490,14 @@ function cambiarSubPaginaModal(orden_prox, orden_act, id, callback){
 				$("#" + id).find("#campo-texto-siento").focus();
 			}
 			callback();
-		}, 500);
+			actual.off("animationend");
+		});	
+			
 	}else if(orden_prox < orden_act){
 
 		actual.addClass("mover-a-derecha");
 		proximo.addClass("mover-de-izquierda sub-activa");
-		setTimeout(function() {
+		actual.on("animationend", function(){
 			actual.removeClass("sub-activa");
 			actual.removeClass("mover-a-derecha");
 			proximo.removeClass("mover-de-izquierda");
@@ -386,7 +505,8 @@ function cambiarSubPaginaModal(orden_prox, orden_act, id, callback){
 				$("#" + id).find("#campo-texto-siento").focus();
 			}
 			callback();
-		}, 500);
+			actual.off("animationend");
+		});
 	}
 }
 
@@ -449,8 +569,22 @@ function esconderPaginaModal(id){
 
 function inicializarContenido(){
 	cargarFechaPrincipal();
-	objetoLunas = inicializarDibujo();
+	objetoLunas = inicializarDibujo ();
 
+	objetoLunas.draw();
+
+	llenarCamposRegistro();
+	inicializarBD();
+
+	$("#slider-dias-lunas div").on("click", function(e){
+		if(!objetoLunas.movimiento && !$(this).hasClass('contenedor-fecha-activa')){
+			var anchoIndiv = physicalScreenWidth/7;
+			var orden = $("#slider-dias-lunas .contenedor-fecha-activa").attr("data-orden");
+			var nuevoOrden = $(this).attr("data-orden");
+			$("#slider-dias-lunas").transition({x: '+=' + anchoIndiv*(orden-nuevoOrden)});
+			cambiarFechaSlider(orden, nuevoOrden);
+		}
+	});
 }
 
 function cargarFechaPrincipal(){
@@ -527,6 +661,9 @@ function cerrarMooonaGeneral(){
 	$("#contenedor-detalles-principal .sub-activa").each(function(){
 		$(this).removeClass("sub-activa");
 	});
+
+	$(".sub-pag-eventos").hide();
+
 	$("#contenedor-detalles-principal .sub-pag[data-orden='3']").addClass("sub-activa");
 	$("#footer-principal").addClass("cerrado");
 
@@ -582,11 +719,131 @@ function cambiarFechaSlider(ordenActual, ordenProximo){
 			contenedorMesActual.fadeIn(300);
 		});
 	}
-	objetoLunas.moverLunas(ordenProximo - ordenActual);
-	console.log(objetoLunas.movimiento);
-
-	
-	
+	objetoLunas.moverLunas(ordenProximo - ordenActual);	
 }
 
+function calculoFechasMooona(fecha){
+	var duracion = localStorage.getItem("regularidad_usr");
+	var etapas = Math.trunc(duracion/4);
+	var etapaBruja = etapas + duracion%4;
+	var hoy = new Date();
+	var ultimaRegla = new Date(hoy.getFullYear(), localStorage.getItem("ultima_m_usr"), localStorage.getItem("ultima_d_usr"));
+	var fechaTemp = new Date(ultimaRegla.getFullYear(), ultimaRegla.getMonth(), ultimaRegla.getDate());
+	console.log(ultimaRegla);
+	if(ultimaRegla > fecha){
+		while(true){
+			var diasF = parseInt(fechaTemp.getDate()) - parseInt(duracion);
+			fechaTemp = new Date(fechaTemp.getFullYear(), fechaTemp.getMonth(), diasF);
+			if(fechaTemp <= fecha){
+				ultimaRegla = fechaTemp;
+				break;
+			}
+		}
+	}else{
+		while(true){
+			var diasF = parseInt(fechaTemp.getDate()) + parseInt(duracion);
+			console.log(fechaTemp.getDate());
+			fechaTemp = new Date(fechaTemp.getFullYear(), fechaTemp.getMonth(), diasF);
+			if(fechaTemp > fecha){
+				break;
+			}else{
+				ultimaRegla = fechaTemp;
+			}
+		}
+	}
+	
+
+	//Fecha de inicio de la ultima regla será ultimaRegla.Date(). Ultimo día será ultimaRegla.Date() + duracion
+	console.log(ultimaRegla);
+	var objRes = {};
+	for(var ii = 0; ii < duracion; ii++){
+		fechaTemp = new Date(ultimaRegla.getFullYear(), ultimaRegla.getMonth(), ultimaRegla.getDate() + ii);
+		if(fechaTemp.getFullYear() == fecha.getFullYear() && fechaTemp.getMonth() == fecha.getMonth() && fechaTemp.getDate() == fecha.getDate()){
+			if(ii >= 0 && ii < etapaBruja){
+				if(ii == 0){
+					objRes['inicioEtapa'] = true;
+				}else{
+					objRes['inicioEtapa'] = false;
+				}
+				objRes['etapa'] = 'bruja';
+			}else if(ii >= etapaBruja && ii < (etapaBruja + etapas)){
+				if(ii == etapaBruja){
+					objRes['inicioEtapa'] = true;
+				}else{
+					objRes['inicioEtapa'] = false;
+				}
+				objRes['etapa'] = 'virgen';
+			}else if(ii >= (etapaBruja + etapas) && ii < (etapaBruja + 2*etapas)){
+				if(ii == (etapaBruja + etapas)){
+					objRes['inicioEtapa'] = true;
+				}else{
+					objRes['inicioEtapa'] = false;
+				}
+				objRes['etapa'] = 'madre';
+			}else if(ii >= (etapaBruja + 2*etapas) && ii < (etapaBruja + 3*etapas)){
+				if(ii == (etapaBruja + 2*etapas)){
+					objRes['inicioEtapa'] = true;
+				}else{
+					objRes['inicioEtapa'] = false;
+				}
+				objRes['etapa'] = 'hechicera';
+			}
+			break;
+		}
+	}
+
+	return objRes;
+	//console.log((fecha - ultimaRegla)/(1000*60*60*24));
+}
+
+function cambioSesion(previo, actual){
+	$('#' + previo).hide();
+	$('#' + actual).show();
+}
+
+function validarRegistro(){
+	if($('#in-nombre').val() == ''){
+		navigator.notification.alert("Por favor ingresa tu nombre.", null, "Invalido", "Cerrar");
+		return;
+	}else{
+		localStorage.setItem('nombre_usr', $("#in-nombre").val());
+		localStorage.setItem('nacimiento_d_usr', $("#sel-dia-nacimiento option:selected").val());
+		localStorage.setItem('nacimiento_m_usr', $("#sel-mes-nacimiento option:selected").val());
+		localStorage.setItem('nacimiento_a_usr', $("#sel-anio-nacimiento option:selected").val());
+		localStorage.setItem('ultima_d_usr', $("#sel-dia-regla option:selected").val());
+		localStorage.setItem('ultima_m_usr', $("#sel-mes-regla option:selected").val());
+		localStorage.setItem('duracion_usr', $("#in-duracion-regla").val());
+		localStorage.setItem('regularidad_usr', $("#in-regularidad-periodo").val());
+		esconderPaginaShadow('pagina-registro');
+		//setPaginaActiva('pagina-principal');
+		inicializarContenido();
+		setPaginaActiva('pagina-principal');
+		botonBack();
+	}
+}
+
+function validarInicioSesion(){
+	var usr = $('#usuario-inicio-s').val();
+	var psw = $('#contrasena-inicio-s').val();
+	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	if(!re.test(usr)){
+		alert('El correo electrónico que ingresó es invalido');
+		return;
+	}
+
+	if(navigator.network.connection.type == 'none' || !coneccion){
+		alert("No está conectado a internet");
+		return;
+	}else{
+		$.ajax({
+			url: 'http://localhost/mooona/checar-usuario/',
+			method: 'POST',
+			data: {usr: usr, psw: psw},
+			success: function(results){
+				console.log(results);
+			}
+
+		});	
+	}
+}
 

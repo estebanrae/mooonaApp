@@ -125,7 +125,9 @@ EstadoCanvas.prototype.moverLunas = function(magnitud){
 		var direccion = (magnitud > 0) ? 1 : -1;
 		var inter =	setInterval(function(){
 						$.each(estado.lunas, function(key, luna){								
-							luna.posicionAlpha += direccion;														
+							luna.posicionAlpha += direccion;	
+							if(luna.posicionAlpha > 1170){luna.posicionAlpha += direccion;}	
+							if(luna.posicionAlpha < 0){luna.posicionAlpha = 1170 + 2*estado.intervaloAlpha - 2}												
 							luna.x = luna.calcularPosicion().posX;
 							luna.y = luna.calcularPosicion().posY;
 							luna.w = luna.calcularTamanio().ancho;
@@ -139,15 +141,18 @@ EstadoCanvas.prototype.moverLunas = function(magnitud){
 							}else{
 								luna.setImagen("img/luna-prueba.png");
 							}
-							if(luna.posicionAlpha == 1170 + estado.intervaloAlpha){
-								var imgP = luna.imgPath;	
-
-								estado.addLuna(new Luna(0, imgP));	
-
+							if(luna.posicionAlpha == 1170 + 2*estado.intervaloAlpha){
+								luna.posicionAlpha = 0;
+								luna.x = luna.calcularPosicion().posX;
+								luna.y = luna.calcularPosicion().posY;
+								luna.w = luna.calcularTamanio().ancho;
+								luna.h = luna.calcularTamanio().alto;
+								luna.opacity = luna.calcularOpacidad();
+								console.log("CAMBIO");
 							}
-							if(luna.posicionAlpha >= 1170 + 2*estado.intervaloAlpha){
+							/*if(luna.posicionAlpha >= 1170 + 2*estado.intervaloAlpha){
 								luna.inhabilitar();	
-							}						
+							}	*/					
 								
 						});					
 						estado.draw();
@@ -158,7 +163,7 @@ EstadoCanvas.prototype.moverLunas = function(magnitud){
 							console.log(estado);
 							clearInterval(inter);
 						}
-					},1);	
+					},10);	
 		
 	
 }
@@ -181,8 +186,6 @@ function inicializarDibujo(){
     	}
     }
 
-	
-	s.draw();
 	return s;
 }
 

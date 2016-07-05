@@ -6,6 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi, user-scalable=no" />
 
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <title>Mooona</title>
 </head>
@@ -14,7 +15,7 @@
             
     <!--            *   HEADER    *             -->
 
-    <div class="header" data-role="header">
+    <div class="header">
         <div class="contenedor-header">
             <img src="img/back.png" alt="back" class="header-back" id="header-back" />
             <img src="img/titulo.png" alt="mooona" class="header-titulo" id="header-titulo" />
@@ -27,7 +28,7 @@
         <!--            *   MENU   *             -->
 
 
-        <div class="menu menu-cerrado" id="menu-lado" data-role="panel" data-display="overlay" data-position="right">
+        <div class="menu menu-cerrado" id="menu-lado">
             <ul class="lista-menu">
                 <li class="sub-menu" id="opciones-siento">
                     <ul>
@@ -43,7 +44,7 @@
                 </li>
                 <li class="sub-menu" id="opciones-calendario">
                     <ul>
-                        <li class="opcion" data-ref="id" id="opcion-calendario"><h4>CALENDARIO</h4></li>
+                        <li class="opcion" data-ref="pagina-calendario" id="opcion-calendario"><h4>CALENDARIO</h4></li>
                     </ul>
                 </li>
                 <li class="sub-menu" id="opciones-points">
@@ -104,8 +105,6 @@
             <div class="footer cerrado pagina-principal" id="footer-principal">
 
                 <div class="barra-footer rosa" id="barra-footer-principal" />
-                    <!--<div class="area-de-swipe" id="area-de-swipe">
-                    </div><!--/area-de-swipe-->
                     <h2 class="titulo-mooona"></h2>
                 </div><!-- /barra-footer-principal -->
 
@@ -174,14 +173,29 @@
 
         <!--            *   PAGINA DE REGISTRO    *             -->
 
-        <div class="registro pagina-tipo-1 shadow pagina azul" id="pagina-registro" data-role="page">
-            <div class="contenedor-formulario">
+        <div class="registro pagina-tipo-1 shadow pagina azul" id="pagina-registro">
+        	<div class="iniciar-sesion" id="iniciar-sesion">
+        		<h1>INICIAR SESIÓN</h1>
+        		<input type="text" name="usr" class="campo-iniciar-sesion" placeholder="correo electrónico" id="usuario-inicio-s"/>
+        		<input type="password" name="pwd" class="campo-iniciar-sesion" placeholder="Contraseña" id="contrasena-inicio-s"/>
+        		<input type="submit" id="enviar-inicio-s" value="CONTINUAR" />
+        		<span>¿Aún no tienes cuenta?<a class="abrir-registrar">Registrate</a></span>
+        	</div><!--/iniciar-sesion-->
+        	<div class="registro-sesion" id="registro-sesion">
+        		<h1>REGISTRATE</h1>
+        		<input type="text" name="usr" class="campo-registro-sesion" placeholder="Correo electrónico" id="usuario-registro-s"/>
+        		<input type="text" name="nm" class="campo-registro-sesion" placeholder="nombre" id="nombre-registro-s"/>
+        		<input type="password" name="pwd" class="campo-registro-sesion" placeholder="contraseña" id="contrasena-registro-s"/>
+        		<input type="submit" id="enviar-registro-s" value="CONTINUAR" />
+        		<span>¿Ya tienes cuenta?<a class="abrir-iniciar-s">Iniciar Sesión</a></span>
+        	</div><!--/iniciar-sesion-->
+            <div class="contenedor-formulario" id="contenedor-formulario">
                 <img class="tache" src="img/tache.png" alt="X" id="tache-registro" />
                 <form id="ingresar-datos">
 
                     <div class="campo-registro" id="campo-nombre">
                         <h2 class="titulo">YO</h2>
-                        <input type="text" name="nombre" id="in-nombre" placeholder="Nombre" />
+                        <input type="hidden" name="nombre" id="in-nombre" placeholder="Nombre" />
                     </div><!--/campo-nombre-->
 
                     <div class="campo-registro" id="campo-fecha-nacimiento">
@@ -221,7 +235,7 @@
                         <h2 class="titulo">DURACIÓN DEL PERIODO</h2>
                         <div class="dias">
                             <h3 class="subtitulo">Días</h3>
-                            <input type="number" class="texto" id="in-duracion-regla" step="1" min="0" value="30" />
+                            <input type="number" class="texto" id="in-duracion-regla" step="1" min="5" max="10" value="7" />
                         </div><!--/dia-->
                     </div><!--/campo-duracion-regla-->
 
@@ -229,7 +243,7 @@
                         <h2 class="titulo">REGULARIDAD DEL PERIODO</h2>
                         <div class="dias">
                             <h3 class="subtitulo">Días</h3>
-                            <input type="number" class="texto" id="in-regularidad-periodo" step="1" min="0" value="30" />
+                            <input type="number" class="texto" id="in-regularidad-periodo" step="1" min="27" max="32" value="30" />
                         </div><!--/dia-->
                     </div><!--/campo-regularidad-periodo-->
 
@@ -302,7 +316,7 @@
 
         <!--            *   MODAL SIENTO    *             -->
 
-        <div class="pagina-tipo-1 modal pagina-siento blanco" id="pagina-siento">
+        <div class="pagina-tipo-1 desplegar-izquierda modal pagina-siento blanco" id="pagina-siento">
 
 
             <!--            *   MENU MODAL SIENTO    *             -->        
@@ -324,7 +338,7 @@
             <!--            *   NOTAS MODAL SIENTO    *             --> 
 
 
-            <div class="sub-pag" data-role="page" id="modal-siento-notas" data-orden="1">
+            <div class="sub-pag" id="modal-siento-notas" data-orden="1">
                 <textarea class="campo-texto" id="campo-texto-siento"></textarea>
             </div><!--/modal-siento-notas-->
 
@@ -332,7 +346,7 @@
 
             <!--            *   ESTRELLA MODAL SIENTO    *             --> 
 
-            <div class="sub-pag sub-activa" data-role="page" id="modal-siento-estrella" data-orden="2">
+            <div class="sub-pag sub-activa" id="modal-siento-estrella" data-orden="2">
                 
                 <div class="barra-fechas azul" id="barra-fechas-siento">
                     <img src="img/back.png" alt="back" class="barra-siento-back" id="barra-siento-back" />
@@ -360,7 +374,7 @@
 
             <!--            *   GRAFICA MODAL SIENTO    *             --> 
 
-            <div class="sub-pag" data-role="page" id="modal-siento-grafica" data-orden="3">
+            <div class="sub-pag" id="modal-siento-grafica" data-orden="3">
 
                 <div class="barra-fechas-graph azul" id="barra-fechas-siento">
                     <img src="img/back.png" alt="back" class="barra-siento-back" id="barra-siento-back-graph" />
@@ -388,6 +402,194 @@
 
 
 
+        <!--            *   MODAL CALENDARIO    *             -->
+
+        <div class="pagina-tipo-1 desplegar-izquierda pagina-calendario blanco" id="pagina-calendario">
+            <input type="hidden" id="mes-calendario-general" />
+            <div class="barra-calendario azul barra-mes" id="barra-meses-calendario">
+                <img class="calendario-fecha-prev" src="img/back.png" />
+                    <h2><span class="mes"></span> <span class="anio"></span></h2>
+                <img class="calendario-fecha-next" src="img/next.png" />
+            </div><!--barra-meses-calendario-->
+            <div class="barra-calendario barra-semana" id="barra-semana-calendario">
+                <table>
+                    <tr>
+                        <td class="domingo">D</td>
+                        <td class="lunes">L</td>
+                        <td class="martes">M</td>
+                        <td class="miercoles">M</td>
+                        <td class="jueves">J</td>
+                        <td class="viernes">V</td>
+                        <td class="sabado">S</td>
+                    </tr>
+                </table>
+            </div><!--barra-semana-calendario-->
+            <div class="calendario-dias" id="calendario-dias">
+                <table>
+                    <tr class="semana-1">
+                        <td class="celda-dia" data-celda="1" data-diasem="0"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="2" data-diasem="1"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="3" data-diasem="2"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="4" data-diasem="3"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="5" data-diasem="4"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="6" data-diasem="5"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="7" data-diasem="6"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                    </tr>
+                    <tr class="semana-2">
+                        <td class="celda-dia" data-celda="8" data-diasem="0"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="9" data-diasem="1"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="10" data-diasem="2"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="11" data-diasem="3"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="12" data-diasem="4"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="13" data-diasem="5"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="14" data-diasem="6"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                    </tr>
+                    <tr class="semana-3">
+                        <td class="celda-dia" data-celda="15" data-diasem="0"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="16" data-diasem="1"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="17" data-diasem="2"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="18" data-diasem="3"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="19" data-diasem="4"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="20" data-diasem="5"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="21" data-diasem="6"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                    </tr>
+                    <tr class="semana-4">
+                        <td class="celda-dia" data-celda="22" data-diasem="0"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="23" data-diasem="1"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="24" data-diasem="2"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="25" data-diasem="3"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="26" data-diasem="4"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="27" data-diasem="5"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="28" data-diasem="6"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                    </tr>
+                    <tr class="semana-5">
+                        <td class="celda-dia" data-celda="29" data-diasem="0"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="30" data-diasem="1"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="31" data-diasem="2"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="32" data-diasem="3"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="33" data-diasem="4"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="34" data-diasem="5"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="35" data-diasem="6"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                    </tr>
+                    <tr class="semana-6">
+                        <td class="celda-dia" data-celda="36" data-diasem="0"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="37" data-diasem="1"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="38" data-diasem="2"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="39" data-diasem="3"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="40" data-diasem="4"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="41" data-diasem="5"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                        <td class="celda-dia" data-celda="42" data-diasem="6"><div class="titulo-celda"><h1></h1></div><div class="contenedor-inferior"></div></td>
+                    </tr>
+                </table>
+            </div><!--/calendario-dias-->
+
+            <div class="calendario-footer azul leyenda">
+                <div class="fertilidad"><span></span><h2>Fertilidad</h2></div>
+                <div class="fertilidad-lunar"><span></span><h2>Fertilidad Lunar</h2></div>
+            </div><!--calendario-footer leyenda-->
+
+
+
+
+            <!--            *   PAGINA INDIVIDUAL EVENTOS    *             -->
+
+            <div class="sub-pag-eventos eventos" id="pagina-evento">
+                <div class="barra-evento azul barra-mes" id="barra-meses-evento">
+                    <img class="calendario-eventos-prev" src="img/back.png" />
+                        <h2><span class="semana"></span> <span class="dia"></span> DE <span class="mes"></span> DE <span class="anio"></span></h2>
+                    <img class="calendario-eventos-next" src="img/next.png" />
+                </div><!--barra-meses-calendario-->
+                <input type="hidden" id="input-dia-escondido">
+                <input type="hidden" id="input-mes-escondido">
+                <input type="hidden" id="input-anio-escondido">
+                <div class="barra-izquierda">
+                    <div class="abr-semana" id="abreviacion-semana">
+                        <h2></h2>
+                    </div><!--/abreviacion-semana-->
+                    <div class="barra-dia rosa" id="barra-dia">
+                        <h2></h2>
+                    </div><!--/dia-->
+                </div><!--/barra-izquierda-->
+                <div class="contenedor-eventos">
+                    <div class="eventos-actuales" id="eventos-actuales">
+                    </div><!--/ eventos-->
+                    <div class="mensaje-eventos">
+                        <p>NO HAY EVENTOS PROGRAMADOS</p>
+                    </div><!--/mensaje-eventos-->
+
+                </div><!--/contenedor-eventos-->
+                <div class="boton-agregar" id="boton-agregar-evento">
+                    <img src="img/agregar.png" />
+                </div><!--/boton-agregar--> 
+            </div><!--/pagina-evento-->
+
+
+
+
+            <!--            *   PAGINA AGREGAR EVENTO   *             -->
+
+            <div class="evento-nuevo shadow azul" id="pagina-evento-nuevo">
+                <h1>NUEVO EVENTO</h1>
+                <img  id="cerrar-evento-nuevo" src="img/tache.png" class="tache" alt="X" />
+                <input type="text" placeholder="Título" id="titulo-evento-nuevo" class="campo-evento-nuevo" data-active="true" />
+                <input type="hidden" id="data-evento-existe" />
+                <input type="hidden" id="id-evento-existe" />
+                <textarea class="campo-evento-nuevo" id="descripcion-evento-nuevo" placeholder="Descripción" data-active="true"></textarea>
+                <div class="horarios-evento">
+                    <h2 class="subtitulo-evento">COMIENZA</h2>
+                    <div class="evento-comienza">
+                        <input type="hidden" data-id="dia_de_la_semana" value="">
+                        <label>Día</label>
+                        <select class="campo-evento-nuevo select-evento" id="select-dia-evento-c" data-active="true"></select>
+                        <label>Mes</label>
+                        <select class="campo-evento-nuevo select-evento" id="select-mes-evento-c" data-active="true"></select>
+                        <label>Hr.</label>
+                        <select class="campo-evento-nuevo select-evento" id="select-hr-evento-c" data-active="true"></select>
+                        <label>Min.</label>
+                        <select class="campo-evento-nuevo select-evento" id="select-min-evento-c" data-active="true"></select>
+                    </div><!--/evento-comienza-->
+                    <h2 class="subtitulo-evento">TERMINA</h2>
+                    <div class="evento-termina">
+                        <label>Día</label>
+                        <select class="campo-evento-nuevo select-evento" id="select-dia-evento-t" data-active="true"></select>
+                        <label>Mes</label>
+                        <select class="campo-evento-nuevo select-evento" id="select-mes-evento-t" data-active="true"></select>
+                        <label>Hr.</label>
+                        <select class="campo-evento-nuevo select-evento" id="select-hr-evento-t" data-active="true"></select>
+                        <label>Min.</label>
+                        <select class="campo-evento-nuevo select-evento" id="select-min-evento-t" data-active="true"></select>
+                    </div><!--/evento-termina-->
+                </div><!--/horarios-evento-->
+
+                <div class="dia-evento">
+                    <label>Día</label>
+                    <select class="campo-evento-nuevo select-evento" id="select-dia-evento-total" data-active="false"></select>
+                    <label>Mes</label>
+                    <select class="campo-evento-nuevo select-evento" id="select-mes-evento-total" data-active="false"></select>
+                </div><!--/dia-evento-->
+
+                <label>TODO EL DÍA</label>
+                <input type="checkbox" id="radio-todo-dia" />
+
+                <div class="repetir-evento" id="repetir-evento">
+                    <h3>Repetir</h3>
+                    <img src="img/mas-blanco.png" />
+                    <div class="dias-repetir" id="dias-repetir">
+                        <select>
+                            <option value="-1" selected>-- No repetir --</option>
+                            <option value="0">Diariariamente</option>
+                            <option value="1">Semanalmente</option>
+                            <option value="3">Mensualmente</option>
+                        </select>
+                    </div><!--/dias-repetir-->
+                </div><!--/repetir-evento-->
+
+                <input type="button" id="boton-guardar-evento" value="FINALIZAR">
+
+            </div><!--/pagina-evento-nuevo-->
+            
+        </div><!--/pagina-calendario-->
+
 
 
     </div><!--/contenedor-pagina-->
@@ -399,6 +601,7 @@
     <script type="text/javascript" src="js/suncalc.js"></script>
     <script type="text/javascript" src="js/datos.js"></script>
     <script type="text/javascript" src="js/lunas.js"></script>
+    <script type="text/javascript" src="js/calendario.js"></script>
     <script type="text/javascript" src="js/global.js"></script>
 
     <script type="text/javascript">

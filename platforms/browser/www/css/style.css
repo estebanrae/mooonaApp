@@ -110,8 +110,8 @@ body{
 	top:0;
 	position: fixed;
 	display: block;
-	height: 50px;
-	z-index: 10;
+	height: 7%;
+	z-index: 21;
 	background-color: #ec6976;
 	box-shadow: 0 3px 5px rgba(0,0,0,.15);
 }
@@ -122,7 +122,7 @@ body{
 	bottom: 0;
 	left: 0;
 	right: 0;
-	width: 200px;
+	width: 40%;
 }
 
 .header .header-menu{
@@ -131,8 +131,8 @@ body{
 	top:0;
 	bottom: 0;
 	right: 0;
-	padding-right: 20px;
-	height: 50px;
+	padding-right: 1%;
+	height: 100%;
 }
 
 .header-back {
@@ -148,13 +148,13 @@ body{
 }
 
 .contenedor-pagina{
-	height: calc(100% - 50px);
+	height: 93%;
 	display: block;
 	position: absolute;
 	left: 0;
 	right: 0;
 	width: 100%;
-	top:50px;
+	top:7%;
 	bottom: 0;
 }
 
@@ -193,12 +193,11 @@ body{
 	padding: 0 10px;
 }
 
-.pagina-tipo-1{
-	height: calc(100% - 50px);
-	position: fixed;
-	width: 100%;
-	top: 50px;
-	padding-bottom: 20px;
+.pagina-tipo-1 {
+    height: 93%;
+    position: fixed;
+    width: 100%;
+    top: 7%;
 }
 
 .contenedor-formulario .titulo,
@@ -220,11 +219,11 @@ body{
 }
 
 .menu{
-	z-index: 9;
+	z-index: 20;
 	background-color: #ec6976;
 	position: fixed;
 	overflow: hidden;
-	height: calc(100% - 50px);
+	height: 93%;
 	right: 0;
 	width: 50%;
 	box-shadow: -3px 0 5px rgba(0,0,0,.1);
@@ -314,12 +313,19 @@ body{
 }
   
 #pagina-registro{
+	overflow: hidden;
+}
 
+.iniciar-sesion,
+.registro-sesion,
+.contenedor-formulario{
+	height: 100%;
+	display: none;
 }
 
 .shadow{
 	display: none;
-	z-index: 1;
+	z-index: 10;
 	background-color: rgba(0,48,71, 0.9);
 
 	-webkit-transform: translateY(600px);
@@ -405,7 +411,7 @@ body{
 	padding-top: 25px;
 }
 
-.modal{
+.desplegar-izquierda{
 	display: none;
 	z-index: 2;
 	background-color: #fff;
@@ -447,27 +453,36 @@ body{
 }
 
 .barra-siento-next,
-.barra-siento-back {
+.barra-siento-back,
+.calendario-fecha-prev,
+.calendario-fecha-next,
+.calendario-eventos-prev,
+.calendario-eventos-next {
 	position: absolute; 
-	top: 10px; 
-	height: 30px;
+	top: 25%; 
+	height: 50%;
 	cursor: pointer;
 }
 
-.barra-siento-back {
-	left: 10px;
+.barra-siento-back,
+ .calendario-fecha-prev,
+ .calendario-eventos-prev{
+	left: 5%;
 }
 
-.barra-siento-next {
-	right: 10px;
+.barra-siento-next,
+ .calendario-fecha-next,
+ .calendario-eventos-next{
+	right: 5%;
 }
 
 .barra-fechas,
 .barra-fechas-graph{
+	position: relative;
 	text-align: center;
 	width: 100%;
 	height: 50px;
-	line-height: 50px;
+	/*line-height: 50px;*/
 }
 
 .sub-activa{
@@ -493,6 +508,10 @@ body{
 div#modal-siento-notas {
   width: 100%;
   height: 100%;
+}
+
+.modal{
+	z-index: 11;
 }
 
 textarea#campo-texto-siento {
@@ -675,6 +694,270 @@ textarea#campo-texto-siento {
 	width: 100%;
 	height: 100%;
 }*/
+
+
+/* CALENDARIO */
+
+.barra-calendario.barra-mes,
+.barra-evento.barra-mes
+{
+	position: relative;
+	height: 8%;
+	width: 100%;
+	text-align: center;
+	z-index: 2;
+	box-shadow: 0 3px 5px rgba(0,0,0,.15);
+}
+
+.barra-calendario table{
+	width: 100%;
+	table-layout: fixed;
+}
+.barra-calendario td{
+	text-align: center;
+	height: 100%;
+	width: 2%;
+}
+
+.barra-calendario.barra-semana {
+    height: 5%;
+    box-shadow: 0 3px 5px rgba(0,0,0,.15);
+}
+
+.calendario-footer {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+    height: 7%;
+}
+
+.calendario-footer .fertilidad span{
+	background-color: #d4edfc;
+}
+
+.calendario-footer .fertilidad-lunar span{
+	background-color: #f5b5d2;
+}
+
+.calendario-footer div{
+	position: relative;
+	display: inline-block;
+	width: 49%;
+	height: 100%;
+
+}
+
+.calendario-footer h2,
+.calendario-footer span {
+	display: inline-block;
+}
+
+.calendario-dias td, .calendario-dias tr {
+	position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.calendario-dias table {
+    width: 100%;
+    height: 100%;
+}
+
+.calendario-dias {
+    width: 100%;
+    height: 80%;
+    color: #003047;
+}
+
+.titulo-celda {
+    position: absolute;
+    height: 40%;
+    text-align: center;
+    width: 100%;
+}
+
+.titulo-celda h1{
+	bottom: 0;
+	position: absolute;
+	width: 100%;
+}
+
+.fecha-actual .titulo-celda{
+	background-color: #003047;
+	color: white;
+}
+/*.fecha-actual .titulo-celda :after{
+	width: 0; 
+	height: 0; 
+	border-top: 60px solid transparent;
+	border-bottom: 60px solid transparent;
+
+	border-left: 60px solid green;
+}*/
+
+.sub-pag-eventos {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    position: absolute;
+}
+
+.barra-izquierda {
+    height: 92%;
+    width: 14%;
+}
+
+.abr-semana {
+    height: 5%;
+    width: 14%;
+    position: absolute;
+    top: 8%;
+    display: block;
+    z-index: 1;
+    box-shadow: 0 3px 2px rgba(0,0,0,.15);
+    background-color: #ffffff;
+}
+
+.barra-dia {
+    display: block;
+    position: absolute;
+    width: 14%;
+    height: 87%;
+    top: 13%;
+}
+
+.contenedor-eventos {
+    position: absolute;
+    top: 8%;
+    left: 14%;
+    width: 86%;
+    height: 92%;
+    background-color: #ffffff;
+}
+
+.boton-agregar {
+    width: 14%;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-right: 1%;
+    margin-bottom: 1%;
+    box-shadow: 2px 2px 2px 2px rgba(0,0,0,.15);
+}
+
+.boton-agregar img{
+	width: 100%;
+}
+
+.mensaje-eventos,
+.sub-pag-eventos{
+	display: none;
+}
+
+.evento-nuevo{
+    position: absolute;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.dia-evento,
+.dias-repetir{
+	display: none;
+}
+
+.dias-repetir li[data-active="true"]{
+	background-color: #ec6976;
+}
+
+.dias-repetir li{
+	display: inline-block;
+}
+
+.evento {
+    background-color: #f0f9fe;
+    margin: 1% 0 0% 1%;
+}
+
+.dia-hay-evento{
+	position: relative;
+}
+
+/*.dia-hay-evento:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-bottom: 15px solid transparent;
+    /* border-bottom: 10px solid #000; 
+    border-right: 15px solid #ec6976;
+    width: 0;
+    height: 0;
+}*/
+
+/*.fecha-actual .titulo-celda {
+	position: relative;
+}*/
+
+/*.fecha-actual .titulo-celda:after {
+	content:  ''; 
+	position:  absolute;
+	border-left: 15px solid transparent; 
+	border-right: 15px solid transparent;
+	border-top: 15px solid #003047;
+	bottom: -15px;
+	left: 50%; 
+	-webkit-transform: translateX(-50%);
+	-moz-transform: translateX(-50%);
+	transform: translateX(-50%);
+}*/
+
+.eventos-actuales{
+    position: absolute;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+}
+
+img.pico-fecha-actual {
+    height: 30%;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: -30%;
+    /* width: auto; */
+}
+
+img.marcador-evento {
+    position: absolute;
+    margin: auto;
+    right: 0;
+    top: 0;
+    width: 33.33%;
+}
+
+.fecha-opaco {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.fecha-opaco h1{
+	opacity: 0.4;
+}
+
+.contenedor-inferior{
+	position: absolute;
+	height: 60%;
+	width: 100%;
+	bottom: 0;
+}
+
+.fecha-fertilidad{
+	background-color: #d4edfc;
+}
+
+
+
+
 
 
 /* ANIMACION */
