@@ -840,7 +840,7 @@ function validarInicioSesion(){
 			method: 'POST',
 			data: {usr: usr, psw: psw},
 			success: function(results){
-				console.log(results);
+				alert(results);
 			}
 
 		});	
