@@ -829,14 +829,14 @@ function validarInicioSesion(){
 	if(!re.test(usr)){
 		alert('El correo electrónico que ingresó es invalido');
 		return;
-	}
+	//}
 
-	if(navigator.network.connection.type == 'none' || !coneccion){
+	//if(navigator.network.connection.type == 'none' || !coneccion){
 		alert("No está conectado a internet");
 		return;
 	}else{
 		$.ajax({
-			url: 'http://localhost/mooona/checar-usuario/',
+			url: 'http://canteraestudio.com/mooona/checar-usuario/',
 			method: 'POST',
 			data: {usr: usr, psw: psw},
 			success: function(results){
