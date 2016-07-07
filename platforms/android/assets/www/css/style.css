@@ -102,6 +102,10 @@ body{
 	color: #fff;
 }
 
+.ui-btn span{
+	display: none;
+}
+
 body{
 	margin: 0;
 }
@@ -342,16 +346,16 @@ body{
 	width: 100%;
 	position: fixed;
 	display: block;
-	height: calc(100% - 120px);
+	height: 87%;
 	bottom: 0;
-	-webkit-transform: translateY(calc(100% - 50px));
-	-moz-transform: translateY(calc(100% - 50px));
-	transform: translateY(calc(100% - 50px));
+	-webkit-transform: translateY(91%);
+	-moz-transform: translateY(91%);
+	transform: translateY(91%);
 }
 
 .barra-footer{
 	width: 100%;
-	height: 50px;
+	height: 9%;
 	bottom: 0;
 	text-align: center;
 	position: relative;
@@ -365,7 +369,7 @@ body{
 .contenedor-general.azul{
 	position: fixed;
 	text-align: center;
-	height: calc(100% - 50px);
+	height: 93%;
 	width: 100%;
 	background-color: #003047;
 	color: #fff;
@@ -545,9 +549,9 @@ textarea#campo-texto-siento {
 
 .contenedor-fecha-principal{
 	position: fixed;
-	top: 50px;
+	top: 7%;
 	width: 100%;
-	height: 70px;
+	height: 6%;
 }
 
 .contenedor-elementos-principal{
@@ -800,6 +804,10 @@ textarea#campo-texto-siento {
     position: absolute;
 }
 
+.slider-dias img{
+	width: 80%;
+}
+
 .barra-izquierda {
     height: 92%;
     width: 14%;
@@ -814,6 +822,10 @@ textarea#campo-texto-siento {
     z-index: 1;
     box-shadow: 0 3px 2px rgba(0,0,0,.15);
     background-color: #ffffff;
+}
+
+.imagen-moona-inicial {
+    width: 40%;
 }
 
 .barra-dia {
@@ -858,6 +870,18 @@ textarea#campo-texto-siento {
     display: block;
     width: 100%;
     height: 100%;
+}
+
+#pagina-productos {
+    width: 100%;
+    height: 93%;
+    background-color: red;
+    position: fixed;
+    top: 7%;
+    -webkit-transform: translateX(-100%);
+	-moz-transform: translateX(-100%);
+	transform: translateX(-100%);
+
 }
 
 .dia-evento,

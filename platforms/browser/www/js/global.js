@@ -11,18 +11,22 @@ var allowTransitionChange;
 var objetoLunas;
 var db;
 var coneccion;
+var NUM_LUNAS = 10;
 
 function onDeviceReady(){
 	console.log("Device is ready...");
 	physicalScreenWidth = window.screen.width;
 	physicalScreenHeight = window.screen.height;
 	//navigator.notification.alert("alto: " + physicalScreenHeight + "ancho: " + physicalScreenWidth, null, "Medidas", "Cerrar");
-	localStorage.setItem('nombre_usr', '');
 	allowTransitionChange = true;
+	handleExternalURLs();
 	setSelects();
 	localStorage.setItem('previa', '');
-	if(localStorage.getItem('nombre_usr') == null || !localStorage.getItem('nombre_usr').length){
+	if(localStorage.getItem('login') == null || !localStorage.getItem('login').length || localStorage.getItem('login') == 'false'){
 		$('#iniciar-sesion').show();
+		cerrarTodo('pagina-registro', desplegarPaginaShadow);
+	}else if(localStorage.getItem('nombre_usr') == null || !localStorage.getItem('nombre_usr').length){
+		$('#contenedor-formulario').show();
 		cerrarTodo('pagina-registro', desplegarPaginaShadow);
 	}else{
 		inicializarContenido();
@@ -36,7 +40,7 @@ function onDeviceReady(){
 
 	$('#boton-registrar').on('tap', function(e){
 		e.preventDefault();
-		validarRegistro();		
+		validarDatosUsuario();		
 
 	});
 
@@ -103,6 +107,9 @@ function onDeviceReady(){
 		validarInicioSesion();
 	});
 
+	$("#enviar-registro-s").on('tap', function(){
+		validarRegistro();
+	});
 	/*$("#repetir-evento li").on('tap',function(){
 		if($(this).attr('data-active') == 'true'){
 			$(this).attr('data-active', 'false');
@@ -569,9 +576,7 @@ function esconderPaginaModal(id){
 
 function inicializarContenido(){
 	cargarFechaPrincipal();
-	objetoLunas = inicializarDibujo ();
-
-	objetoLunas.draw();
+	objetoLunas = inicializarDibujo();
 
 	llenarCamposRegistro();
 	inicializarBD();
@@ -585,6 +590,7 @@ function inicializarContenido(){
 			cambiarFechaSlider(orden, nuevoOrden);
 		}
 	});
+
 }
 
 function cargarFechaPrincipal(){
@@ -615,20 +621,20 @@ function cargarSlider(dia, mes, anio){
 		var fecha = new Date(anio, mes, dia);		
 		fecha.setDate(dia - 151 + i);
 		var fase = SunCalc.getMoonIllumination(fecha).phase;
-		var claveUrlLuna = Math.round(fase*dias);
-		$("#slider-dias-lunas").append("<div data-orden='" + i + "'><h2>" + fecha.getDate() + "</h2><img src='/img/luna-" + claveUrlLuna + ".png'/><h3>" + fecha.getMonth() + "</h3></div>");
+		var claveUrlLuna = Math.round(fase*(NUM_LUNAS - 1) + 1);
+		$("#slider-dias-lunas").append("<div data-orden='" + i + "'><h2>" + fecha.getDate() + "</h2><img src='img/luna-" + claveUrlLuna + ".png'/><h3>" + fecha.getMonth() + "</h3></div>");
 		
 	}
 	var fechaHoy = new Date(anio, mes, dia);
 	var fase = SunCalc.getMoonIllumination(fecha).phase;
-	var claveUrlLuna = Math.round(fase*dias);
-	$("#slider-dias-lunas").append("<div data-orden='151' class='contenedor-fecha-activa'><h2>" + dia + "</h2><img src='/img/luna-" + claveUrlLuna + ".png'/><h3>" + mes + "</h3></div>");
+	var claveUrlLuna = Math.round(fase*NUM_LUNAS);
+	$("#slider-dias-lunas").append("<div data-orden='151' class='contenedor-fecha-activa'><h2>" + dia + "</h2><img src='img/luna-" + claveUrlLuna + ".png'/><h3>" + mes + "</h3></div>");
 	for (var i = 152; i <= 300; i++){
 		var fecha = new Date(anio, mes, dia);		
 		fecha.setDate(dia - 151 + i);
 		var fase = SunCalc.getMoonIllumination(fecha).phase;
-		var claveUrlLuna = Math.round(fase*dias);
-		$("#slider-dias-lunas").append("<div data-orden='" + i + "'><h2>" + fecha.getDate() + "</h2><img src='/img/luna-" + claveUrlLuna + ".png'/><h3>" + fecha.getMonth() + "</h3></div>");
+		var claveUrlLuna = Math.round(fase*NUM_LUNAS);
+		$("#slider-dias-lunas").append("<div data-orden='" + i + "'><h2>" + fecha.getDate() + "</h2><img src='img/luna-" + claveUrlLuna + ".png'/><h3>" + fecha.getMonth() + "</h3></div>");
 	}
 	var ancho = 0;
 	var anchoIndiv = physicalScreenWidth/7;
@@ -652,7 +658,7 @@ function toggleMooonaGeneral(){
 }
 
 function cerrarMooonaGeneral(){
-	$("#footer-principal").stop().transition({y: $(window).height() - 170, duration: 300, queue: false},function(){
+	$("#footer-principal").stop().transition({y: physicalScreenHeight*0.80 , duration: 300, queue: false},function(){
 		$("#footer-principal .pagina-tipo-2").removeAttr("style");
 		//$("#footer-principal").removeAttr("style");
 	});
@@ -729,7 +735,6 @@ function calculoFechasMooona(fecha){
 	var hoy = new Date();
 	var ultimaRegla = new Date(hoy.getFullYear(), localStorage.getItem("ultima_m_usr"), localStorage.getItem("ultima_d_usr"));
 	var fechaTemp = new Date(ultimaRegla.getFullYear(), ultimaRegla.getMonth(), ultimaRegla.getDate());
-	console.log(ultimaRegla);
 	if(ultimaRegla > fecha){
 		while(true){
 			var diasF = parseInt(fechaTemp.getDate()) - parseInt(duracion);
@@ -742,7 +747,6 @@ function calculoFechasMooona(fecha){
 	}else{
 		while(true){
 			var diasF = parseInt(fechaTemp.getDate()) + parseInt(duracion);
-			console.log(fechaTemp.getDate());
 			fechaTemp = new Date(fechaTemp.getFullYear(), fechaTemp.getMonth(), diasF);
 			if(fechaTemp > fecha){
 				break;
@@ -754,7 +758,6 @@ function calculoFechasMooona(fecha){
 	
 
 	//Fecha de inicio de la ultima regla será ultimaRegla.Date(). Ultimo día será ultimaRegla.Date() + duracion
-	console.log(ultimaRegla);
 	var objRes = {};
 	for(var ii = 0; ii < duracion; ii++){
 		fechaTemp = new Date(ultimaRegla.getFullYear(), ultimaRegla.getMonth(), ultimaRegla.getDate() + ii);
@@ -766,6 +769,8 @@ function calculoFechasMooona(fecha){
 					objRes['inicioEtapa'] = false;
 				}
 				objRes['etapa'] = 'bruja';
+				var numeroImg = Math.round((((3*NUM_LUNAS/4) - (NUM_LUNAS/2))/etapaBruja)*ii + (NUM_LUNAS/2));
+				objRes['numImg'] = numeroImg;
 			}else if(ii >= etapaBruja && ii < (etapaBruja + etapas)){
 				if(ii == etapaBruja){
 					objRes['inicioEtapa'] = true;
@@ -773,6 +778,8 @@ function calculoFechasMooona(fecha){
 					objRes['inicioEtapa'] = false;
 				}
 				objRes['etapa'] = 'virgen';
+				var numeroImg = Math.round(((NUM_LUNAS - (3*NUM_LUNAS/4))/etapas)*(ii - etapaBruja) + (3*NUM_LUNAS/4));
+				objRes['numImg'] = numeroImg;
 			}else if(ii >= (etapaBruja + etapas) && ii < (etapaBruja + 2*etapas)){
 				if(ii == (etapaBruja + etapas)){
 					objRes['inicioEtapa'] = true;
@@ -780,6 +787,8 @@ function calculoFechasMooona(fecha){
 					objRes['inicioEtapa'] = false;
 				}
 				objRes['etapa'] = 'madre';
+				var numeroImg = Math.round((((NUM_LUNAS/4) - 1)/etapas)*(ii - (etapaBruja + etapas)) + 1);
+				objRes['numImg'] = numeroImg;
 			}else if(ii >= (etapaBruja + 2*etapas) && ii < (etapaBruja + 3*etapas)){
 				if(ii == (etapaBruja + 2*etapas)){
 					objRes['inicioEtapa'] = true;
@@ -787,6 +796,8 @@ function calculoFechasMooona(fecha){
 					objRes['inicioEtapa'] = false;
 				}
 				objRes['etapa'] = 'hechicera';
+				var numeroImg = Math.round((((NUM_LUNAS/2) - (NUM_LUNAS/4))/etapas)*(ii - (etapaBruja + 2*etapas)) + (NUM_LUNAS/4));
+				objRes['numImg'] = numeroImg;
 			}
 			break;
 		}
@@ -801,7 +812,7 @@ function cambioSesion(previo, actual){
 	$('#' + actual).show();
 }
 
-function validarRegistro(){
+function validarDatosUsuario(){
 	if($('#in-nombre').val() == ''){
 		navigator.notification.alert("Por favor ingresa tu nombre.", null, "Invalido", "Cerrar");
 		return;
@@ -818,7 +829,6 @@ function validarRegistro(){
 		//setPaginaActiva('pagina-principal');
 		inicializarContenido();
 		setPaginaActiva('pagina-principal');
-		botonBack();
 	}
 }
 
@@ -831,19 +841,85 @@ function validarInicioSesion(){
 		return;
 	}
 
-	if(navigator.network.connection.type == 'none' || !coneccion){
+	//if(navigator.network.connection.type == 'none' || !coneccion){
+	if(!coneccion){
 		alert("No está conectado a internet");
 		return;
 	}else{
 		$.ajax({
-			url: 'http://localhost/mooona/checar-usuario/',
+			url: 'http://canteraestudio.com/mooona/checar-usuario',
 			method: 'POST',
 			data: {usr: usr, psw: psw},
 			success: function(results){
 				console.log(results);
+				if(results == 'true'){
+					localStorage.setItem('login', 'true');
+					localStorage.setItem('email_usr', usr);
+					cambioSesion('iniciar-sesion', 'contenedor-formulario')
+				}else{
+					localStorage.setItem('login', 'false');
+				}
 			}
 
 		});	
 	}
 }
+
+function validarRegistro(){
+	var usr = $('#usuario-registro-s').val();
+	var psw = $('#contrasena-registro-s').val();
+	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	if(!re.test(usr)){
+		alert('El correo electrónico que ingresó es invalido');
+		return;
+	}
+
+	//if(navigator.network.connection.type == 'none' || !coneccion){
+	if(!coneccion){
+		alert("No está conectado a internet");
+		return;
+	}else{
+		$.ajax({
+			url: 'http://canteraestudio.com/mooona/registrar-usuario',
+			method: 'POST',
+			data: {usr: usr, psw: psw},
+			success: function(results){
+				console.log(results);
+				if(results == 'true'){
+					localStorage.setItem('login', 'true');
+					localStorage.setItem('email_usr', usr);
+					cambioSesion('registro-sesion', 'contenedor-formulario');
+				}else{
+					localStorage.setItem('login', 'false');
+					var error = results.split('|');
+					var error = error[1];
+					alert(error);
+				}
+			}
+
+		});	
+	}
+}
+
+function handleExternalURLs() {
+    // Handle click events for all external URLs
+    if (device.platform.toUpperCase() === 'ANDROID') {
+        $(document).on('click', 'a[href^="http"]', function (e) {
+            var url = $(this).attr('href');
+            navigator.app.loadUrl(url, { openExternal: true });
+            e.preventDefault();
+        });
+    }
+    else if (device.platform.toUpperCase() === 'IOS') {
+        $(document).on('click', 'a[href^="http"]', function (e) {
+            var url = $(this).attr('href');
+            window.open(url, '_system');
+            e.preventDefault();
+        });
+    }
+    else {
+        // Leave standard behaviour
+    }
+}
+
 

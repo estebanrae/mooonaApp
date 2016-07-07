@@ -3,8 +3,10 @@
 var anchoCanvas = $("#espiral-lunas").width();
 var altoCanvas = $("#espiral-lunas").height();
 var valorArb = anchoCanvas*0.025;
+var imagenes = [];
+var imagenesRosa = [];
 
-function Luna(posicionAlpha, imgPath){
+function Luna(posicionAlpha, imagen, orden){
 	
 	this.posicionAlpha = posicionAlpha || 0;
 	this.w = this.calcularTamanio().ancho;
@@ -15,8 +17,9 @@ function Luna(posicionAlpha, imgPath){
 	this.primera = (posicionAlpha == 0) ? true : false;
 	this.opacity = this.calcularOpacidad();
 	this.habilitada = true;
-	
-	this.imgPath = imgPath || '';
+	this.orden = orden || 0;
+	this.movimiento = true;
+	this.imagen = imagen || '';
 }
 
 Luna.prototype.setImagen = function(imgPath){
@@ -24,10 +27,8 @@ Luna.prototype.setImagen = function(imgPath){
 }
 
 Luna.prototype.draw = function(ctx) {
-	var img = new Image();
-	img.src = this.imgPath;
 	ctx.globalAlpha = this.opacity;
-	ctx.drawImage(img, this.x, this.y, this.w, this.h);
+	ctx.drawImage(this.imagen, this.x, this.y, this.w, this.h);
 	ctx.restore();
 };
 
@@ -62,6 +63,8 @@ function EstadoCanvas(canvas){
 	this.intervaloAlpha = 0;
 	this.lunas = [];
 	this.movimiento = false;
+	this.residuo = 0;
+	this.arrPosiciones = [];
 
 
 	this.intervalo = 30;
@@ -123,42 +126,48 @@ EstadoCanvas.prototype.moverLunas = function(magnitud){
 		var estado = this;
 		estado.movimiento = true;
 		var direccion = (magnitud > 0) ? 1 : -1;
+
 		var inter =	setInterval(function(){
-						$.each(estado.lunas, function(key, luna){								
-							luna.posicionAlpha += direccion;	
-							if(luna.posicionAlpha > 1170){luna.posicionAlpha += direccion;}	
-							if(luna.posicionAlpha < 0){luna.posicionAlpha = 1170 + 2*estado.intervaloAlpha - 2}												
-							luna.x = luna.calcularPosicion().posX;
-							luna.y = luna.calcularPosicion().posY;
-							luna.w = luna.calcularTamanio().ancho;
-							luna.h = luna.calcularTamanio().alto;	
-							if(luna.habilitada){
-								luna.opacity = luna.calcularOpacidad();
-							}
-							
-							if(luna.posicionAlpha > 1170 - estado.intervaloAlpha/2 && luna.posicionAlpha < 1170 + estado.intervaloAlpha/2){
-								luna.setImagen("img/luna-prueba-rosa.png");
-							}else{
-								luna.setImagen("img/luna-prueba.png");
-							}
-							if(luna.posicionAlpha == 1170 + 2*estado.intervaloAlpha){
-								luna.posicionAlpha = 0;
+						$.each(estado.lunas, function(key, luna){
+							var prox = luna.orden + magnitud;
+							alphaProx = estado.arrPosiciones[prox];
+							if(luna.movimiento){
+
+								luna.posicionAlpha += direccion;
+								if(luna.posicionAlpha > 1170){luna.posicionAlpha += direccion;}
+								if(luna.posicionAlpha == alphaProx){
+									luna.movimiento = false;
+									luna.orden += magnitud;
+								}
+								if(luna.posicionAlpha == 1260 && prox >= estado.lunas.length){
+									luna.movimiento = false;
+									luna.orden =  prox - estado.lunas.length;
+									console.log(luna.orden);
+									luna.posicionAlpha = estado.arrPosiciones[luna.orden];
+								}
+								if(prox < 0 && luna.posicionAlpha < 0){
+									luna.orden = estado.lunas.length  + Math.abs(magnitud) + prox ;
+									console.log(prox);
+									luna.posicionAlpha = 1260;
+								}
 								luna.x = luna.calcularPosicion().posX;
 								luna.y = luna.calcularPosicion().posY;
 								luna.w = luna.calcularTamanio().ancho;
 								luna.h = luna.calcularTamanio().alto;
 								luna.opacity = luna.calcularOpacidad();
-								console.log("CAMBIO");
-							}
-							/*if(luna.posicionAlpha >= 1170 + 2*estado.intervaloAlpha){
-								luna.inhabilitar();	
-							}	*/					
+							}				
 								
 						});					
 						estado.draw();
-						tick++;	
-						//console.log(estado);					
-						if(tick > Math.abs(estado.intervaloAlpha*magnitud)){
+						tick++;
+						var termina = true;
+						$.each(estado.lunas, function(key, luna){
+							if(luna.movimiento){termina= false;}
+						});
+						if(termina){
+							$.each(estado.lunas, function(key, luna){
+								luna.movimiento = true;
+							});
 							estado.movimiento = false;
 							console.log(estado);
 							clearInterval(inter);
@@ -175,17 +184,60 @@ function inicializarDibujo(){
 	var s = new EstadoCanvas(canvas);
     var longitud = s.dibujarEspiral(s.canvas, s.ctx); 
     var dias = localStorage.getItem('regularidad_usr');
-    s.intervaloAlpha = Math.trunc(1170/dias);
+    s.intervaloAlpha = Math.trunc(1170/(dias - 1));
+    s.residuo = 1170%(dias - 1);
+    var jj = 0;
 
-    //for(var i = 0; i<dias; i++){
-    for(var i = 0; i <=1170; i += s.intervaloAlpha){
-    	if(i == 1170){
-    		s.addLuna(new Luna(i, "img/luna-prueba-rosa.png"));
-    	}else{
-    		s.addLuna(new Luna(i, "img/luna-prueba.png"));
-    	}
+	for(var i = 1; i<dias; i++){
+    	s.arrPosiciones.push(jj);
+    	jj += s.intervaloAlpha;
+    	if(i >= (dias - s.residuo)){
+    		jj++;
+    	}    
     }
-
-	return s;
+    s.arrPosiciones.push(jj);
+    s.arrPosiciones.push(1260);
+    var hoy = new Date();
+    cargarImagenes(function(){
+    	$.each(s.arrPosiciones, function(key, val){
+	    	if(key !== s.arrPosiciones.length - 1){
+	    		var fechaTemp = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() - key - 1);
+	    		var obj = calculoFechasMooona(fechaTemp);
+	    		if(val == 1170){
+	    			s.addLuna(new Luna(val, imagenesRosa[obj.numImg - 1] , key));
+	    		}else{
+	    			s.addLuna(new Luna(val, imagenes[obj.numImg - 1] , key));
+	    		}
+	    	}
+	    	console.log(key);
+	    	
+	    });
+	    console.log(s);
+	    console.log(imagenes);
+	    console.log(imagenesRosa);
+	    s.draw();
+    });
+    return s;
 }
 
+function cargarImagenes(cargado){
+	for(var ii = 1; ii<= NUM_LUNAS; ii++){
+		var img = new Image();
+		img.onload = function(){
+			imagenes.push(img);
+			if(imagenes.length == NUM_LUNAS){cargarImagenesRosa(function(){cargado();});}
+		};
+		img.src = 'img/luna-' + ii + '.png';
+	}
+}
+
+function cargarImagenesRosa(cargado){
+	for(var ii = 1; ii<= NUM_LUNAS; ii++){
+		var img = new Image();
+		img.onload = function(){
+			imagenesRosa.push(img);
+			if(imagenesRosa.length == NUM_LUNAS){cargado();}
+		};
+		img.src = 'img/luna-rosa-' + ii + '.png';
+	}
+}

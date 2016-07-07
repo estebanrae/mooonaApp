@@ -6,7 +6,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, target-densityDpi=device-dpi, user-scalable=no" />
 
-    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-1.4.5.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
     <title>Mooona</title>
 </head>
@@ -96,7 +95,6 @@
                         </div><!--/contenedor-slider-dias-->
                         <div class="contenedor-lunas" id="espiral-lunas">
                             <canvas id="canvas-espiral-lunas" class="canvas-espiral"></canvas>
-                            <canvas id="canvas-espiral-lunas" class="canvas-espiral"></canvas>
                         </div><!--/espiral-lunas-->
                     </div><!--/contenedor-elementos-principal-->
                 </div><!--/contenedor-arriba-->
@@ -184,7 +182,6 @@
         	<div class="registro-sesion" id="registro-sesion">
         		<h1>REGISTRATE</h1>
         		<input type="text" name="usr" class="campo-registro-sesion" placeholder="Correo electrónico" id="usuario-registro-s"/>
-        		<input type="text" name="nm" class="campo-registro-sesion" placeholder="nombre" id="nombre-registro-s"/>
         		<input type="password" name="pwd" class="campo-registro-sesion" placeholder="contraseña" id="contrasena-registro-s"/>
         		<input type="submit" id="enviar-registro-s" value="CONTINUAR" />
         		<span>¿Ya tienes cuenta?<a class="abrir-iniciar-s">Iniciar Sesión</a></span>
@@ -195,7 +192,7 @@
 
                     <div class="campo-registro" id="campo-nombre">
                         <h2 class="titulo">YO</h2>
-                        <input type="hidden" name="nombre" id="in-nombre" placeholder="Nombre" />
+                        <input type="text" name="nombre" id="in-nombre" placeholder="Nombre" />
                     </div><!--/campo-nombre-->
 
                     <div class="campo-registro" id="campo-fecha-nacimiento">
@@ -235,7 +232,7 @@
                         <h2 class="titulo">DURACIÓN DEL PERIODO</h2>
                         <div class="dias">
                             <h3 class="subtitulo">Días</h3>
-                            <input type="number" class="texto" id="in-duracion-regla" step="1" min="5" max="10" value="7" />
+                            <input type="number" class="texto" id="in-duracion-regla" step="1" min="2" max="20" value="7" />
                         </div><!--/dia-->
                     </div><!--/campo-duracion-regla-->
 
@@ -243,7 +240,7 @@
                         <h2 class="titulo">REGULARIDAD DEL PERIODO</h2>
                         <div class="dias">
                             <h3 class="subtitulo">Días</h3>
-                            <input type="number" class="texto" id="in-regularidad-periodo" step="1" min="27" max="32" value="30" />
+                            <input type="number" class="texto" id="in-regularidad-periodo" step="1" min="15" value="30" />
                         </div><!--/dia-->
                     </div><!--/campo-regularidad-periodo-->
 
@@ -592,6 +589,22 @@
 
 
 
+
+
+
+
+   		<!--            *   PAGINA PRODUCTOS   *             -->
+   		<div class="pagina-productos" id="pagina-productos">
+   		<div class="barra-titulo">
+   			<h1></h1>
+   		</div>
+   		<div class="contenedor-productos" id="contenedor-productos">
+   		</div><!--conteneedor-productos-->
+   		</div><!--/pagina-productos-->
+
+
+
+
     </div><!--/contenedor-pagina-->
 
     <script type="text/javascript" src="cordova.js"></script>
@@ -604,12 +617,6 @@
     <script type="text/javascript" src="js/calendario.js"></script>
     <script type="text/javascript" src="js/global.js"></script>
 
-    <script type="text/javascript">
-       /* $(".slider").slick({
-            accessibility: false
-
-        });*/
-    </script>
 </body>
 
 </html>

@@ -55,7 +55,7 @@ function cargarCalendario(date){
 			}	
 			var moonas = calculoFechasMooona(fechaCal);
 			if(moonas.inicioEtapa){
-				$("#calendario-dias .celda-dia[data-celda='" + ii + "'] .contenedor-inferior").html('<img src="img/moona-' + moonas.etapa + '.png" class="imagen-moona-inicial">');
+				$("#calendario-dias .celda-dia[data-celda='" + ii + "'] .contenedor-inferior").html('<img src="img/diosa-' + moonas.etapa + '.png" class="imagen-moona-inicial">');
 			}
 			if(moonas.etapa == 'madre'){
 				$("#calendario-dias .celda-dia[data-celda='" + ii + "'] .contenedor-inferior").addClass("fecha-fertilidad");
