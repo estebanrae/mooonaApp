@@ -14,7 +14,6 @@ function cargarCalendario(date){
 	var cnt = $("#calendario-dias .semana-1 .celda-dia[data-diasem='" + semanaUno + "']").attr('data-celda');
 	var fechaCal = new Date(fechaDiaUno.getFullYear(), fechaDiaUno.getMonth(),1 - (cnt - 1));
 	var hoy = new Date();
-	//$("#calendario-dias .semana-1 .celda-dia[data-diasem='" + semanaUno + "']").on("click", fechaDiaUno, cargarEvento);
 	$("#pagina-calendario .barra-mes .mes").html(mesesC[date.getMonth()]);
 	$("#pagina-calendario .barra-mes .anio").html(date.getFullYear());
 	$("#calendario-dias .celda-dia .titulo-celda .marcador-evento").each(function(){
@@ -33,7 +32,7 @@ function cargarCalendario(date){
 		$(this).html('');
 	});
 	$("#calendario-dias .celda-dia").each(function(){
-		$(this).off("click");
+		$(this).off("tap");
 	});
 
 	$("#calendario-dias .celda-dia .contenedor-inferior").each(function(){
@@ -49,7 +48,7 @@ function cargarCalendario(date){
 			$("#calendario-dias .celda-dia[data-celda='" + ii + "']").find(".titulo-celda h1").html(fechaCal.getDate());		
 			checarEventos(fechaCal, ii);
 
-			$("#calendario-dias .celda-dia[data-celda='" + ii + "']").on("click", fechaCal, cargarEvento);
+			$("#calendario-dias .celda-dia[data-celda='" + ii + "']").on("tap", fechaCal, cargarEvento);
 			if(fechaCal.getMonth() !== date.getMonth()){
 				$("#calendario-dias .celda-dia[data-celda='" + ii + "']").addClass('fecha-opaco');
 			}	
@@ -77,10 +76,6 @@ function checarEventos(fecha, cnt){
 		}, errorBDCalendario);
 	}, errorBDCalendario, function(){});
 
-}
-
-function inicializarBD(){
-	db = window.openDatabase("MooonaBD", "1.0", "Base Mooona", 200000);
 }
 
 function cargarEvento(e){
@@ -146,8 +141,8 @@ function generarEventos(tx, results, fecha){
 
 		$("#eventos-actuales").html(html);
 
-		$(".evento .boton-editar").on("click", editarEvento);
-		$(".evento .boton-eliminar").on("click", eliminarEvento);
+		$(".evento .boton-editar").on("tap", editarEvento);
+		$(".evento .boton-eliminar").on("tap", eliminarEvento);
 		
 	}
 
@@ -374,6 +369,7 @@ function editarBDEvento(tx, datos){
 
 function editarEvento(){
 	//alert("EDITAR");
+	cargarDatosEventoNuevo(new Date($("#input-anio-escondido").val(), $("#input-mes-escondido").val(), $("#input-dia-escondido").val()));
 	var evento = $(this).closest(".evento");
 	$("#boton-agregar-evento").trigger("click");
 	$("#titulo-evento-nuevo").val(evento.find("h1").text());
@@ -411,6 +407,7 @@ function editarEvento(){
 		$("#select-min-evento-t").find("option[value='" + arrHFechaT[1] + "']").attr('selected', 'true');
 	}
 	$("#id-evento-existe").val(evento.attr("data-id"));
+	desplegarPaginaShadow('pagina-evento-nuevo');
 
 }
 

@@ -93,7 +93,7 @@ body{
 }
 
 .blanco{
-	color: #000;
+	color: #003047;
 	background-color: #fff;
 }
 
@@ -428,12 +428,12 @@ body{
 .pagina-siento{
 	position: fixed;
 	width: 100%;
-	height: 100%;
+	height: 93%;
 }
 
 .header-siento{
 	width: 100%;
-	height: 50px;
+	height: 7%;
 	top: 0;
 }
 
@@ -447,6 +447,7 @@ body{
 .sub-pag{
 	position: absolute;
 	visibility: hidden;
+	height: 93%;
 	width: 100%;
 }
 
@@ -485,7 +486,7 @@ body{
 	position: relative;
 	text-align: center;
 	width: 100%;
-	height: 50px;
+	height: 8%;
 	/*line-height: 50px;*/
 }
 
@@ -498,9 +499,17 @@ body{
 	display: inline-block;
 }
 
-.contenedor-datos{
+.contenedor-datos-estrella,
+.contenedor-datos-grafica
+{
 	text-align: center;
 }
+.contenedor-datos-grafica
+{
+	height: 9%;
+	width: 100%;
+}
+
 
 .imagen-icono{
 	display: inline-block;
@@ -532,19 +541,16 @@ textarea#campo-texto-siento {
 }
 
 .icono-selector-detalles img{
-	width: 70%;
-	height: auto;
+	height: 70%;
+	position: absolute;
 }
 
-.pagina-tipo-2{
-
-	position: fixed;
-	text-align: center;
-	width: calc(100% - 120px);
-	height: calc(100% - 130px);
-	color: #003047;
-	padding: 40px 60px;
-
+.pagina-tipo-2 {
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    height: 91%;
+    color: #003047;
 }
 
 .contenedor-fecha-principal{
@@ -591,8 +597,8 @@ textarea#campo-texto-siento {
 	width: 100%;
 	position: fixed;
 	top: 0;
-	height: 80px;
-	z-index: 2;
+	height: 12%;
+	z-index: 10;
 	box-shadow: 0 3px 5px rgba(0,0,0,.15);
 	left: 0;	
 }
@@ -604,15 +610,17 @@ textarea#campo-texto-siento {
 }
 
 .pagina-tipo-3 {
-  top: 80px;
-  position: fixed;
-  left: 0;
-  text-align: center;
-  width: calc(100% - 120px);
-  height: calc(100% - 80px);
-  padding: 20px 60px 40px;
-  color: #003047;
- /* visibility: hidden;*/
+    top: 12%;
+    position: fixed;
+    left: 0;
+    text-align: center;
+    width: 100%;
+    bottom: 0;
+    height: auto;
+   /*height: 79%;*/
+    /* padding: 20px 60px 40px; */
+    color: #003047;
+    /* visibility: hidden; */
 }
 
 .area-de-swipe{
@@ -637,7 +645,7 @@ textarea#campo-texto-siento {
 
 .contenedor-slider-dias{
 	width: 100%;
-	height: 80px;
+	height: 10%;
 	white-space: nowrap;
 	/*-webkit-transform: translateX(calc(-4*100%/9));
 	-moz-transform: translateX(calc(-4*100%/9));
@@ -659,7 +667,7 @@ textarea#campo-texto-siento {
 	left: 0;
 	right: 0;
 	margin: auto;
-	height: 80px;
+	height: 10%;
 
 }
 .contenedor-bordes::before{
@@ -681,18 +689,25 @@ textarea#campo-texto-siento {
 	bottom: 0;
 }
 
-.contenedor-fecha-activa{
-	font-weight: bold;
-}
-
 .slider-dias div{
 	position: relative;
 	display: inline-block;
-	top: 50%;
-	-webkit-transform: translateY(-50%);
+	top: 0;
+	height: 100%;
+	opacity: 0.5;
+	/*-webkit-transform: translateY(-50%);
 	-moz-transform: translateY(-50%);
-  	transform: translateY(-50%);
+  	transform: translateY(-50%);*/
 }
+
+.contenedor-fecha-activa{
+	font-weight: bold;
+	opacity: 1 !important;
+}
+.slider-dias h3{
+	display: none;
+}
+
 
 /*.canvas-espiral{
 	width: 100%;
@@ -805,7 +820,8 @@ textarea#campo-texto-siento {
 }
 
 .slider-dias img{
-	width: 80%;
+	/*width: 80%;*/
+	height: 80%;
 }
 
 .barra-izquierda {
@@ -875,7 +891,6 @@ textarea#campo-texto-siento {
 #pagina-productos {
     width: 100%;
     height: 93%;
-    background-color: red;
     position: fixed;
     top: 7%;
     -webkit-transform: translateX(-100%);
@@ -978,6 +993,321 @@ img.marcador-evento {
 .fecha-fertilidad{
 	background-color: #d4edfc;
 }
+
+
+
+
+
+
+
+/* PRODUCTOS */
+
+.pagina-productos .barra-titulo {
+    width: 100%;
+    margin: auto;
+    height: 8%;
+    box-shadow: 0 3px 5px rgba(0,0,0,.15);
+
+
+}
+
+.pagina-productos .barra-titulo h1 {
+    width: 65%;
+    height: 100%;
+    display: inline-block;
+}
+
+.pagina-productos .barra-titulo h2 {
+    width: 30%;
+    height: 100%;
+    display: inline-block;
+    background-color: #fff;
+    color: #003047;
+}
+
+.pagina-productos{
+	background-image: url("../img/fondo-luna.jpg");
+	background-size: auto 100%;
+	background-repeat: no-repeat;
+	background-position: center
+}
+
+.mensaje-no-hay,
+.contenedor-productos{
+	height: 92%;
+	width: 100%;
+	background-color: rgba(236,105,118,0.7);
+}
+
+.mensaje-no-hay{
+	display: none;	
+}
+
+.contenedor-productos{
+	background-color: rgba(255,255,255,0.8);
+}
+
+.producto {
+    width: 100%;
+    height: 35%;
+    background-color: rgba(0, 48, 71, 0.8);
+}
+
+.producto img{
+	width: 20%;
+}
+
+.producto-abierto{
+	height: 100%;
+	background-color: rgba(0, 48, 71, 0.8);
+}
+
+#contenedor-tip-shadow {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    display: none;
+}
+
+
+
+
+
+
+/* ESTRELLAS */
+
+.estrella {
+    background-image: url("../img/sprite-estrella-rosa.png");
+    width: 15%;
+    height: 100%;
+    background-position: 0 90%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.estrella-activa{
+	background-position: 0 -5%;	
+}
+
+.contenedor-grafica-siento{
+	width:	80%;
+	height: 80%;
+	margin: auto;
+	left:0;
+	right: 0;
+}
+
+.contenedor-grafica {
+    width: 100%;
+    height: 50%;
+    position: relative;
+}
+
+#contenedor-grafica-siento span{
+	display: inline-block;
+	position: relative;
+	height: 100%;
+}
+
+#contenedor-grafica-siento img{
+	width: 100%;
+	position: absolute;
+}
+
+#contenedor-grafica-siento span[data-magnitud="1"] img,
+#contenedor-grafica-siento span[data-magnitud="1"] h5{
+	bottom: 10%;
+}
+
+#contenedor-grafica-siento span[data-magnitud="2"] img,
+#contenedor-grafica-siento span[data-magnitud="2"] h5{
+	bottom: 30%;
+}
+
+#contenedor-grafica-siento span[data-magnitud="3"] img,
+#contenedor-grafica-siento span[data-magnitud="3"] h5{
+	bottom: 50%;
+}
+
+#contenedor-grafica-siento span[data-magnitud="4"] img,
+#contenedor-grafica-siento span[data-magnitud="4"] h5{
+	bottom: 70%;
+}
+
+#contenedor-grafica-siento span[data-magnitud="5"] img,
+#contenedor-grafica-siento span[data-magnitud="5"] h5{
+	bottom: 90%;
+}
+
+#contenedor-grafica-siento span[data-magnitud="0"] h5{
+	bottom:0;
+}
+#contenedor-grafica-siento h5{
+	position: absolute;
+	display: block;
+	font-size: 50%;
+	transform: translateY(130%);
+}
+
+
+
+
+/* FOOTER */
+
+.div-diosa h6,
+.div-diosa .contenido-diosa{
+	display: none;
+}
+
+.div-sub-iconos .contenido-diosa{
+	opacity: 1;
+    position: absolute;
+    padding: 2% 8%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.div-sub-iconos p{
+	padding-top: 20%;
+}
+
+.div-sub-iconos{
+	height: 100%;
+	display: inline-block;
+}
+
+.div-sub-iconos img{
+	height: 70%;
+}
+
+.contenido-diosa {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    display: none;
+}
+
+.contenido-diosa p{
+	top: 19%;
+	position: absolute;
+}
+
+.div-sub-iconos[data-seleccionada="false"]{
+	opacity: 0.5;
+}
+
+.div-sub-iconos[data-seleccionada="true"]{
+	opacity: 1;
+
+}
+
+.contenido-arpa{
+	padding-top: 28%;
+}
+
+.contenedor-sub-iconos {
+    width: 100%;
+    height: 15%;
+    display: flex;
+    position: absolute;
+    left: 0;
+    justify-content: space-between;
+    top: 0;
+    z-index: 3;
+}
+
+.contenido-flor,
+.contenido-fertilidad {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.contenido-flor p,
+.contenido-fertilidad p{
+	position: absolute;
+	top: 19%;
+}
+
+.contenido-fertilidad{
+	display: none;
+}
+
+#fechas-manzana{
+	width: 100%;
+	height: 18%;
+}
+
+.fecha-manzana{
+	display: inline-block;
+	height: 100%;
+}
+
+.fecha-manzana img{
+	height: 50%;
+	bottom: 0;
+}
+
+.fecha-manzana h1{
+	top: 0;
+}
+
+.fecha-manzana.fecha-actual h1{
+	color: #ec6976;
+}
+
+.pagina-manzana-principal{
+	color: white;
+	overflow-y: auto;
+}
+
+.contenedor-tip{
+	position: relative;
+	width: 100%;
+	padding-top: 10%;
+}
+
+.contenedor-tip .titulo{
+	position: relative;
+	border-bottom: 1px solid white;
+	margin-bottom: 2%;
+}
+
+.contenedor-tip .titulo img{
+	height: 100%;
+	position: absolute;
+	left: 0;
+}
+
+.contenedor-tip .titulo span{
+	position: absolute;
+	right: 0;
+}
+
+.contenedor-tip .titulo h2{
+	display: inline-block;
+}
+
+.barra-alimentos{
+	width: 100%;
+    margin-top: 10%;
+    height: 10%;
+}
+
+#contenedor-alimentos .titulo{
+	border-bottom: 1px solid #003047;
+}
+
+
+
 
 
 
