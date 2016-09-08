@@ -18,6 +18,7 @@ var MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Ag
 
 function onDeviceReady(){
 	console.log("Device is ready...");
+	alert("Device is ready..."); //Test1
 	physicalScreenWidth = window.screen.width;
 	physicalScreenHeight = window.screen.height;
 	//navigator.notification.alert("alto: " + physicalScreenHeight + "ancho: " + physicalScreenWidth, null, "Medidas", "Cerrar");
@@ -985,6 +986,7 @@ function validarInicioSesion(){
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 			  console.log(textStatus, errorThrown);
+			  alert(errorThrown)//Test1
 			}
 		});	
 	}
@@ -1024,6 +1026,7 @@ function validarRegistro(){
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 			  console.log(textStatus, errorThrown);
+			  alert(errorThrown);
 			}
 		});	
 	}
@@ -1052,6 +1055,7 @@ function handleExternalURLs() {
 
 function syncDetalles(){
 	console.log("FETCHING...");
+	alert("FETCHING...");//Test1
 	$.ajax({
 		url: 'http://canteraestudio.com/mooona/leer-detalles',
 		async: false,
@@ -1059,6 +1063,7 @@ function syncDetalles(){
 			//console.log(res);
 			res = JSON.parse(res);
 			console.log("FINISHED");
+			alert("FINISHED");//Test1
 			var posts = res[0];
 			var categories = res[1];
 			guardarPosts(posts);
