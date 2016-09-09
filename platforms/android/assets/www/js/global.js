@@ -1058,7 +1058,7 @@ function syncDetalles(){
 	alert("FETCHING...");//Test1
 	$.ajax({
 		url: 'http://canteraestudio.com/mooona/leer-detalles',
-		async: false,
+		async: true,
 		success: function(res){
 			//console.log(res);
 			res = JSON.parse(res);
