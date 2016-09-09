@@ -1068,6 +1068,9 @@ function syncDetalles(){
 			var categories = res[1];
 			guardarPosts(posts);
 			guardarCategorias(categories);
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			alert(errorThrown);
 		}
 	});
 }
