@@ -14,8 +14,8 @@ function cargarCalendario(date){
 	var cnt = $("#calendario-dias .semana-1 .celda-dia[data-diasem='" + semanaUno + "']").attr('data-celda');
 	var fechaCal = new Date(fechaDiaUno.getFullYear(), fechaDiaUno.getMonth(),1 - (cnt - 1));
 	var hoy = new Date();
-	$("#pagina-calendario .barra-mes .mes").html(mesesC[date.getMonth()]);
-	$("#pagina-calendario .barra-mes .anio").html(date.getFullYear());
+	$("#pagina-calendario .barra-mes .mes, #pagina-evento .barra-fecha .mess").html(mesesC[date.getMonth()]);
+	$("#pagina-calendario .barra-mes .anio, #pagina-evento .barra-fecha .anio").html(date.getFullYear());
 	$("#calendario-dias .celda-dia .titulo-celda .marcador-evento").each(function(){
 		$(this).remove();
 	});
@@ -67,36 +67,57 @@ function cargarCalendario(date){
 
 function checarEventos(fecha, cnt){
 	var mesFormato = parseInt(fecha.getMonth()) + 1;
-	var formatoFecha = fecha.getFullYear() + '-' + mesFormato + '-' + fecha.getDate();
+	var formatoFechaInicio = fecha.getFullYear() + '-' + mesFormato + '-' + fecha.getDate() + ' 00:00:00';
+	var formatoFechaFin = fecha.getFullYear() + '-' + mesFormato + '-' + fecha.getDate() + ' 23:59:59';
 	db.transaction(function(tx){
-		tx.executeSql("SELECT * FROM eventos_calendario WHERE fecha = '" + formatoFecha + "'", [], function(tx,results){			
+		//tx.executeSql("DROP TABLE eventos_calendario");
+		//tx.executeSql("DROP TABLE fechas_calendario");
+		tx.executeSql("CREATE TABLE IF NOT EXISTS eventos_calendario ( "+
+					"idEvento INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"titulo VARCHAR(200), " +
+					"descripcion VARCHAR(500)," + 
+					"repeticion INTEGER);");
+		tx.executeSql("CREATE TABLE IF NOT EXISTS fechas_calendario ( "+
+					"idFecha INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"fechaInicio DATETIME, " +
+					"fechaFin DATETIME, " +
+					"idEvento INTEGER);");
+		console.log(formatoFechaInicio);
+		tx.executeSql("SELECT * FROM fechas_calendario WHERE (fechaInicio >= '" + formatoFechaInicio + "' AND fechaInicio <= '" + formatoFechaFin + "') OR (fechaFin >= '" + formatoFechaInicio + "' AND fechaFin <= '" + formatoFechaFin + "') OR (fechaInicio < '" + formatoFechaInicio + "' AND fechaFin > '" + formatoFechaFin + "');", [], function(tx,results){
+			console.log(results);
+			if(results.rows.length > 0 ){
+				$("#calendario-dias .celda-dia[data-celda='" + cnt + "'] .titulo-celda").append('<img src="img/marcador-evento.png" class="marcador-evento">');
+			}				
+		}, function(err){
+			console.log("error select: " + err);
+		});
+		/*tx.executeSql("SELECT * FROM eventos_calendario WHERE fecha = '" + formatoFecha + "'", [], function(tx,results){			
 			if(results.rows.length >0 ){
 				$("#calendario-dias .celda-dia[data-celda='" + cnt + "'] .titulo-celda").append('<img src="img/marcador-evento.png" class="marcador-evento">');
 			}				
-		}, errorBDCalendario);
-	}, errorBDCalendario, function(){});
+		}, errorBDCalendario);*/
+	}, function(err){
+		console.log("error general: ");
+		console.log(err);
+	});
 
 }
 
 function cargarEvento(e){
 	var fecha = e.data;
 	var mesFormato = parseInt(fecha.getMonth()) + 1;
-	var formatoFecha = fecha.getFullYear() + '-' + mesFormato + '-' + fecha.getDate(); 
+	var formatoFechaInicio = fecha.getFullYear() + '-' + mesFormato + '-' + fecha.getDate() + ' 00:00:00';
+	var formatoFechaFin = fecha.getFullYear() + '-' + mesFormato + '-' + fecha.getDate() + ' 23:59:59';
 	$("#input-dia-escondido").val(fecha.getDate());
 	$("#input-mes-escondido").val(fecha.getMonth());
 	$("#input-anio-escondido").val(fecha.getFullYear());
 	db.transaction(function(tx){
-		cargarBDEventos(tx, formatoFecha, fecha);
+		var sql = "SELECT * FROM eventos_calendario LEFT JOIN fechas_calendario USING(idEvento) WHERE (fechaInicio >= '" + formatoFechaInicio + "' AND fechaInicio <= '" + formatoFechaFin + "') OR (fechaFin >= '" + formatoFechaInicio + "' AND fechaFin <= '" + formatoFechaFin + "') OR (fechaInicio < '" + formatoFechaInicio + "' AND fechaFin > '" + formatoFechaFin + "');"; 
+		console.log('cargando...');
+		console.log(sql);
+		tx.executeSql(sql, [], function(tx, results){
+			generarEventos(tx, results, fecha)}, errorBDCalendario);
 	}, errorBDCalendario, completadoCalendario);
-}
-
-function cargarBDEventos(tx, formatoFecha, fecha){
-	var sql = "select * " + 
-				"from eventos_calendario  " +
-				"where fecha ='" + formatoFecha + "'";
-	console.log('cargando...');
-	tx.executeSql(sql, [], function(tx, results){
-		generarEventos(tx, results, fecha)}, errorBDCalendario);
 }
 
 function generarEventos(tx, results, fecha){
@@ -106,6 +127,7 @@ function generarEventos(tx, results, fecha){
 	var arrSCN = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sabado"];
 	var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 	var mesesC = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+	console.log(results);
 
 	$("#eventos-actuales").html("");
 	$(".mensaje-eventos").hide();
@@ -114,6 +136,7 @@ function generarEventos(tx, results, fecha){
 	$("#barra-meses-evento .dia").html(fecha.getDate());
 	$("#barra-meses-evento .mes").html(mesesC[fecha.getMonth()]);
 	$("#barra-meses-evento .semana").html(arrSC[fecha.getDay()]);
+	$("#barra-meses-evento .anio").html(fecha.getFullYear());
 	$("#input-dia-escondido").val(fecha.getDate());
 	$("#input-mes-escondido").val(fecha.getMonth());
 	$("#input-anio-escondido").val(fecha.getFullYear());
@@ -122,20 +145,25 @@ function generarEventos(tx, results, fecha){
 	}else{
 		var html = '';
 		$.each(results.rows, function(key, result){
-			html += '<div class="evento evento-cerrado" data-id="' + result.id + '" id="evento-' + result.id + '"><h1>' + result.titulo + '</h1>';
+			html += '<div class="evento evento-cerrado" data-id="' + result.idEvento + '" id="evento-' + result.ididEvento + '"><img src="img/diosa-' + calculoFechasMooona(fecha).etapa + '.png" class="icono-evento"/><h1>' + result.titulo + '</h1>';
 			if(result.descripcion !== ''){
 				html += '<h2>' + result.descripcion + '</h2>';
 			} 
-			var arrFecha = result.fecha.split('-');
-			var mesEvento = parseInt(arrFecha[1]) - 1;
-			var fechaEvento = new Date(arrFecha[0], mesEvento, arrFecha[2]);
-			var arrC = result.empieza.split(" ");
+			//var arrFecha = result.fecha.split('-');
+			//var mesEvento = parseInt(arrFecha[1]) - 1;
+			//var fechaEvento = new Date(arrFecha[0], mesEvento, arrFecha[2]);
+			var arrC = result.fechaInicio.split(" ");
+			var arrFechaC = arrC[0].split("-");
+			var fechaInicioJS = new Date(arrFechaC[0], arrFechaC[1] - 1, arrFechaC[2]);
+			console.log(fechaInicioJS);
+			var arrT = result.fechaFin.split(" ");
+			var arrFechaT = arrT[0].split("-");
+			var fechaFinJS = new Date(arrFechaT[0], arrFechaT[1] - 1, arrFechaT[2]);
 			var arrCHora = arrC[1].split(":");
-			var arrT = result.termina.split(" ");
 			var arrTHora = arrT[1].split(":");
-			html += '<p>' + arrSCN[fechaEvento.getDay()] + ', ' + fechaEvento.getDate() + ' de ' + meses[mesEvento] + ' de ' + fechaEvento.getFullYear() + '<br/>' + 
-				'De ' + arrCHora[0] + ':' + arrCHora[1] + ' a ' + arrTHora[0] + ':' + arrTHora[1] + ' Hrs</p>';
-			html += '<h3 class="boton-editar">Editar</h3>'	+ '<img src="img/basurero.png" class="boton-eliminar"/><input type="hidden" class="info-fecha-inicio" value="' + result.empieza + '"><input type="hidden" class="info-fecha-final" value="' + result.termina + '"></div><!--/evento-->';
+			html += '<p>Empieza: ' + arrSCN[fechaInicioJS.getDay()] + ', ' + fechaInicioJS.getDate() + ' de ' + meses[fechaInicioJS.getMonth()] + ' del ' + fechaInicioJS.getFullYear() + ' a las ' + arrCHora[0] + ':' + arrCHora[1] + '<br/>Termina: ' + arrSCN[fechaFinJS.getDay()] + ', ' + fechaFinJS.getDate() + ' de ' + meses[fechaFinJS.getMonth()] + ' del ' + fechaFinJS.getFullYear() + ' a las ' + arrTHora[0] + ':' + arrTHora[1];
+				//'De ' + arrCHora[0] + ':' + arrCHora[1] + ' a ' + arrTHora[0] + ':' + arrTHora[1] + ' Hrs</p>';
+			html += '<h3 class="boton-editar">Editar</h3>'	+ '<img src="img/basurero.png" class="boton-eliminar"/><input type="hidden" class="info-fecha-inicio" value="' + result.fechaInicio + '"><input type="hidden" class="info-fecha-final" value="' + result.fechaFin + '"><input type="hidden" id="repeticion-evento" value="' + result.repeticion + '" /></div><!--/evento-->';
 
 		});
 
@@ -149,26 +177,8 @@ function generarEventos(tx, results, fecha){
 }
 
 function errorBDCalendario(tx, err){
-	if(err.code == 5){
-		var sql = "CREATE TABLE IF NOT EXISTS eventos_calendario ( "+
-					"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-					"fecha DATE, " +
-					"titulo VARCHAR(200), " +
-					"descripcion VARCHAR(500), " +
-					"empieza DATETIME, " +
-					"termina DATETIME, " + 
-					"repite VARCHAR(100))";
-		tx.executeSql(sql, [], errorBDCalendario, completadoCalendario);
-	}else{
-	}
+	alert("ERROR DE BD: ", err.code);
 }
-
-function eliminarTablaCalendario(){
-	db.transaction(function(tx){
-		tx.executeSql("DROP TABLE eventos_calendario");
-	}, function(tx, err){ alert("No se elimino")}, function(){alert("Tabla Eliminada")});
-}
-
 
 function completadoCalendario(){
 	activarBotonBack("pagina-evento", true);
@@ -195,6 +205,11 @@ function cargarDatosEventoNuevo(fecha){
 	$("#select-mes-evento-t").html(htmlMesComenzar);
 	$("#select-mes-evento-total").html(htmlMesComenzar);
 
+	$("#titulo-evento-nuevo, #descripcion-evento-nuevo").val('');
+	$("#dias-repetir").hide();
+	$("#repetir-evento img").show();
+
+
 	$("#select-mes-evento-c").on('change', function(){
 		var mes = $(this).find('option:selected').val();
 		cargarDiasMes(mes,'select-dia-evento-c');
@@ -211,14 +226,22 @@ function cargarDatosEventoNuevo(fecha){
 	var htmlHoraC = '';
 	var htmlHoraT = '';
 	for(var ii = 0; ii<23; ii ++){	
-		if(ii == 9){
-			htmlHoraC += '<option selected value="' + ii + '">' + ii + '</option>';
-		}else{
+		if(ii < 10){
+			if(ii == 9){
+				htmlHoraC += '<option selected value="' + ii + '">0' + ii + '</option>';
+			}else{
+				htmlHoraC += '<option selected value="' + ii + '">0' + ii + '</option>';
+			}
+		}
+		else{
 			htmlHoraC += '<option value="' + ii + '">' + ii + '</option>';
 		}
 	}	
-	for(var ii = 0; ii<24; ii ++){	
-		if(ii == 10){
+	for(var ii = 0; ii<24; ii ++){
+		if(ii < 10){
+			htmlHoraT += '<option selected value="' + ii + '">0' + ii + '</option>';
+		}
+		else if(ii == 10){
 			htmlHoraT += '<option selected value="' + ii + '">' + ii + '</option>';
 		}else{
 			htmlHoraT += '<option value="' + ii + '">' + ii + '</option>';
@@ -230,7 +253,11 @@ function cargarDatosEventoNuevo(fecha){
 
 	var htmlMin = '';
 	for(var ii = 0; ii<60; ii++){
-		htmlMin += '<option value="' + ii + '">' + ii + '</option>';
+		if(ii < 10){
+			htmlMin += '<option value="' + ii + '">0' + ii + '</option>';	
+		}else{
+			htmlMin += '<option value="' + ii + '">' + ii + '</option>';
+		}
 	}
 
 	$("#select-min-evento-c").html(htmlMin);
@@ -344,8 +371,81 @@ function validarEventoNuevo(){
 }
 
 function guardarBDEvento(tx, datos){
-	var sql = 'INSERT INTO eventos_calendario (fecha, titulo, descripcion, empieza, termina, repite) VALUES ("' + datos.fecha + '", "' + datos.titulo + '", "' + datos.descripcion + '", "' + datos.horarioC + '", "' + datos.horarioT + '", "' + datos.repetir + '")';
-	tx.executeSql(sql);
+	var sql = 'INSERT INTO eventos_calendario (titulo, descripcion, repeticion) VALUES ("' + datos.titulo + '", "' + datos.descripcion + '", "' + datos.repetir + '")';
+	tx.executeSql(sql, [], function(tx, res){ 
+							guardarFechaEvento(tx, datos, res.insertId);
+								console.log(res);
+						}, function(tx, err){ 
+								console.log(err); 
+								console.log(sql);
+						});
+
+}
+
+/*tx.executeSql("CREATE TABLE IF NOT EXISTS eventos_calendario ( "+
+					"idEvento INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"titulo VARCHAR(200), " +
+					"descripcion VARCHAR(500));");
+		tx.executeSql("CREATE TABLE IF NOT EXISTS fechas_calendario ( "+
+					"idFecha INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"fechaInicio DATETIME, " +
+					"fechaFin DATETIME, " +
+					"idEvento INT);");*/
+
+function sumaFechasBD(fechaBD, valor, intervalo){
+	var fechaHora = fechaBD.split(' ');
+	var fechaArr = fechaHora[0].split('-');
+	var fechaJS = new Date(fechaArr[0], parseInt(fechaArr[1]) - 1, fechaArr[2]);
+	switch (intervalo){
+		case "dia":
+			fechaJS.setDate(fechaJS.getDate() + valor);
+			break;
+		case "semana":
+			fechaJS.setDate(fechaJS.getDate() + valor*7);
+			break;
+		case "mes":
+			fechaJS.setMonth(fechaJS.getMonth() + valor);
+			break;
+	}
+	var mesFormato = fechaJS.getMonth() + 1;
+	var nuevaFecha = fechaJS.getFullYear() + '-' + mesFormato + '-' + fechaJS.getDate() + ' ' + fechaHora[1];
+	return nuevaFecha;
+}
+
+function guardarFechaEvento(tx, datos, idEvento){
+	console.log(datos);
+	switch (datos.repetir){
+		case "0":
+			for(var ii = 0; ii <= 100; ii++){
+				var fechaAGuardarI = sumaFechasBD(datos.horarioC, ii, 'dia');
+				var fechaAGuardarF = sumaFechasBD(datos.horarioT, ii, 'dia');
+				var sql ="INSERT INTO fechas_calendario (fechaInicio, fechaFin, idEvento) VALUES('"+ fechaAGuardarI +"', '" + fechaAGuardarF + "', '" + idEvento + "');";
+				tx.executeSql(sql, [], function(tx, res){}, function(tx, err){console.log(err);});
+				console.log(sql);
+			}
+			break;
+		case "1":
+			for(var ii = 0; ii <= 50; ii++){
+				var fechaAGuardarI = sumaFechasBD(datos.horarioC, ii, 'semana');
+				var fechaAGuardarF = sumaFechasBD(datos.horarioT, ii, 'semana');
+				var sql ="INSERT INTO fechas_calendario (fechaInicio, fechaFin, idEvento) VALUES('"+ fechaAGuardarI +"', '" + fechaAGuardarF + "', '" + idEvento + "');";
+				tx.executeSql(sql);
+			}
+			break;
+		case "3":
+			for(var ii = 0; ii <= 20; ii++){
+				var fechaAGuardarI = sumaFechasBD(datos.horarioC, ii, 'mes');
+				var fechaAGuardarF = sumaFechasBD(datos.horarioT, ii, 'mes');
+				var sql ="INSERT INTO fechas_calendario (fechaInicio, fechaFin, idEvento) VALUES('"+ fechaAGuardarI +"', '" + fechaAGuardarF + "', '" + idEvento + "');";
+				tx.executeSql(sql);
+				console.log(sql);
+			}
+			break;
+		default:
+			tx.executeSql("INSERT INTO fechas_calendario (fechaInicio, fechaFin, idEvento) VALUES('"+ datos.horarioC +"', '" + datos.horarioT + "', '" + idEvento + "');");
+			break;
+
+	}
 }
 
 function errorGuardarBD(tx, err){
@@ -359,12 +459,14 @@ function terminaGuardarBD(fecha){
 	cargarEvento(obj);
 	activarBotonBack('pagina-evento', true);
 	esconderPaginaShadow('pagina-evento-nuevo');
-	alert("SUCCESS");
+	//alert("SUCCESS");
 }
 
 function editarBDEvento(tx, datos){
-	var sql = 'UPDATE eventos_calendario SET fecha = "' + datos.fecha + '", titulo = "' + datos.titulo + '", descripcion = "' + datos.descripcion + '", empieza = "' + datos.horarioC + '", termina = "' + datos.horarioT + '", repite = "' + datos.repetir + '" WHERE id = "' + datos.ID + '"';
+	var sql = 'UPDATE eventos_calendario SET titulo = "' + datos.titulo + '", descripcion = "' + datos.descripcion + '", repeticion = "' + datos.repetir + '" WHERE idEvento = "' + datos.ID + '"';
 	tx.executeSql(sql);
+	tx.executeSql("DELETE FROM fechas_calendario WHERE idEvento = " + datos.ID);
+	guardarFechaEvento(tx, datos, datos.ID);
 }
 
 function editarEvento(){
@@ -384,27 +486,31 @@ function editarEvento(){
 	var arrFFechaT = arr1FechaT[0].split("-");
 	var arrHFechaT = arr1FechaT[1].split(":");
 	var mesT = parseInt(arrFFechaT[1]) - 1;
+	if($("#repeticion-evento").val() !== '-1'){
+		$("#dias-repetir select").val($("#repeticion-evento").val());
+		$("#dias-repetir").show();
+		$("#repetir-evento img").hide();
+	}
 	$("#pagina-evento-nuevo h1").html("EDITAR EVENTO");
 	$("#data-evento-existe").val("1");
 	if(arrFFechaC == arrFFechaT && arrHFechaC == ['00', '00', '00'] && arrHFechaT == ['23', '59', '59']){
 		$("#radio-todo-dia").attr('checked', 'checked');
 		$(".horarios-evento").hide();
 		$(".dia-evento").show();
-		$("#select-dia-evento-total").find("option[value='" + arrFFechaC[2] + "']").attr('selected', 'true');
-		$("#select-mes-evento-total").find("option[value='" + mesC + "']").attr('selected', 'true');
+		$("#select-dia-evento-total").val(arrFFechaC[2] );
+		$("#select-mes-evento-total").val(mesC);
 	}else{
 		$("#radio-todo-dia").removeAttr('checked');
 		$(".horarios-evento").show();
 		$(".dia-evento").hide();
-		$("#select-dia-evento-c").find("option[value='" + arrFFechaC[2] + "']").attr('selected', 'true');
-		$("#select-mes-evento-c").find("option[value='" + mesC + "']").attr('selected', 'true');
-		$("#select-hr-evento-c").find("option[value='" + arrHFechaC[0] + "']").attr('selected', 'true');
-		$("#select-min-evento-c").find("option[value='" + arrHFechaC[1] + "']").attr('selected', 'true');
-
-		$("#select-dia-evento-t").find("option[value='" + arrFFechaT[2] + "']").attr('selected', 'true');
-		$("#select-mes-evento-t").find("option[value='" + mesT + "']").attr('selected', 'true');
-		$("#select-hr-evento-t").find("option[value='" + arrHFechaT[0] + "']").attr('selected', 'true');
-		$("#select-min-evento-t").find("option[value='" + arrHFechaT[1] + "']").attr('selected', 'true');
+		$("#select-dia-evento-c").val( arrFFechaC[2] );
+		$("#select-mes-evento-c").val( mesC );
+		$("#select-hr-evento-c").val( parseInt(arrHFechaC[0]) );
+		$("#select-min-evento-c").val( parseInt(arrHFechaC[1]) );
+		$("#select-dia-evento-t").val( arrFFechaT[2] );
+		$("#select-mes-evento-t").val( mesT );
+		$("#select-hr-evento-t").val( parseInt(arrHFechaT[0]) );
+		$("#select-min-evento-t").val( parseInt(arrHFechaT[1]) );
 	}
 	$("#id-evento-existe").val(evento.attr("data-id"));
 	desplegarPaginaShadow('pagina-evento-nuevo');
@@ -441,6 +547,8 @@ function confirmaEliminarEvento(boton, id){
 }
 
 function eliminarBDEvento(tx, id){
-	var sql = 'DELETE FROM eventos_calendario WHERE id="' + id + '"';
+	var sql = 'DELETE FROM eventos_calendario WHERE idEvento="' + id + '"';
+	tx.executeSql(sql);
+	var sql = 'DELETE FROM fechas_calendario WHERE idEvento="' + id + '"';
 	tx.executeSql(sql);
 }

@@ -718,7 +718,7 @@ textarea#campo-texto-siento {
 /* CALENDARIO */
 
 .barra-calendario.barra-mes,
-.barra-evento.barra-mes
+.barra-evento.barra-fecha
 {
 	position: relative;
 	height: 8%;
@@ -1306,8 +1306,27 @@ img.marcador-evento {
 	border-bottom: 1px solid #003047;
 }
 
+.contenedor-moona-luna {
+    display: none;
+    height: 7%;
+    position: absolute;  
+}
 
+.contenedor-moona-luna img{
+	height: 50%;
+}
 
+.contenedor-moona-luna.izquieda{
+	left: 0;
+}
+
+.contenedor-moona-luna.derecha{
+	right: 0;
+}
+
+.dia-escondido{
+	display: none;
+}
 
 
 

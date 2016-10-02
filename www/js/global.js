@@ -18,7 +18,7 @@ var MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Ag
 
 function onDeviceReady(){
 	console.log("Device is ready...");
-	alert("Device is ready..."); //Test1
+	//alert("Device is ready..."); //Test1
 	physicalScreenWidth = window.screen.width;
 	physicalScreenHeight = window.screen.height;
 	//navigator.notification.alert("alto: " + physicalScreenHeight + "ancho: " + physicalScreenWidth, null, "Medidas", "Cerrar");
@@ -39,8 +39,18 @@ function onDeviceReady(){
 	}	
 	coneccion = true;
 
-	document.addEventListener('online', function(){coneccion = true}, false);
-	document.addEventListener('offline', function(){coneccion = false}, false);
+	document.addEventListener('online', function(){
+								if(!coneccion){
+									coneccion = true; 
+									inicializarContenido();
+									//alert("FIRED ONLINE");
+								}
+								}, false);
+	document.addEventListener('offline', function(){
+								if(coneccion){
+									coneccion = false; 
+								}
+							}, false);
 	//eliminarTablaCalendario();
 
 	$('#boton-registrar').on('tap', function(e){
@@ -96,8 +106,8 @@ function onDeviceReady(){
 	$("#repetir-evento img").on('tap',function(){	
 		var hoy = new Date($("#input-anio-escondido").val(), $("#input-mes-escondido").val(), $("#input-dia-escondido").val());
 		$("#dias-repetir").show();
-		$("#dias-repetir select option").each(function(){ $(this).removeAttr("selected");})
-		$("#dias-repetir select option[value='0']").attr("selected", 'true');
+		//$("#dias-repetir select option").each(function(){ $(this).removeAttr("selected");})
+		$("#dias-repetir select").val(0);
 		$(this).hide();
 	});
 
@@ -300,6 +310,13 @@ function onDeviceReady(){
 
 	$(".pagina-calendario .barra-mes").on("swiperight", function(e){
 		cambiarMesCalendario(-1);
+	});
+
+	$("#pagina-evento .barra-fecha").on("swipeleft", function(e){
+		cambiarDiaCalendario(1);
+	});
+	$("#pagina-evento .barra-fecha").on("swiperight", function(e){
+		cambiarDiaCalendario(-1);
 	});
 
 	$(document).on("click", ".producto", function(){
@@ -528,7 +545,14 @@ function esconderPaginaShadow(id){
 
 function desplegarPaginaCalendario(id){
 	$("#"+id).show().transition({x:0});
-	cargarCalendario(new Date());
+	if($("#input-mes-escondido").val() == '' || $("#input-mes-escondido").val() == null){
+		var fecha = new Date();
+	}else{
+		var fecha = new Date($("#input-anio-escondido").val(), $("#input-mes-escondido").val(), $("#input-dia-escondido").val());
+	}
+	console.log($("#input-mes-escondido").val());
+	console.log(fecha);
+	cargarCalendario(fecha);
 }
 
 function cerrarTodo(idActual, callback){
@@ -545,6 +569,10 @@ function cerrarTodo(idActual, callback){
 			esconderPaginaModal(id);
 		}
 	});
+	if(idActual !== 'pagina-calendario'){
+		console.log(idActual);
+		$("#input-mes-escondido, #input-mes-escondido, #input-mes-escondido").val('');
+	}
 	
 	cerrarMooonaGeneral();
 	cerrarMenu();
@@ -679,6 +707,7 @@ function esconderPaginaModal(id){
 }
 
 function inicializarContenido(){
+	$("#slider-dias-lunas").html('');
 	cargarFechaPrincipal();
 	objetoLunas = inicializarDibujo();
 
@@ -686,7 +715,7 @@ function inicializarContenido(){
 	inicializarBD();
 	syncProductos();
 	syncDetalles();
-	inicializarFooter();
+	inicializarFooter(new Date());
 
 	$("#slider-dias-lunas div").on("click", function(e){
 		if(!objetoLunas.movimiento && !$(this).hasClass('contenedor-fecha-activa')){
@@ -723,38 +752,33 @@ function cargarFechaPrincipal(){
 
 }
 
-function cargarSlider(dia, mes, anio){
-	var dias = localStorage.getItem('regularidad_usr');
-	for (var i = 1; i <= 150; i++){
-		var fecha = new Date(anio, mes, dia);		
-		fecha.setDate(dia - 151 + i);
-		var fase = SunCalc.getMoonIllumination(fecha).phase;
-		var faseConv = fase.toFixed(2);
-		if(faseConv == 1){
-			faseConv = 0;
-		}
-		var claveUrlLuna = Math.round(faseConv*(NUM_LUNAS - 1) + 1);
-		$("#slider-dias-lunas").append("<div data-orden='" + i + "' ><h2 data-sss='" + fase +"' data-fecha='" + fecha + "'>" + fecha.getDate() + "</h2><img src='img/luna-" + claveUrlLuna + ".png'/><h3>" + fecha.getMonth() + "</h3></div>");
-		
-	}
-	var fechaHoy = new Date(anio, mes, dia);
+function lunaFaseUrl(fecha){
 	var fase = SunCalc.getMoonIllumination(fecha).phase;
 	var faseConv = fase.toFixed(2);
 	if(faseConv == 1){
 		faseConv = 0;
 	}
-	var claveUrlLuna = Math.round(faseConv*(NUM_LUNAS - 1) + 1);
-	$("#slider-dias-lunas").append("<div data-orden='151' class='contenedor-fecha-activa'><h2 data-sss='" + fase +"' data-fecha='" + fecha + "'>" + dia + "</h2><img src='img/luna-" + claveUrlLuna + ".png'/><h3>" + mes + "</h3></div>");
-	for (var i = 152; i <= 300; i++){
-		var fecha = new Date(anio, mes, dia);		
+	var claveUrlLuna = Math.trunc(faseConv*(NUM_LUNAS - 1) + 1);
+	return claveUrlLuna;
+}
+
+function cargarSlider(dia, mes, anio){
+	var dias = localStorage.getItem('regularidad_usr');
+	for (var i = 1; i <= 150; i++){
+		var fecha = new Date(anio, mes, dia, 0,0,0,0, 0);		
 		fecha.setDate(dia - 151 + i);
 		var fase = SunCalc.getMoonIllumination(fecha).phase;
-		var faseConv = fase.toFixed(2);
-		if(faseConv == 1){
-			faseConv = 0;
-		}
-		var claveUrlLuna = Math.round(faseConv*(NUM_LUNAS - 1) + 1);
-		$("#slider-dias-lunas").append("<div data-orden='" + i + "'><h2 data-sss='" + fase +"' data-fecha='" + fecha + "'>" + fecha.getDate() + "</h2><img src='img/luna-" + claveUrlLuna + ".png'/><h3>" + fecha.getMonth() + "</h3></div>");
+		$("#slider-dias-lunas").append("<div data-orden='" + i + "' ><h2 data-sss='" + fase +"' data-fecha='" + fecha + "'>" + fecha.getDate() + "</h2><img src='img/luna-" + lunaFaseUrl(fecha) + ".png'/><h3>" + fecha.getMonth() + "</h3></div>");
+		
+	}
+	var fechaHoy = new Date(anio, mes, dia, 0,0,0,0,0);
+	var fase = SunCalc.getMoonIllumination(fechaHoy).phase;
+	$("#slider-dias-lunas").append("<div data-orden='151' class='contenedor-fecha-activa'><h2 data-sss='" + fase +"' data-fecha='" + fechaHoy + "'>" + dia + "</h2><img src='img/luna-" + lunaFaseUrl(fechaHoy) + ".png'/><h3>" + mes + "</h3></div>");
+	for (var i = 152; i <= 300; i++){
+		var fecha = new Date(anio, mes, dia, 0,0,0,0,0);		
+		fecha.setDate(dia - 151 + i);
+		var fase = SunCalc.getMoonIllumination(fecha).phase;
+		$("#slider-dias-lunas").append("<div data-orden='" + i + "'><h2 data-sss='" + fase +"' data-fecha='" + fecha + "'>" + fecha.getDate() + "</h2><img src='img/luna-" + lunaFaseUrl(fecha) + ".png'/><h3>" + fecha.getMonth() + "</h3></div>");
 	}
 	var ancho = 0;
 	var anchoIndiv = physicalScreenWidth/7;
@@ -806,6 +830,9 @@ function cerrarMooonaGeneral(){
 	});
 	$("#pagina-foco-principal").addClass("sub-activa");
 	$("#selector-detalles-foco").addClass("icono-activo");
+
+	$(".contenedor-moona-luna").hide();
+	$(".dia-escondido").hide();
 }
 
 function abrirMooonaGeneral(){
@@ -814,6 +841,9 @@ function abrirMooonaGeneral(){
 	$("#footer-principal").removeClass("cerrado");
 	$("#footer-principal").addClass("abierto");
 	activarBotonBack("footer-principal", false);
+
+	$(".contenedor-moona-luna").show();
+	$(".dia-escondido").show();
 
 }
 
@@ -847,6 +877,7 @@ function cambiarFechaSlider(ordenActual, ordenProximo){
 		});
 	}
 	objetoLunas.moverLunas(ordenProximo - ordenActual);	
+	inicializarFooter(new Date($("div[data-orden='" + ordenProximo + "'] h2").attr("data-fecha")));
 }
 
 function calculoFechasMooona(fecha){
@@ -985,8 +1016,7 @@ function validarInicioSesion(){
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
-			  console.log(textStatus, errorThrown);
-			  alert(errorThrown)//Test1
+			  alert("Error de conexión: " + textStatus)//Test1
 			}
 		});	
 	}
@@ -1025,8 +1055,7 @@ function validarRegistro(){
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
-			  console.log(textStatus, errorThrown);
-			  alert(errorThrown);
+			  alert("Error de conexión: " + errorThrown);
 			}
 		});	
 	}
@@ -1055,29 +1084,34 @@ function handleExternalURLs() {
 
 function syncDetalles(){
 	console.log("FETCHING...");
-	alert("FETCHING...");//Test1
+	if(localStorage.getItem('init') == null || localStorage.getItem('init') == '' || localStorage.getItem('init') == 'false'){
+		inicializado = false;
+	}else{
+		inicializado = true;
+	}
+
 	$.ajax({
 		url: 'http://canteraestudio.com/mooona/leer-detalles',
-		async: true,
+		async: inicializado,
+		timeout: 6000,
 		success: function(res){
-			//console.log(res);
 			res = JSON.parse(res);
 			console.log("FINISHED");
-			alert("FINISHED");//Test1
+			localStorage.setItem('init', true);
 			var posts = res[0];
 			var categories = res[1];
 			guardarPosts(posts);
 			guardarCategorias(categories);
 		},
 		error: function(jqXHR, textStatus, errorThrown){
-			alert(errorThrown);
+			alert("Error de conexión. Es posible que algunas funciones no estén disponibles. Compruebe su conexión a internet.");
 		}
 	});
 }
 
 
 function guardarPosts(posts){
-	db.transaction(function(tx){		
+	db.transaction(function(tx){	
 		tx.executeSql("CREATE TABLE IF NOT EXISTS posts ( "+
 					"id_post INTEGER UNIQUE NOT NULL PRIMARY KEY, " +
 					"titulo VARCHAR(200), " +
@@ -1097,14 +1131,15 @@ function guardarPosts(posts){
 						continuarGuardarPosts(tx, results, post);
 					}, errorCargarProductos);
 		});
-	},errorCargarProductos);
+	},function(err){
+	});
 }
 
 function continuarGuardarPosts(tx, results, post){
 	if(results.rows.length == 0){
 		tx.executeSql("INSERT INTO posts VALUES ('" + post.ID + "', '" + post.titulo + "', '" + post.contenido + "', '" + post.descripcion + "', '" + post.imagenURL + "', '" + post.resumen + "', '" + post.imagenExtraURL + "', '" + post.categoria + "') ");
 	}else{
-		tx.executeSql("UPDATE posts SET titulo = '" + post.titulo + "', contenido = '" + post.contenido + "', descripcion = '" + post.descripcion + "', resumen ='" + post.imagenURL + "', imgPath = '" + post.imagenURL + "', id_categoria= '" + post.categoria + "' WHERE id_post = '" + post.ID + "'");
+		tx.executeSql("UPDATE posts SET titulo = '" + post.titulo + "', contenido = '" + post.contenido + "', descripcion = '" + post.descripcion + "', resumen ='" + post.resumen + "', imgPath = '" + post.imagenURL + "', imgPathExtra = '" + post.imagenExtraURL + "', id_categoria= '" + post.categoria + "' WHERE id_post = '" + post.ID + "'");
 	}
 	if(post.imagenURL){
 		//guardarImgPost(post.imagenURL, post.imagen, post);
@@ -1113,21 +1148,8 @@ function continuarGuardarPosts(tx, results, post){
 	if(post.imagenExtraURL){
 		guardarImgPost(post, '2');	
 	}
-	/*x.executeSql("DELETE FROM posts_categorias WHERE id_post = '" + post.ID + "'");
-	$.each(post.categorias, function(key, categoria){
-		tx.executeSql("SELECT * FROM posts_categorias WHERE id_post = '" + post.ID + "' AND id_categoria = '" + categoria + "'", [], 
-			function (tx, results){
-				guardarPostsCategorias(tx, results, post.ID, categoria);
-			}, errorCargarProductos);
-	});*/
 }
 
-/*function guardarPostsCategorias(tx, results, post, categoria){
-	if(results.rows.length == 0){
-		tx.executeSql("INSERT INTO posts_categorias (id_post, id_categoria) VALUES ('" + post+ "', '" + categoria + "') ");
-	}
-}
-*/
 function guardarCategorias(categorias){
 	db.transaction(function(tx){
 		tx.executeSql("CREATE TABLE IF NOT EXISTS categorias ( "+
@@ -1172,7 +1194,6 @@ function guardarImgPostBase(url, id, imagen){
 		if(imagen == 1){
 			tx.executeSql("UPDATE posts SET imgPath='" + url + "' WHERE id_post='" + id + "'");
 			tx.executeSql('SELECT * FROM posts' , [], function(tx, results){
-			console.log(results.rows[1]);
 		},funcionErrorBase2);
 		}else{
 			tx.executeSql("UPDATE posts SET imgPathExtra='" + url + "' WHERE id_post='" + id + "'");
@@ -1182,10 +1203,12 @@ function guardarImgPostBase(url, id, imagen){
 }
 
 
-function inicializarFooter(){
-	var moona = calculoFechasMooona(new Date());
-	var luna = lunaHoy();
-	var fechas = calculoFechasFooter(moona.etapa);
+function inicializarFooter(fecha){
+	var moona = calculoFechasMooona(fecha);
+	var luna = lunaHoy(fecha);
+	var fechas = calculoFechasFooter(moona.etapa, fecha);
+	console.log(luna);
+	console.log(moona);
 	/*recuperarPost(moona.etapa, function(res){
 		$("#contenedor-mooona-principal img").attr("src", res.imgPath);
 		$("#contenedor-mooona-principal h4").html(res.contenido);
@@ -1195,22 +1218,27 @@ function inicializarFooter(){
 		$("#contenedor-mooona-principal img").attr("src", res[0].imgPath);	//TODOS LOS POSTS
 		$("#contenedor-mooona-principal h4").html(res[0].contenido);		//
 	});																	//
-	recuperarSubPostsFooter("virgen"); 									// 
+	recuperarSubPostsFooter("virgen", fecha); 									// 
 
 	$("#rango-fechas-mooona .dia-inicial").html(fechas.init.getDate());
 	$("#rango-fechas-mooona .dia-final").html(fechas.fin.getDate());
-	$("#rango-fechas-mooona .mes").html(MESES[fechas.init.getMonth()]);
+	$("#rango-fechas-mooona .mes").html(MESES[fechas.fin.getMonth()]);
 	$(".titulo-mooona").html("Moona " + moona.etapa + " en " + luna);
+
+	$(".dia-escondido").html(fecha.getDate());
+
+	$("#cont-luna-ext img").attr("src", "img/luna-" + lunaFaseUrl(fecha) + ".png");
+	$("#cont-luna-mooona img").attr("src", "img/luna-" + moona.numImg + ".png");
+
 }
 
-function calculoFechasFooter(etapa){
-	var hoy = new Date();
-	var fechaTemp = hoy;
+function calculoFechasFooter(etapa, fecha){
+	var fechaTemp = fecha;
 	while(calculoFechasMooona(fechaTemp).etapa == etapa){
 		fechaTemp = new Date(fechaTemp.getFullYear(), fechaTemp.getMonth(), parseInt(fechaTemp.getDate()) - 1);
 	}
 	var fechaInit = new Date(fechaTemp.getFullYear(), fechaTemp.getMonth(), parseInt(fechaTemp.getDate()) + 1);
-	var fechaTemp = hoy;
+	var fechaTemp = fecha;
 	while(calculoFechasMooona(fechaTemp).etapa == etapa){
 		fechaTemp = new Date(fechaTemp.getFullYear(), fechaTemp.getMonth(), parseInt(fechaTemp.getDate()) + 1);
 	}
@@ -1218,9 +1246,9 @@ function calculoFechasFooter(etapa){
 	return {init : fechaInit, fin: fechaFin}
 }
 
-function lunaHoy(){
+function lunaHoy(fecha){
 	var texto = '';
-	var fase = SunCalc.getMoonIllumination(new Date()).phase;
+	var fase = SunCalc.getMoonIllumination(fecha).phase;
 	if(fase >= 0.88 || fase < 0.13){
 		texto = 'Luna Nueva';
 	}
@@ -1249,9 +1277,9 @@ function recuperarPost(categoria, regresar){
 	}, errorRecuperarPost);
 }
 
-function recuperarSubPostsFooter(etapa){
+function recuperarSubPostsFooter(etapa, fecha){
 	recuperarSubPostsFoco(etapa);
-	recuperarSubPostsManzana(etapa);
+	recuperarSubPostsManzana(etapa, fecha);
 	recuperarSubPostsArpa(etapa);
 	recuperarSubPostsPesa(etapa);
 	recuperarSubPostsFlor(etapa);
@@ -1265,11 +1293,11 @@ function recuperarSubPostsFoco(etapa){
 	});
 }
 
-function recuperarSubPostsManzana(etapa){
+function recuperarSubPostsManzana(etapa, fecha){
 	$("#fechas-manzana, #contenedor-tips, #contenedor-alimentos").html("");
 	recuperarPost("manzana-" + etapa, function(res){
 		$("#selector-detalles-manzana img").attr("src", res[0].imgPath);
-		recuperarDivLunas(etapa);
+		recuperarDivLunas(etapa, fecha);
 		switch(etapa){
 			case "madre": 
 				var descEtapa = "Ovulación";
@@ -1321,15 +1349,14 @@ function recuperarTipsManzana(ID){
 	}, errorRecuperarPost);
 }
 
-function recuperarDivLunas(etapa){
-	var fechasFase = recuperarFechasFaseAct(etapa);
-	var hoy = new Date();
+function recuperarDivLunas(etapa, fecha){
+	var fechasFase = recuperarFechasFaseAct(etapa, fecha);
 	var cnt = 0;
 	$.each(fechasFase.fechas, function(key, val){
 		var div = document.createElement('div');
 		div.className = "fecha-manzana";
 		var img = new Image();
-		if(hoy.getDate() == fechasFase.fechas[key]){
+		if(fecha.getDate() == val){
 			div.className = "fecha-manzana fecha-actual";
 			img.src = "img/luna-rosa" + fechasFase.lunas[key] + ".png";
 		}else{
@@ -1403,7 +1430,6 @@ function recuperarFertilidadLunar(){
 }
 
 function continuacionRecuperarPostPrincipal(tx, contador){
-	console.log(contador);
 }
 function funcionErrorBase2(tx, err){
 	alert("1: ERROR-" + err.code + ": " + err.message);
@@ -1441,37 +1467,27 @@ function desplegarSubFooter(clase, esto){
 	$(".contenedor-sub-iconos").addClass("azul");
 }
 
-function recuperarFechasFaseAct(etapa){
-	var hoy = new Date();
-	var fecha = hoy;
-	var calculo = calculoFechasMooona(hoy);
+function recuperarFechasFaseAct(etapa, fecha){
+	var fechaTemp = fecha;
+	var calculo = calculoFechasMooona(fecha);
 	var etapa = calculo.etapa;
 	var etapaTemp = etapa;
 	var cnt = 1;
 	var fechas = [];
 	var lunas = [];
-	fechas.push(hoy.getDate());
+	fechaMadrugada = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate());
+	fechas.push(fecha.getDate());
 	//lunas.push(calculo.numImg); // En el caso de que se use la luna MOONA *** Caso 1
-	var fase = SunCalc.getMoonIllumination(hoy).phase;
-	var faseCalc = fase.toFixed(2);
-	if(faseCalc == 1){
-		faseCalc = 0;
-	}
-	lunas.push(Math.round(faseCalc*(NUM_LUNAS - 1) + 1));
+	lunas.push(lunaFaseUrl(fechaMadrugada));
 	//En el caso de que se use la luna de hoy *** Caso 2
 	while (true ){
-		fecha = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() + cnt);
-		var calc = calculoFechasMooona(fecha);
+		fechaTemp = new Date(fechaMadrugada.getFullYear(), fechaMadrugada.getMonth(), fechaMadrugada.getDate() + cnt);
+		var calc = calculoFechasMooona(fechaTemp);
 		etapaTemp = calc.etapa;
 		if(etapaTemp === etapa){
-			fechas.push(fecha.getDate());
+			fechas.push(fechaTemp.getDate());
 			//lunas.push(calc.numImg); // Caso 1
-			var fase = SunCalc.getMoonIllumination(fecha).phase;
-			var faseCalc = fase.toFixed(2);
-			if(faseCalc == 1){
-				faseCalc = 0;
-			}
-			lunas.push(Math.round(faseCalc*(NUM_LUNAS - 1) + 1));
+			lunas.push(lunaFaseUrl(fechaTemp));
 			//Caso 2
 			cnt++;		
 		}else{
@@ -1480,18 +1496,13 @@ function recuperarFechasFaseAct(etapa){
 	}
 	var cnt = 1;
 	while (true ){
-		fecha = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate() - cnt);
-		var calc = calculoFechasMooona(fecha);
+		fechaTemp = new Date(fechaMadrugada.getFullYear(), fechaMadrugada.getMonth(), fechaMadrugada.getDate() - cnt);
+		var calc = calculoFechasMooona(fechaTemp);
 		etapaTemp = calc.etapa;
 		if(etapaTemp === etapa){
-			fechas.unshift(fecha.getDate());
+			fechas.unshift(fechaTemp.getDate());
 			//lunas.unshift(calc.numImg); // Caso 1
-			var fase = SunCalc.getMoonIllumination(fecha).phase;
-			var faseCalc = fase.toFixed(2);
-			if(faseCalc == 1){
-				faseCalc = 0;
-			}
-			lunas.unshift(Math.round(faseCalc*(NUM_LUNAS - 1) + 1));
+			lunas.unshift(lunaFaseUrl(fechaTemp));
 			//Caso 2	
 			cnt++;		
 		}else{

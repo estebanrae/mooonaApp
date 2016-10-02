@@ -23,6 +23,10 @@ function cargarSientoActual(fecha, attr){
 function consultarSientoBase(fecha, attr){
 	fechaFormato = fechaJSaDB(fecha);
 	db.transaction(function(tx){
+		tx.executeSql("CREATE TABLE IF NOT EXISTS sentimientos ( "+
+					"fecha DATE NOT NULL, " +
+					"atributo VARCHAR(50), " +
+					"magnitud INTEGER);");
 		tx.executeSql('SELECT * FROM sentimientos WHERE fecha = "' + fechaFormato + '" AND atributo = "' + attr + '"', [], 
 					function(tx, results){
 						var magnitudActual = 0;
@@ -34,12 +38,12 @@ function consultarSientoBase(fecha, attr){
 						activarEstrella(magnitudActual);
 					}, errorCargarSiento);
 	}, errorCargarSiento);
+
 }
 
 function guardarSientoBase(fecha, attr, magnitud){
 	fechaFormato = fechaJSaDB(fecha);
 	db.transaction(function(tx){
-			tx.executeSql("DROP TABLE sentimientos");
 			tx.executeSql("CREATE TABLE IF NOT EXISTS sentimientos ( "+
 					"fecha DATE NOT NULL, " +
 					"atributo VARCHAR(50), " +
@@ -64,7 +68,7 @@ function guardarSiento(tx, results, fecha, attr, magnitud){
 }
 
 function errorCargarSiento(err){
-	alert("ERROR-" + err.code + ": " + err.message);
+	alert("ERRORX-" + err.code + ": " + err.message);
 }
 
 function successGuardarSiento(){
