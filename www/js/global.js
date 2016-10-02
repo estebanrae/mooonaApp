@@ -24,6 +24,10 @@ function onDeviceReady(){
 	//navigator.notification.alert("alto: " + physicalScreenHeight + "ancho: " + physicalScreenWidth, null, "Medidas", "Cerrar");
 	allowTransitionChange = true;
 	productosCargados = false;
+	window.addEventListener("orientationchange", function(){
+	    alert("cambio orientacion");
+	    screen.lockOrientation('portrait');
+	});
 	handleExternalURLs();
 	setSelects();
 	localStorage.setItem('previa', '');

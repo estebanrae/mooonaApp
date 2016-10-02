@@ -1,0 +1,1526 @@
+/*  CSS RESET  */
+                                /**/
+                                  /**/
+                                  /**/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+}
+
+a{
+        text-decoration:none;
+}
+
+a:hover,
+a:focus,
+a:active,
+input:hover,
+input:focus,
+input:active{
+        outline:none;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+        display: block;
+}
+
+body { 
+	line-height: 1; 
+	font-family: 'PT Sans Caption', sans-serif;
+}
+
+ol, ul { list-style: none; }
+
+blockquote, q { quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+        content: '';
+        content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+::selection {
+	background-color: #ef4037;
+	color: #FFF;
+}
+
+::-moz-selection {
+	background-color: #ef4037;
+	color: #FFF;
+}
+
+body{
+	-webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;  
+}
+
+
+
+
+
+
+body{
+	font-size: 1.5em;
+}
+
+.azul{
+	color: #fff;
+	background-color: #003047;
+}
+
+.blanco{
+	color: #003047;
+	background-color: #fff;
+}
+
+.rosa{
+	background-color: #ec6976;
+	color: #fff;
+}
+
+.ui-btn span{
+	display: none;
+}
+
+body{
+	margin: 0;
+}
+.header{
+	width: 100%;
+	top:0;
+	position: fixed;
+	display: block;
+	height: 7%;
+	z-index: 21;
+	background-color: #ec6976;
+	box-shadow: 0 3px 5px rgba(0,0,0,.15);
+}
+.header .header-titulo{
+	margin: auto;
+	position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: 40%;
+}
+
+.header .header-menu{
+	margin: auto;
+	position: absolute;
+	top:0;
+	bottom: 0;
+	right: 0;
+	padding-right: 1%;
+	height: 100%;
+}
+
+.header-back {
+	display: none;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	padding-right: 20px;
+	padding-left: 10px;
+	height: 35px;
+}
+
+.campo-iniciar-sesion {
+    width: 100%;
+    height: 75%;
+    padding: 3% 0;
+    margin: 2% 0;
+}
+
+input#enviar-inicio-s {
+    width: 100%;
+    /* padding: 10% 0; */
+    height: 38%;
+    margin: 5% 0;
+}
+
+.contenedor-pagina{
+	height: 93%;
+	display: block;
+	position: absolute;
+	left: 0;
+	right: 0;
+	width: 100%;
+	top:7%;
+	bottom: 0;
+}
+
+.contenedor-header{
+	text-align: center;
+	height: 100%;
+	position: relative;
+	/*padding: 15px 15px;*/
+}
+
+.contenedor-formulario{
+	padding: 0 35px ;
+}
+
+.campo-registro{
+	width: 100%;
+	display: block;
+	padding: 20px 0;
+}
+
+.campo-rueda{
+	display: inline-block;
+}
+
+#campo-fecha-nacimiento .mes,
+#campo-fecha-nacimiento .dia{
+	width: 20%;
+}
+
+#campo-fecha-nacimiento .anio{
+	width: 50%;
+}
+
+#campo-ultima-regla .campo-rueda{
+	width:40%;
+	padding: 0 10px;
+}
+
+.pagina-tipo-1 {
+    height: 93%;
+    position: fixed;
+    width: 100%;
+    top: 7%;
+}
+
+.contenedor-formulario .titulo,
+.contenedor-formulario .subtitulo,
+#campo-ultima-regla .campo-rueda,
+#campo-fecha-nacimiento .anio,
+#campo-fecha-nacimiento .mes,
+#campo-fecha-nacimiento .dia
+{
+	text-align: center;
+}
+
+.contenedor-formulario input{
+	width: 100%;
+}
+
+.pagina{
+	overflow: auto;
+}
+
+.menu{
+	z-index: 20;
+	background-color: #ec6976;
+	position: fixed;
+	overflow: hidden;
+	height: 93%;
+	right: 0;
+	width: 50%;
+	box-shadow: -3px 0 5px rgba(0,0,0,.1);
+	-webkit-transform: translateX(100%);
+	-moz-transform: translateX(100%);
+	transform: translateX(100%);	
+}
+
+.lista-menu{
+	height: 100%;
+}
+
+.lista-menu .sub-menu{
+	border-bottom: 1px solid #eef0f2;
+	text-align: right;
+	color: #fff;
+}
+
+.sub-menu ul{
+	height: 100%;
+}
+
+.lista-menu #opciones-siento
+{
+	height: 7%;
+}
+.lista-menu #opciones-calendario,
+.lista-menu #opciones-points{
+	height: 8%;
+}
+
+.lista-menu #opciones-about{
+	height: 17%;
+}
+
+.lista-menu #opciones-mi,
+.lista-menu #lista-vacia
+{
+	height: 23%;
+}
+
+.lista-menu #opciones-preferencias{
+	height: 10%;
+}
+
+.lista-menu .sub-menu.preferencias{
+	border: none;
+}
+
+.opcion#opcion-siento,
+.opcion#opcion-calendario,
+.opcion#opcion-points,
+.opcion#opcion-vacia{
+	height: 100%;
+}
+
+.opcion#opcion-periodo,
+.opcion#opcion-ejercicio,
+.opcion#opcion-nutricion{
+	height: 33.33%;
+}
+
+.opcion#opcion-tutorial,
+.opcion#opcion-about{
+	height: 50%;
+}
+
+.opcion{
+	padding-right: 20px;
+}
+
+.opcion h4{
+	/*position: absolute;
+	width: 100%;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;*/
+
+	line-height: 50px;
+
+}
+
+.opcion-seleccionada{
+	background-color: #003047;
+}
+  
+#pagina-registro{
+	overflow: hidden;
+}
+
+.iniciar-sesion,
+.registro-sesion,
+.contenedor-formulario{
+	height: 100%;
+	display: none;
+}
+
+.shadow{
+	display: none;
+	z-index: 10;
+	background-color: rgba(0,48,71, 0.9);
+
+	-webkit-transform: translateY(600px);
+	-moz-transform: translateY(600px);
+	transform: translateY(600px);
+}
+
+#pagina-principal{
+	display: block;
+	height: 100%;
+}
+
+.footer{
+	width: 100%;
+	position: fixed;
+	display: block;
+	height: 87%;
+	bottom: 0;
+	-webkit-transform: translateY(91%);
+	-moz-transform: translateY(91%);
+	transform: translateY(91%);
+}
+
+.barra-footer{
+	width: 100%;
+	height: 9%;
+	bottom: 0;
+	text-align: center;
+	position: relative;
+	display: block;
+	top: 0;
+	z-index: 1;
+	background-color: #ec6976;
+	box-shadow: 0 3px 5px rgba(0,0,0,.15);
+}
+
+.contenedor-general.azul{
+	position: fixed;
+	text-align: center;
+	height: 93%;
+	width: 100%;
+	background-color: #003047;
+	color: #fff;
+	overflow: hidden;
+
+}
+
+.pagina-menu-siento{
+	width: 100%;
+	height: 100%;
+}
+
+.fila-menu-siento{
+	display: block;
+	height: 33%;
+}
+
+.contenedor-boton-siento{
+	display: inline-block;
+	position: relative;
+	width: 32%;
+	height: 100%;
+}
+
+.contenedor-boton-siento img,
+.contenedor-boton-siento h3{
+ 	display:block;
+ 	height: 50%;
+ 	margin: auto;
+}
+
+.contenedor-boton-siento h3{
+	text-align: center;
+	height: auto;
+	padding-top: 15px; 
+}
+
+.pagina-menu-siento{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	padding-top: 25px;
+}
+
+.desplegar-izquierda{
+	display: none;
+	z-index: 2;
+	background-color: #fff;
+
+	-webkit-transform: translateX(-600px);
+	-moz-transform: translateX(-600px);
+	transform: translateX(-600px);
+}
+
+.pagina-siento{
+	position: fixed;
+	width: 100%;
+	height: 93%;
+}
+
+.header-siento{
+	width: 100%;
+	height: 7%;
+	top: 0;
+}
+
+.contenedor-estrellas{
+	text-align: center;
+	width: 100%;
+	height: 75px;
+	bottom:0;
+}
+
+.sub-pag{
+	position: absolute;
+	visibility: hidden;
+	height: 93%;
+	width: 100%;
+}
+
+.barra-fechas h2,
+.barra-fechas-graph h2{
+	display: inline-block;
+	position: relative;
+}
+
+.barra-siento-next,
+.barra-siento-back,
+.calendario-fecha-prev,
+.calendario-fecha-next,
+.calendario-eventos-prev,
+.calendario-eventos-next {
+	position: absolute; 
+	top: 25%; 
+	height: 50%;
+	cursor: pointer;
+}
+
+.barra-siento-back,
+ .calendario-fecha-prev,
+ .calendario-eventos-prev{
+	left: 5%;
+}
+
+.barra-siento-next,
+ .calendario-fecha-next,
+ .calendario-eventos-next{
+	right: 5%;
+}
+
+.barra-fechas,
+.barra-fechas-graph{
+	position: relative;
+	text-align: center;
+	width: 100%;
+	height: 8%;
+	/*line-height: 50px;*/
+}
+
+.sub-activa{
+	visibility: visible;
+	overflow: hidden;
+}
+
+.contenedor-estrellas .estrella{
+	display: inline-block;
+}
+
+.contenedor-datos-estrella,
+.contenedor-datos-grafica
+{
+	text-align: center;
+}
+.contenedor-datos-grafica
+{
+	height: 9%;
+	width: 100%;
+}
+
+
+.imagen-icono{
+	display: inline-block;
+	width: 32%;
+	height: 100%;
+	text-align: center;
+}
+
+div#modal-siento-notas {
+  width: 100%;
+  height: 100%;
+}
+
+.modal{
+	z-index: 11;
+}
+
+textarea#campo-texto-siento {
+	border: none;
+	width: 100%;
+	height: 100%;
+	top: 
+}
+
+.icono-selector-detalles{
+	display: inline-block;
+	width: 19%;
+	height: 100%
+}
+
+.icono-selector-detalles img{
+	height: 70%;
+	position: absolute;
+}
+
+.pagina-tipo-2 {
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    height: 91%;
+    color: #003047;
+}
+
+.contenedor-fecha-principal{
+	position: fixed;
+	top: 7%;
+	width: 100%;
+	height: 6%;
+}
+
+.contenedor-elementos-principal{
+	position: fixed;
+	top: 120px;
+	width: 100%;
+	height: calc(100% - 120px);
+}
+
+.contenedor-fecha-principal h1{
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	margin: auto;
+	-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+
+.rango-fechas-mooona .dia-inicial,
+.rango-fechas-mooona .dia-final{
+	color: #ec6976;
+}
+
+.boton-detalles{
+	background-color: #003047;
+	color: #fff;
+	height: 50px;
+	width: 100%;
+	margin: auto;
+
+}
+
+.sub-menu-footer {
+	width: 100%;
+	position: fixed;
+	top: 0;
+	height: 12%;
+	z-index: 10;
+	box-shadow: 0 3px 5px rgba(0,0,0,.15);
+	left: 0;	
+}
+
+.contenedor-detalles-principal{
+	-webkit-transform: translateY(100%);
+	-moz-transform: translateY(100%);
+	transform: translateY(100%);
+}
+
+.pagina-tipo-3 {
+    top: 12%;
+    position: fixed;
+    left: 0;
+    text-align: center;
+    width: 100%;
+    bottom: 0;
+    height: auto;
+   /*height: 79%;*/
+    /* padding: 20px 60px 40px; */
+    color: #003047;
+    /* visibility: hidden; */
+}
+
+.area-de-swipe{
+	position: fixed;
+	width: 100%;
+	height: 110px;
+	margin-top: -60px;
+	z-index: 1;
+}
+
+.pagina-footer-activa{
+	visibility: visible;
+}
+
+.icono-selector-detalles{
+	opacity: 0.5;
+}
+
+.icono-selector-detalles.icono-activo{
+	opacity: 1;
+}
+
+.contenedor-slider-dias{
+	width: 100%;
+	height: 10%;
+	white-space: nowrap;
+	/*-webkit-transform: translateX(calc(-4*100%/9));
+	-moz-transform: translateX(calc(-4*100%/9));
+	transform: translateX(calc(-4*100%/9));*/
+}
+
+.slider-dias{
+	height: 100%;
+}
+
+.contenedor-lunas{
+	width: 100%;
+	height: calc(100% - 130px);
+	border: 1px;
+}
+
+.contenedor-bordes{
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin: auto;
+	height: 10%;
+
+}
+.contenedor-bordes::before{
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1px;
+	background-color: white;
+	bottom: 0;
+}
+.contenedor-bordes::after{
+	content: "";
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 1px;
+	background-color: white;
+	bottom: 0;
+}
+
+.slider-dias div{
+	position: relative;
+	display: inline-block;
+	top: 0;
+	height: 100%;
+	opacity: 0.5;
+	/*-webkit-transform: translateY(-50%);
+	-moz-transform: translateY(-50%);
+  	transform: translateY(-50%);*/
+}
+
+.contenedor-fecha-activa{
+	font-weight: bold;
+	opacity: 1 !important;
+}
+.slider-dias h3{
+	display: none;
+}
+
+
+/*.canvas-espiral{
+	width: 100%;
+	height: 100%;
+}*/
+
+
+/* CALENDARIO */
+
+.barra-calendario.barra-mes,
+.barra-evento.barra-fecha
+{
+	position: relative;
+	height: 8%;
+	width: 100%;
+	text-align: center;
+	z-index: 2;
+	box-shadow: 0 3px 5px rgba(0,0,0,.15);
+}
+
+.barra-calendario table{
+	width: 100%;
+	table-layout: fixed;
+}
+.barra-calendario td{
+	text-align: center;
+	height: 100%;
+	width: 2%;
+}
+
+.barra-calendario.barra-semana {
+    height: 5%;
+    box-shadow: 0 3px 5px rgba(0,0,0,.15);
+}
+
+.calendario-footer {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+    height: 7%;
+}
+
+.calendario-footer .fertilidad span{
+	background-color: #d4edfc;
+}
+
+.calendario-footer .fertilidad-lunar span{
+	background-color: #f5b5d2;
+}
+
+.calendario-footer div{
+	position: relative;
+	display: inline-block;
+	width: 49%;
+	height: 100%;
+
+}
+
+.calendario-footer h2,
+.calendario-footer span {
+	display: inline-block;
+}
+
+.calendario-dias td, .calendario-dias tr {
+	position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.calendario-dias table {
+    width: 100%;
+    height: 100%;
+}
+
+.calendario-dias {
+    width: 100%;
+    height: 80%;
+    color: #003047;
+}
+
+.titulo-celda {
+    position: absolute;
+    height: 40%;
+    text-align: center;
+    width: 100%;
+}
+
+.titulo-celda h1{
+	bottom: 0;
+	position: absolute;
+	width: 100%;
+}
+
+.fecha-actual .titulo-celda{
+	background-color: #003047;
+	color: white;
+}
+/*.fecha-actual .titulo-celda :after{
+	width: 0; 
+	height: 0; 
+	border-top: 60px solid transparent;
+	border-bottom: 60px solid transparent;
+
+	border-left: 60px solid green;
+}*/
+
+.sub-pag-eventos {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    position: absolute;
+}
+
+.slider-dias img{
+	/*width: 80%;*/
+	height: 80%;
+}
+
+.barra-izquierda {
+    height: 92%;
+    width: 14%;
+}
+
+.abr-semana {
+    height: 5%;
+    width: 14%;
+    position: absolute;
+    top: 8%;
+    display: block;
+    z-index: 1;
+    box-shadow: 0 3px 2px rgba(0,0,0,.15);
+    background-color: #ffffff;
+}
+
+.imagen-moona-inicial {
+    width: 40%;
+}
+
+.barra-dia {
+    display: block;
+    position: absolute;
+    width: 14%;
+    height: 87%;
+    top: 13%;
+}
+
+.contenedor-eventos {
+    position: absolute;
+    top: 8%;
+    left: 14%;
+    width: 86%;
+    height: 92%;
+    background-color: #ffffff;
+}
+
+.boton-agregar {
+    width: 14%;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-right: 1%;
+    margin-bottom: 1%;
+    box-shadow: 2px 2px 2px 2px rgba(0,0,0,.15);
+}
+
+.boton-agregar img{
+	width: 100%;
+}
+
+.mensaje-eventos,
+.sub-pag-eventos{
+	display: none;
+}
+
+.evento-nuevo{
+    position: absolute;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+#pagina-productos {
+    width: 100%;
+    height: 93%;
+    position: fixed;
+    top: 7%;
+    -webkit-transform: translateX(-100%);
+	-moz-transform: translateX(-100%);
+	transform: translateX(-100%);
+
+}
+
+.dia-evento,
+.dias-repetir{
+	display: none;
+}
+
+.dias-repetir li[data-active="true"]{
+	background-color: #ec6976;
+}
+
+.dias-repetir li{
+	display: inline-block;
+}
+
+.evento {
+    background-color: #f0f9fe;
+    margin: 1% 0 0% 1%;
+}
+
+.dia-hay-evento{
+	position: relative;
+}
+
+/*.dia-hay-evento:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-bottom: 15px solid transparent;
+    /* border-bottom: 10px solid #000; 
+    border-right: 15px solid #ec6976;
+    width: 0;
+    height: 0;
+}*/
+
+/*.fecha-actual .titulo-celda {
+	position: relative;
+}*/
+
+/*.fecha-actual .titulo-celda:after {
+	content:  ''; 
+	position:  absolute;
+	border-left: 15px solid transparent; 
+	border-right: 15px solid transparent;
+	border-top: 15px solid #003047;
+	bottom: -15px;
+	left: 50%; 
+	-webkit-transform: translateX(-50%);
+	-moz-transform: translateX(-50%);
+	transform: translateX(-50%);
+}*/
+
+.eventos-actuales{
+    position: absolute;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+}
+
+img.pico-fecha-actual {
+    height: 30%;
+    position: absolute;
+    margin: auto;
+    left: 0;
+    right: 0;
+    bottom: -30%;
+    /* width: auto; */
+}
+
+img.marcador-evento {
+    position: absolute;
+    margin: auto;
+    right: 0;
+    top: 0;
+    width: 33.33%;
+}
+
+.fecha-opaco {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.fecha-opaco h1{
+	opacity: 0.4;
+}
+
+.contenedor-inferior{
+	position: absolute;
+	height: 60%;
+	width: 100%;
+	bottom: 0;
+}
+
+.fecha-fertilidad{
+	background-color: #d4edfc;
+}
+
+
+
+
+
+
+
+/* PRODUCTOS */
+
+.pagina-productos .barra-titulo {
+    width: 100%;
+    margin: auto;
+    height: 8%;
+    box-shadow: 0 3px 5px rgba(0,0,0,.15);
+
+
+}
+
+.pagina-productos .barra-titulo h1 {
+    width: 65%;
+    height: 100%;
+    display: inline-block;
+}
+
+.pagina-productos .barra-titulo h2 {
+    width: 30%;
+    height: 100%;
+    display: inline-block;
+    background-color: #fff;
+    color: #003047;
+}
+
+.pagina-productos{
+	background-image: url("../img/fondo-luna.jpg");
+	background-size: auto 100%;
+	background-repeat: no-repeat;
+	background-position: center
+}
+
+.mensaje-no-hay,
+.contenedor-productos{
+	height: 92%;
+	width: 100%;
+	background-color: rgba(236,105,118,0.7);
+}
+
+.mensaje-no-hay{
+	display: none;	
+}
+
+.contenedor-productos{
+	background-color: rgba(255,255,255,0.8);
+}
+
+.producto {
+    width: 100%;
+    height: 35%;
+    background-color: rgba(0, 48, 71, 0.8);
+}
+
+.producto img{
+	width: 20%;
+}
+
+.producto-abierto{
+	height: 100%;
+	background-color: rgba(0, 48, 71, 0.8);
+}
+
+#contenedor-tip-shadow {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    display: none;
+}
+
+
+
+
+
+
+/* ESTRELLAS */
+
+.estrella {
+    background-image: url("../img/sprite-estrella-rosa.png");
+    width: 15%;
+    height: 100%;
+    background-position: 0 90%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.estrella-activa{
+	background-position: 0 -5%;	
+}
+
+.contenedor-grafica-siento{
+	width:	80%;
+	height: 80%;
+	margin: auto;
+	left:0;
+	right: 0;
+}
+
+.contenedor-grafica {
+    width: 100%;
+    height: 50%;
+    position: relative;
+}
+
+#contenedor-grafica-siento span{
+	display: inline-block;
+	position: relative;
+	height: 100%;
+}
+
+#contenedor-grafica-siento img{
+	width: 100%;
+	position: absolute;
+}
+
+#contenedor-grafica-siento span[data-magnitud="1"] img,
+#contenedor-grafica-siento span[data-magnitud="1"] h5{
+	bottom: 10%;
+}
+
+#contenedor-grafica-siento span[data-magnitud="2"] img,
+#contenedor-grafica-siento span[data-magnitud="2"] h5{
+	bottom: 30%;
+}
+
+#contenedor-grafica-siento span[data-magnitud="3"] img,
+#contenedor-grafica-siento span[data-magnitud="3"] h5{
+	bottom: 50%;
+}
+
+#contenedor-grafica-siento span[data-magnitud="4"] img,
+#contenedor-grafica-siento span[data-magnitud="4"] h5{
+	bottom: 70%;
+}
+
+#contenedor-grafica-siento span[data-magnitud="5"] img,
+#contenedor-grafica-siento span[data-magnitud="5"] h5{
+	bottom: 90%;
+}
+
+#contenedor-grafica-siento span[data-magnitud="0"] h5{
+	bottom:0;
+}
+#contenedor-grafica-siento h5{
+	position: absolute;
+	display: block;
+	font-size: 50%;
+	transform: translateY(130%);
+}
+
+
+
+
+/* FOOTER */
+
+.div-diosa h6,
+.div-diosa .contenido-diosa{
+	display: none;
+}
+
+.div-sub-iconos .contenido-diosa{
+	opacity: 1;
+    position: absolute;
+    padding: 2% 8%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.div-sub-iconos p{
+	padding-top: 20%;
+}
+
+.div-sub-iconos{
+	height: 100%;
+	display: inline-block;
+}
+
+.div-sub-iconos img{
+	height: 70%;
+}
+
+.contenido-diosa {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    display: none;
+}
+
+.contenido-diosa p{
+	top: 19%;
+	position: absolute;
+}
+
+.div-sub-iconos[data-seleccionada="false"]{
+	opacity: 0.5;
+}
+
+.div-sub-iconos[data-seleccionada="true"]{
+	opacity: 1;
+
+}
+
+.contenido-arpa{
+	padding-top: 28%;
+}
+
+.contenedor-sub-iconos {
+    width: 100%;
+    height: 15%;
+    display: flex;
+    position: absolute;
+    left: 0;
+    justify-content: space-between;
+    top: 0;
+    z-index: 3;
+}
+
+.contenido-flor,
+.contenido-fertilidad {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+}
+
+.contenido-flor p,
+.contenido-fertilidad p{
+	position: absolute;
+	top: 19%;
+}
+
+.contenido-fertilidad{
+	display: none;
+}
+
+#fechas-manzana{
+	width: 100%;
+	height: 18%;
+}
+
+.fecha-manzana{
+	display: inline-block;
+	height: 100%;
+}
+
+.fecha-manzana img{
+	height: 50%;
+	bottom: 0;
+}
+
+.fecha-manzana h1{
+	top: 0;
+}
+
+.fecha-manzana.fecha-actual h1{
+	color: #ec6976;
+}
+
+.pagina-manzana-principal{
+	color: white;
+	overflow-y: auto;
+}
+
+.contenedor-tip{
+	position: relative;
+	width: 100%;
+	padding-top: 10%;
+}
+
+.contenedor-tip .titulo{
+	position: relative;
+	border-bottom: 1px solid white;
+	margin-bottom: 2%;
+}
+
+.contenedor-tip .titulo img{
+	height: 100%;
+	position: absolute;
+	left: 0;
+}
+
+.contenedor-tip .titulo span{
+	position: absolute;
+	right: 0;
+}
+
+.contenedor-tip .titulo h2{
+	display: inline-block;
+}
+
+.barra-alimentos{
+	width: 100%;
+    margin-top: 10%;
+    height: 10%;
+}
+
+#contenedor-alimentos .titulo{
+	border-bottom: 1px solid #003047;
+}
+
+.contenedor-moona-luna {
+    display: none;
+    height: 7%;
+    position: absolute;  
+}
+
+.contenedor-moona-luna img{
+	height: 50%;
+}
+
+.contenedor-moona-luna.izquieda{
+	left: 0;
+}
+
+.contenedor-moona-luna.derecha{
+	right: 0;
+}
+
+.dia-escondido{
+	display: none;
+}
+
+
+
+
+
+
+/* ANIMACION */
+
+.hacerGrande img{
+	animation-name: hacerGrande;
+	animation-duration: 0.5s;
+}
+
+.hacerChico img{	
+	animation-name: hacerChico;
+	animation-duration: 0.5s;
+}
+
+.mover-a-derecha{
+	z-index: 2;
+	animation-name: moverDeCeroADerecha;
+	animation-duration: 0.5s;
+}
+
+.mover-de-izquierda{
+	z-index: 4;
+	-webkit-transform: translateX(-100%);
+	-moz-transform: translateX(-100%);
+	transform: translateX(-100%);
+
+	animation-name: moverDeIzquierdaACero;
+	animation-duration: 0.5s;
+}
+
+.mover-a-izquierda{
+	z-index: 2;
+	animation-name: moverDeCeroAIzquierda;
+	animation-duration: 0.5s;
+}
+
+.mover-de-derecha{
+	z-index: 4;
+	-webkit-transform: translateX(100%);
+	-moz-transform: translateX(100%);
+	transform: translateX(100%);
+
+	animation-name: moverDeDerechaACero;
+	animation-duration: 0.5s;
+}
+
+
+
+
+/* MOVER DE CERO A DERECHA */
+
+@-webkit-keyframes moverDeCeroADerecha{
+	0% {-webkit-transform: translateX(0);
+		-moz-transform: translateX(0);
+		transform: translateX(0);}
+
+	100% {-webkit-transform: translateX(100%);
+		-moz-transform: translateX(100%);
+		transform: translateX(100%);}
+}
+
+@keyframes moverDeCeroADerecha{
+	0% {-webkit-transform: translateX(0);
+		-moz-transform: translateX(0);
+		transform: translateX(0);}
+
+	100% {-webkit-transform: translateX(100%);
+		-moz-transform: translateX(100%);
+		transform: translateX(100%);}
+}
+
+
+/* MOVER DE IZQUIERDA A CERO */
+
+@-webkit-keyframes moverDeIzquierdaACero{
+	0% {-webkit-transform: translateX(-100%);
+		-moz-transform: translateX(-100%);
+		transform: translateX(-100%);}
+
+	100% {-webkit-transform: translateX(0);
+		-moz-transform: translateX(0);
+		transform: translateX(0);}
+}
+
+@keyframes moverDeIzquierdaACero{
+	0% {-webkit-transform: translateX(-100%);
+		-moz-transform: translateX(-100%);
+		transform: translateX(-100%);}
+
+	100% {-webkit-transform: translateX(0);
+		-moz-transform: translateX(0);
+		transform: translateX(0);}
+}
+
+
+/* MOVER DE CERO A IZQUIERDA */
+
+@-webkit-keyframes moverDeCeroAIzquierda{
+	0% {-webkit-transform: translateX(0);
+		-moz-transform: translateX(0);
+		transform: translateX(0);}
+
+	100% {-webkit-transform: translateX(-100%);
+		-moz-transform: translateX(-100%);
+		transform: translateX(-100%);}
+}
+
+@keyframes moverDeCeroAIzquierda{
+	0% {-webkit-transform: translateX(0);
+		-moz-transform: translateX(0);
+		transform: translateX(0);}
+
+	100% {-webkit-transform: translateX(-100%);
+		-moz-transform: translateX(-100%);
+		transform: translateX(-100%);}
+}
+
+
+/* MOVER DE DERECHA A CERO */
+
+@-webkit-keyframes moverDeDerechaACero{
+	0% {-webkit-transform: translateX(100%);
+		-moz-transform: translateX(100%);
+		transform: translateX(100%);}
+
+	100% {-webkit-transform: translateX(0);
+		-moz-transform: translateX(0);
+		transform: translateX(0);}
+}
+
+@keyframes moverDeDerechaACero{
+	0% {-webkit-transform: translateX(100%);
+		-moz-transform: translateX(100%);
+		transform: translateX(100%);}
+
+	100% {-webkit-transform: translateX(0);
+		-moz-transform: translateX(0);
+		transform: translateX(0);}
+}
+
+
+/* HACER CHICO */
+
+@-webkit-keyframes hacerChico{
+	0% {width: 100%;
+		opacity: 1;}
+
+	100% {width: 70%;
+		opacity: 0.5;}
+}
+
+@keyframes hacerChico{
+	0% {width: 100%;
+		opacity: 1;}
+
+	100% {width: 70%;
+		opacity: 0.5;}
+}
+
+/* HACER GRANDE */
+
+@-webkit-keyframes hacerChico{
+	0% {width: 70%;
+		opacity: 0.5;}
+
+	100% {width: 100%;
+		opacity: 1;}
+}
+
+@keyframes hacerChico{
+	0% {width: 70%;
+		opacity: 0.5;}
+
+	100% {width: 100%;
+		opacity: 1;}
+}
