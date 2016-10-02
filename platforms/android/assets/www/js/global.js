@@ -994,6 +994,7 @@ function validarInicioSesion(){
 
 	// ACTIVAR PARA MOVIL
 	//if(navigator.network.connection.type == 'none' || !coneccion){
+	$("#enviar-inicio-s").prop("disabled", true);
 	if(!coneccion){
 		alert("No está conectado a internet");
 		return;
@@ -1004,6 +1005,7 @@ function validarInicioSesion(){
 			data: {usr: usr, psw: psw, set: 'true'},
 			success: function(results){
 				var res = results.split('|');
+				$("#enviar-inicio-s").prop("disabled", false);
 				if(res[0] == 'true'){
 					localStorage.setItem('login', 'true');
 					localStorage.setItem('email_usr', res[1]);
