@@ -51,9 +51,9 @@
                         <li class="opcion" data-ref="id" id="opcion-points"><h4>MOOONA POINTS</h4></li>
                     </ul>
                 </li>
-                <li class="sub-menu" id="lista-vacia">
+                <li class="sub-menu" id="cerrar-sesion">
                     <ul>
-                        <li class="opcion" data-ref="pagina-registro" id="opcion-vacia"><h4>EDITAR PERFIL</h4></li>
+                        <li class="opcion" id="cerrar-sesion" ><h4>CERRAR SESIÓN</h4></li>
                     </ul>
                 </li>
                 <li class="sub-menu" id="opciones-about">
@@ -64,9 +64,11 @@
                 </li>
                 <li class="sub-menu preferencias" id="opciones-preferencias">
                     <ul>
-                        <li id="iconos-preferencias">
+                        <li id="iconos-preferencias" class="opcion">
                             <img class="icono-menu" src="img/icono-mail.png" />
-                            <img class="icono-menu" src="img/icono-settings.png" />
+                        </li>
+                        <li id="opcion-vacia" class="opcion">
+                            <img class="icono-menu" src="img/icono-settings.png" id="opcion-vacia" />
                         </li>
                     </ul>
                 </li>
@@ -280,16 +282,16 @@
         <div class="registro pagina-tipo-1 shadow pagina azul" id="pagina-registro">
         	<div class="iniciar-sesion" id="iniciar-sesion">
         		<h1>INICIAR SESIÓN</h1>
-        		<input type="text" name="usr" class="campo-iniciar-sesion" placeholder="usuario o e-mail" id="usuario-inicio-s"/>
-        		<input type="password" name="pwd" class="campo-iniciar-sesion" placeholder="Contraseña" id="contrasena-inicio-s"/>
+        		<input type="text" name="usr" class="campo-iniciar-sesion input-texto" placeholder="usuario o e-mail" id="usuario-inicio-s"/>
+        		<input type="password" name="pwd" class="campo-iniciar-sesion input-texto" placeholder="Contraseña" id="contrasena-inicio-s"/>
         		<input type="submit" id="enviar-inicio-s" value="CONTINUAR" />
         		<span>¿Aún no tienes cuenta?<a class="abrir-registrar">Registrate</a></span>
         	</div><!--/iniciar-sesion-->
         	<div class="registro-sesion" id="registro-sesion">
         		<h1>REGISTRATE</h1>
-        		<input type="text" name="email_usr" class="campo-registro-sesion" placeholder="Correo electrónico" id="mail-registro-s"/>
-                <input type="text" name="usr" class="campo-registro-sesion" placeholder="Nombre de usuario" id="usuario-registro-s"/>
-        		<input type="password" name="pwd" class="campo-registro-sesion" placeholder="contraseña" id="contrasena-registro-s"/>
+        		<input type="text" name="email_usr" class="campo-registro-sesion input-texto" placeholder="Correo electrónico" id="mail-registro-s"/>
+                <input type="text" name="usr" class="campo-registro-sesion input-texto" placeholder="Nombre de usuario" id="usuario-registro-s"/>
+        		<input type="password" name="pwd" class="campo-registro-sesion input-texto" placeholder="contraseña" id="contrasena-registro-s"/>
         		<input type="submit" id="enviar-registro-s" value="CONTINUAR" />
         		<span>¿Ya tienes cuenta?<a class="abrir-iniciar-s">Iniciar Sesión</a></span>
         	</div><!--/iniciar-sesion-->
@@ -299,7 +301,8 @@
 
                     <div class="campo-registro" id="campo-nombre">
                         <h2 class="titulo">YO</h2>
-                        <input type="text" name="nombre" id="in-nombre" placeholder="Nombre" />
+                        <h4 id="mail-usr-actual"></h4>
+                        <input type="text" name="nombre" class="input-texto" id="in-nombre" placeholder="Nombre" />
                     </div><!--/campo-nombre-->
 
                     <div class="campo-registro" id="campo-fecha-nacimiento">
@@ -322,7 +325,7 @@
                     </div><!--/campo-fecha-nacimiento-->
 
                     <div class="campo-registro" id="campo-ultima-regla">
-                        <h2 class="titulo">ÚLTIMA REGLA</h2>
+                        <h2 class="titulo">ÚLTIMO PERIODO</h2>
                         <div class="dia campo-rueda">
                             <h3 class="subtitulo">Día</h3>
                             <select id="sel-dia-regla">     

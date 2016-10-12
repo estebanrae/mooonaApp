@@ -14,8 +14,8 @@ function syncProductos(){
 		method: 'POST',
 		success: function(result){
 			var resultados = $.parseJSON(result);
-			guardarProductosBase(resultados, function(){
-			});
+			//console.log(resultados);
+			guardarProductosBase(resultados);
 		}
 	});
 }
@@ -55,10 +55,10 @@ function guardarEnBase(tx, results, data){
 }
 
 function guardarImagen(tx, results, data){
-	window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+	/*window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
  	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
  		success(fileSystem, data);
- 	}, fail); 
+ 	}, fail); */
 }
 
 function success(fileSystem, data){

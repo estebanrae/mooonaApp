@@ -23,19 +23,19 @@ function cargarSientoActual(fecha, attr){
 function consultarSientoBase(fecha, attr){
 	fechaFormato = fechaJSaDB(fecha);
 	db.transaction(function(tx){
-		tx.executeSql("CREATE TABLE IF NOT EXISTS sentimientos ( "+
-					"fecha DATE NOT NULL, " +
-					"atributo VARCHAR(50), " +
-					"magnitud INTEGER);");
+		//tx.executeSql("DROP TABLE sentimientos");
 		tx.executeSql('SELECT * FROM sentimientos WHERE fecha = "' + fechaFormato + '" AND atributo = "' + attr + '"', [], 
 					function(tx, results){
 						var magnitudActual = 0;
+						var comentarioActual = '';
 						if(results.rows.length == 0){
 							magnitudActual = 1;
 						}else{
 							magnitudActual = results.rows[0].magnitud;
+							comentarioActual = results.rows[0].comentarios;
 						}
 						activarEstrella(magnitudActual);
+						cargarComentarioSiento(comentarioActual);
 					}, errorCargarSiento);
 	}, errorCargarSiento);
 
@@ -44,10 +44,6 @@ function consultarSientoBase(fecha, attr){
 function guardarSientoBase(fecha, attr, magnitud){
 	fechaFormato = fechaJSaDB(fecha);
 	db.transaction(function(tx){
-			tx.executeSql("CREATE TABLE IF NOT EXISTS sentimientos ( "+
-					"fecha DATE NOT NULL, " +
-					"atributo VARCHAR(50), " +
-					"magnitud INTEGER);");
 			tx.executeSql('SELECT * FROM sentimientos WHERE fecha = "' + fechaFormato + '" AND atributo = "' + attr + '"', [], 
 					function(tx, results){
 						guardarSiento(tx, results, fechaFormato, attr, magnitud);
@@ -59,11 +55,18 @@ function guardarSientoBase(fecha, attr, magnitud){
 
 function guardarSiento(tx, results, fecha, attr, magnitud){
 	if(results.rows.length == 0){
-		console.log("INSERT");
-		tx.executeSql("INSERT INTO sentimientos (fecha, atributo, magnitud) VALUES('" + fecha + "', '" + attr + "', '" + magnitud + "')");
+		tx.executeSql("INSERT INTO sentimientos (fecha, atributo, magnitud) VALUES('" + fecha + "', '" + attr + "', '" + magnitud + "')", [], function(tx, res){
+			var datosBase = [];
+			datosBase.push({"fecha": fecha, "atributo": attr, "magnitud": magnitud, "idSiento": res.insertId});
+			queryRespaldo("insert", "sentimientos", datosBase);
+		}, function(tx, err){});
 	}else{
-		console.log("UPDATE");
-		tx.executeSql("UPDATE sentimientos SET atributo= '" + attr + "', magnitud='" + magnitud + "' WHERE fecha='" + fecha + "' AND atributo = '" + attr + "'");
+		tx.executeSql("UPDATE sentimientos SET magnitud='" + magnitud + "' WHERE fecha='" + fecha + "' AND atributo = '" + attr + "'", [], function(tx, res){
+			var datosBase = [];
+			datosBase.push({"magnitud": magnitud});
+			datosBase.push({"fecha": fecha, "atributo": attr});
+			queryRespaldo("update", "sentimientos", datosBase);
+		}, function(tx, err){});	
 	}
 }
 
@@ -83,7 +86,7 @@ function leerDatosGrafica(mes, anio, attr){//Mes del 0 al 11
 	$("#anio-grafica-actual").val(anio);
 	var mesForm = parseInt(mes) + 1;
 	db.transaction(function(tx){
-		sql = 'SELECT * FROM sentimientos WHERE fecha >= "' + anio + '-' + mesForm + '-1" AND fecha <= "' + anio + '-' + mesForm + '-31" AND atributo = "' + attr + '" ORDER BY fecha ASC';
+		sql = 'SELECT * FROM sentimientos WHERE fecha >= "' + anio + '-' + mesForm + '-01" AND fecha <= "' + anio + '-' + mesForm + '-31" AND atributo = "' + attr + '" ORDER BY fecha ASC';
 		tx.executeSql(sql, [],function(tx, results){
 						desplegarGrafica(tx, results, mesForm, anio);
 					}, errorCargarSiento);
@@ -137,8 +140,47 @@ function fechaJSaDB(fecha){
 	console.log(fecha);
 	var fechaFormato = '';
 	fechaFormato += fecha.getFullYear() + '-';
-	fechaFormato += parseInt(fecha.getMonth()) + 1;
+	if(parseInt(fecha.getMonth()) + 1 < 10){
+		fechaFormato += '0' + parseInt(fecha.getMonth()) + 1;	
+	}else{
+		fechaFormato += parseInt(fecha.getMonth()) + 1;
+	}
 	fechaFormato += '-';
-	fechaFormato += parseInt(fecha.getDate());
+	if(parseInt(fecha.getDate()) < 10){
+		fechaFormato += "0" + parseInt(fecha.getDate());	
+	}else{
+		fechaFormato += parseInt(fecha.getDate());
+	}
 	return fechaFormato;
+}
+
+function guardarComentarioSiento(){
+	var fecha = new Date($("#fecha-siento-actual").val());
+	var attr = $("#attr-siento-actual").val();
+	var comentario = $("#campo-texto-siento").val();
+
+	fechaFormato = fechaJSaDB(fecha);
+	console.log(comentario);
+	db.transaction(function(tx){
+			tx.executeSql('SELECT * FROM sentimientos WHERE fecha = "' + fechaFormato + '" AND atributo = "' + attr + '"', [], 
+					function(tx, results){
+						guardarComentario(tx, results, fechaFormato, attr, comentario);
+					}, errorCargarSiento);
+		}
+		,errorCargarSiento, successGuardarSiento
+	);
+}
+
+function cargarComentarioSiento(comentario){
+	$("#campo-texto-siento").val(comentario);
+}
+
+function guardarComentario(tx, results, fecha, attr, comentario){
+
+	tx.executeSql("UPDATE sentimientos SET comentarios='" + comentario + "' WHERE fecha='" + fecha + "' AND atributo = '" + attr + "'", [], function(tx, res){
+		var datosBase = [];
+		datosBase.push({"comentarios": comentario});
+		datosBase.push({"fecha": fecha, "atributo": attr});
+		queryRespaldo("update", "sentimientos", datosBase);
+	}, function(tx, err){});	
 }

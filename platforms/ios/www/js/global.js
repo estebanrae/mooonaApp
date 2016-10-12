@@ -25,6 +25,7 @@ function onDeviceReady(){
 	allowTransitionChange = true;
 	productosCargados = false;
 	window.addEventListener("orientationchange", function(){
+	    alert("cambio orientacion");
 	    screen.lockOrientation('portrait');
 	});
 	handleExternalURLs();
@@ -35,6 +36,8 @@ function onDeviceReady(){
 		cerrarTodo('pagina-registro', desplegarPaginaShadow);
 	}else if(localStorage.getItem('nombre_usr') == null || !localStorage.getItem('nombre_usr').length){
 		$('#contenedor-formulario').show();
+		$("#tache-registro, #header-back").hide();
+
 		cerrarTodo('pagina-registro', desplegarPaginaShadow);
 	}else{
 		inicializarContenido();
@@ -55,6 +58,7 @@ function onDeviceReady(){
 								}
 							}, false);
 	//eliminarTablaCalendario();
+
 
 	$('#boton-registrar').on('tap', function(e){
 		e.preventDefault();
@@ -95,6 +99,13 @@ function onDeviceReady(){
 		}else{
 			cambiarTodoElDia(false);
 		}
+	});
+
+	$("#tache-registro").on("tap", function(){
+		setPaginaActiva('pagina-principal');
+		esconderPaginaShadow('pagina-registro');
+		$("#header-back").hide();
+		localStorage.setItem("previa", "");
 	});
 
 	$("#boton-guardar-evento").on('tap',function(){
@@ -148,14 +159,15 @@ function onDeviceReady(){
 
 	$("#boton-agregar-evento").on('tap',function(){
 		var actual =  localStorage.getItem('activa');
-		var fecha = '';
 		
 		var dia = $("#input-dia-escondido").val();
 		var mes = $("#input-mes-escondido").val();
 		var anio = $("#input-anio-escondido").val();
-		fecha = new Date(anio, mes, dia);
+		var fechaInicio = new Date(anio, mes, dia, "09", "00", "00", "00");
+		var fechaFinal = new Date(anio, mes, dia, "10", "00", "00", "00");
+
 		activarBotonBack('pagina-evento-nuevo', true);
-		cargarDatosEventoNuevo(fecha);
+		cargarDatosEventoNuevo(fechaInicio, fechaFinal);
 		desplegarPaginaShadow('pagina-evento-nuevo');
 	});
 
@@ -329,7 +341,7 @@ function onDeviceReady(){
 
 	$(".estrella").click(function(){
 		var magnitud = $(this).attr('data-magnitud');
-		activarEstrella(magnitud);
+		activarEstrella(magnitud, '');
 	});
 
 
@@ -347,6 +359,10 @@ function onDeviceReady(){
 		$("#contenedor-tip-shadow .titulo").html(padre.find(".titulo").html());
 		$("#contenedor-tip-shadow .contenido").html(padre.find(".contenido-completo").val());
 		$("#contenedor-tip-shadow").show();
+	});
+
+	$("#campo-texto-siento").on("keyup", function(){
+		guardarComentarioSiento();
 	});
 }
 
@@ -502,6 +518,7 @@ function desplegarPagina(id, callback){
 function llenarCamposRegistro(){
 	$("#in-nombre").val(localStorage.getItem('nombre_usr'));
 	$("#sel-dia-nacimiento option[value='" + localStorage.getItem('nacimiento_d_usr') + "']").attr("selected", "selected");
+	$("#mail-usr-actual").html(localStorage.getItem("email_usr"));
 	$("#sel-mes-nacimiento option[value='" + localStorage.getItem('nacimiento_m_usr') + "']").attr("selected", "selected");
 	$("#sel-anio-nacimiento option[value='" + localStorage.getItem('nacimiento_a_usr') + "']").attr("selected", "selected");
 	$("#sel-dia-regla option[value='" + localStorage.getItem('ultima_d_usr') + "']").attr("selected", "selected");
@@ -589,7 +606,8 @@ function selectorPaginas(id){
 			activarBotonBack('menu-hoy-siento', true);
 			break;
 		case 'opcion-vacia':
-			$('.contenedor-formulario').show();
+			$('.contenedor-formulario, #tache-registro').show();
+			$("#tache-registro").show();
 			cerrarTodo('pagina-registro', desplegarPaginaShadow);
 			activarBotonBack('pagina-registro', true);
 			break;
@@ -611,6 +629,20 @@ function selectorPaginas(id){
 			cerrarTodo('pagina-productos', function(){
 				desplegarPaginaProductos('pagina-productos', 'nutricion');
 			});
+			break;
+		case 'cerrar-sesion':
+			navigator.notification.confirm(
+				'¿Esta seguro que desea cerrar sesión?',
+				function(btn){
+					if(btn == 1){
+						reiniciarApp();
+					}
+					
+				}
+				,
+				'Cerrar Sesión',
+				['Si', 'No']
+			);
 			break;
 		default:
 			navigator.notification.alert("Sección en construcción", null, "Próximamente", "Cerrar");
@@ -710,12 +742,16 @@ function esconderPaginaModal(id){
 }
 
 function inicializarContenido(){
+
+	inicializarBD();
+	inicializarBases();
+	resolverRespaldosInicial();
+
 	$("#slider-dias-lunas").html('');
 	cargarFechaPrincipal();
 	objetoLunas = inicializarDibujo();
 
 	llenarCamposRegistro();
-	inicializarBD();
 	syncProductos();
 	syncDetalles();
 	inicializarFooter(new Date());
@@ -983,6 +1019,8 @@ function validarDatosUsuario(){
 		//setPaginaActiva('pagina-principal');
 		inicializarContenido();
 		setPaginaActiva('pagina-principal');
+		$("#header-back").hide();
+		localStorage.setItem("previa", "");
 	}
 }
 
@@ -997,6 +1035,7 @@ function validarInicioSesion(){
 
 	// ACTIVAR PARA MOVIL
 	//if(navigator.network.connection.type == 'none' || !coneccion){
+	$("#tache-registro, #header-back").hide();
 	$("#enviar-inicio-s").prop("disabled", true);
 	if(!coneccion){
 		alert("No está conectado a internet");
@@ -1012,6 +1051,7 @@ function validarInicioSesion(){
 				if(res[0] == 'true'){
 					localStorage.setItem('login', 'true');
 					localStorage.setItem('email_usr', res[1]);
+					$("#mail-usr-actual").html(res[1]);
 					cambioSesion('iniciar-sesion', 'contenedor-formulario')
 				}else{
 					localStorage.setItem('login', 'false');
@@ -1022,6 +1062,7 @@ function validarInicioSesion(){
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 			  alert("Error de conexión: " + textStatus)//Test1
+			  return;
 			}
 		});	
 	}
@@ -1090,15 +1131,14 @@ function handleExternalURLs() {
 function syncDetalles(){
 	console.log("FETCHING...");
 	if(localStorage.getItem('init') == null || localStorage.getItem('init') == '' || localStorage.getItem('init') == 'false'){
-		inicializado = false;
+		var inicializado = false;
 	}else{
-		inicializado = true;
+		var inicializado = true;
 	}
 
 	$.ajax({
 		url: 'http://canteraestudio.com/mooona/leer-detalles',
 		async: inicializado,
-		timeout: 6000,
 		success: function(res){
 			res = JSON.parse(res);
 			console.log("FINISHED");
@@ -1178,7 +1218,7 @@ function continuarGuardarCategorias(tx, results, categoria){
 }
 
 function guardarImgPost(post, imagen){
-	window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+	/*window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
  	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
  		successImgPost(fileSystem, post, imagen);
  	}, fail); /**/ //ACTIVAR PARA MOVIL
@@ -1515,6 +1555,20 @@ function recuperarFechasFaseAct(etapa, fecha){
 		}
 	}
 	return {fechas: fechas, lunas: lunas};
+}
+
+
+
+function reiniciarApp(){
+	localStorage.clear();
+	$('#iniciar-sesion').show();
+	cerrarTodo('pagina-registro', desplegarPaginaShadow);
+	$("#pagina-registro .input-texto").val('');
+	db.transaction(function(tx){
+			tx.executeSql("DROP TABLE productos");
+			tx.executeSql("DROP TABLE IF EXISTS eventos_calendario");
+			tx.executeSql("DROP TABLE IF EXISTS fechas_calendario");
+		});
 }
 
 
