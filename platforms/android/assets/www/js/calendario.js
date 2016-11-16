@@ -213,7 +213,7 @@ function generarEventos(tx, results, fecha){
 	}else{
 		var html = '';
 		$.each(results.rows, function(key, result){
-			html += '<div class="evento evento-cerrado" data-id="' + result.idEvento + '" id="evento-' + result.idEvento + '"><img src="img/diosa-' + calculoFechasMooona(fecha).etapa + '.png" class="icono-evento"/><h1>' + result.titulo + '</h1>';
+			html += '<div class="evento evento-cerrado" data-id="' + result.idEvento + '" id="evento-' + result.idEvento + '"><img src="img/diosa-' + calculoFechasMooona(fecha).etapa + '.png" class="icono-evento"/><h1>' + result.titulo + '</h1><div class="flechita-evento"></div>';
 			if(result.descripcion !== ''){
 				html += '<h2>' + result.descripcion + '</h2>';
 			} 
@@ -237,10 +237,10 @@ function generarEventos(tx, results, fecha){
 
 			}else{
 
-				html += '<p>Empieza: ' + arrSCN[fechaInicioJS.getDay()] + ', ' + fechaInicioJS.getDate() + ' de ' + meses[fechaInicioJS.getMonth()] + ' del ' + fechaInicioJS.getFullYear() + ' a las ' + arrCHora[0] + ':' + arrCHora[1] + '<br/>Termina: ' + arrSCN[fechaFinJS.getDay()] + ', ' + fechaFinJS.getDate() + ' de ' + meses[fechaFinJS.getMonth()] + ' del ' + fechaFinJS.getFullYear() + ' a las ' + arrTHora[0] + ':' + arrTHora[1] + '</p>';
+				html += '<div class="plegable-evento"><p>Empieza: ' + arrSCN[fechaInicioJS.getDay()] + ', ' + fechaInicioJS.getDate() + ' de ' + meses[fechaInicioJS.getMonth()] + ' del ' + fechaInicioJS.getFullYear() + ' a las ' + arrCHora[0] + ':' + arrCHora[1] + '<br/>Termina: ' + arrSCN[fechaFinJS.getDay()] + ', ' + fechaFinJS.getDate() + ' de ' + meses[fechaFinJS.getMonth()] + ' del ' + fechaFinJS.getFullYear() + ' a las ' + arrTHora[0] + ':' + arrTHora[1] + '</p>';
 			}
 				//'De ' + arrCHora[0] + ':' + arrCHora[1] + ' a ' + arrTHora[0] + ':' + arrTHora[1] + ' Hrs</p>';
-			html += '<h3 class="boton-editar">Editar</h3>'	+ '<img src="img/basurero.png" class="boton-eliminar"/><input type="hidden" class="info-fecha-inicio" value="' + result.fechaInicio + '"><input type="hidden" class="info-fecha-final" value="' + result.fechaFin + '"><input type="hidden" class="repeticion-evento" value="' + result.repeticion + '" /></div><!--/evento-->';
+			html += '<h3 class="boton-editar">Editar</h3>'	+ '<img src="img/basurero.png" class="boton-eliminar"/><input type="hidden" class="info-fecha-inicio" value="' + result.fechaInicio + '"><input type="hidden" class="info-fecha-final" value="' + result.fechaFin + '"><input type="hidden" class="repeticion-evento" value="' + result.repeticion + '" /></div><!--/plegable-evento--></div><!--/evento-->';
 
 		});
 
@@ -561,13 +561,13 @@ function guardarFechaEvento(tx, datos, idEvento, callback){
 	switch (datos.repetir){
 		case "0":
 			
-			for(var ii = 0; ii <= 100; ii++){
+			for(var ii = 0; ii <= 365; ii++){
 				var fechaAGuardarI = sumaFechasBD(datos.horarioC, ii, 'dia');
 				var fechaAGuardarF = sumaFechasBD(datos.horarioT, ii, 'dia');
 				var sql ="INSERT INTO fechas_calendario (fechaInicio, fechaFin, idEvento) VALUES('"+ fechaAGuardarI +"', '" + fechaAGuardarF + "', '" + idEvento + "');";
 				tx.executeSql(sql, [], function(tx, res){
 					jj++;
-					if(jj == 100){
+					if(jj == 365){
 						tx.executeSql("SELECT * FROM fechas_calendario WHERE idEvento = " + idEvento, [], function(tx, res){
 							$.each(res.rows, function(key, val){
 								datosBase.push(val);
@@ -584,13 +584,13 @@ function guardarFechaEvento(tx, datos, idEvento, callback){
 			break;
 		case "1":
 
-			for(var ii = 0; ii <= 50; ii++){
+			for(var ii = 0; ii <= 53; ii++){
 				var fechaAGuardarI = sumaFechasBD(datos.horarioC, ii, 'semana');
 				var fechaAGuardarF = sumaFechasBD(datos.horarioT, ii, 'semana');
 				var sql ="INSERT INTO fechas_calendario (fechaInicio, fechaFin, idEvento) VALUES('"+ fechaAGuardarI +"', '" + fechaAGuardarF + "', '" + idEvento + "');";
 				tx.executeSql(sql, [], function(tx, res){
 					jj++;
-					if(jj == 50){
+					if(jj == 53){
 						tx.executeSql("SELECT * FROM fechas_calendario WHERE idEvento = " + idEvento, [], function(tx, res){
 							$.each(res.rows, function(key, val){
 								datosBase.push(val);

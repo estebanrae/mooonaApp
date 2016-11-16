@@ -2,7 +2,7 @@ $(document).ready(function(){
 	document.addEventListener('deviceready', onDeviceReady, false);
 	var deviceType = (navigator.userAgent.match(/iPad/i))  == "iPad" ? "iPad" : (navigator.userAgent.match(/iPhone/i))  == "iPhone" ? "iPhone" : (navigator.userAgent.match(/Android/i)) == "Android" ? "Android" : (navigator.userAgent.match(/BlackBerry/i)) == "BlackBerry" ? "BlackBerry" : "null";
 
-});
+}); // $(document).ready(function()
 
 
 var physicalScreenWidth;
@@ -18,10 +18,8 @@ var MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Ag
 
 function onDeviceReady(){
 	console.log("Device is ready...");
-	//alert("Device is ready..."); //Test1
 	physicalScreenWidth = window.screen.width;
 	physicalScreenHeight = window.screen.height;
-	//navigator.notification.alert("alto: " + physicalScreenHeight + "ancho: " + physicalScreenWidth, null, "Medidas", "Cerrar");
 	allowTransitionChange = true;
 	productosCargados = false;
 	window.addEventListener("orientationchange", function(){
@@ -34,64 +32,64 @@ function onDeviceReady(){
 	if(localStorage.getItem('login') == null || !localStorage.getItem('login').length || localStorage.getItem('login') == 'false'){
 		$('#iniciar-sesion').show();
 		cerrarTodo('pagina-registro', desplegarPaginaShadow);
-	}else if(localStorage.getItem('nombre_usr') == null || !localStorage.getItem('nombre_usr').length){
+	}//if
+	else if(localStorage.getItem('nombre_usr') == null || !localStorage.getItem('nombre_usr').length){
 		$('#contenedor-formulario').show();
 		$("#tache-registro, #header-back").hide();
 
 		cerrarTodo('pagina-registro', desplegarPaginaShadow);
-	}else{
+	}//else if
+	else{
 		inicializarContenido();
 		setPaginaActiva('pagina-principal');
-	}	
-	coneccion = true;
+	} //else	
+	conexion = true;
 
 	document.addEventListener('online', function(){
-								if(!coneccion){
-									coneccion = true; 
+								if(!conexion){
+									conexion = true; 
 									inicializarContenido();
 									//alert("FIRED ONLINE");
 								}
 								}, false);
 	document.addEventListener('offline', function(){
-								if(coneccion){
-									coneccion = false; 
+								if(conexion){
+									conexion = false; 
 								}
 							}, false);
-	//eliminarTablaCalendario();
 
 
 	$('#boton-registrar').on('tap', function(e){
 		e.preventDefault();
 		validarDatosUsuario();		
 
-	});
+	}); // $('#boton-registrar').on('tap...
 
 	$(".abrir-registrar").on('tap',function(e){
 		e.preventDefault();
 		cambioSesion('iniciar-sesion', 'registro-sesion');
-	});
+	}); // $(".abrir-registrar").on('tap ...
 
 	$(".abrir-iniciar-s").on('tap',function(e){
 		e.preventDefault();
 		cambioSesion('registro-sesion', 'iniciar-sesion');
-	});
+	}); // $(".abrir-iniciar-s").on('tap...
 
 	$('#header-menu').on('tap',function(e){
 		toggleMenu();
-	});
+	}); // $('#header-menu').on('tap...
 
 	$('#header-back').on('tap',function(){
 		botonBack();
-	});
+	}); // $('#header-back').on('tap...
 
 	$("#icono-notas-siento").on('tap',function(){
 		$("#campo-texto-siento").focus();
-	});
+	}); // $("#icono-notas-siento").on('tap...
 
 	$("#barra-footer-principal").on("swipeup", function(e){
 		abrirMooonaGeneral();
-		//$(this).css({top: '60px'});
-	});
+	}); // $("#barra-footer-principal").on("swipeup"...
 
 	$("#radio-todo-dia").on('change', function(){
 		if($(this).is(":checked")){
@@ -99,63 +97,45 @@ function onDeviceReady(){
 		}else{
 			cambiarTodoElDia(false);
 		}
-	});
+	}); // $("#radio-todo-dia").on('change'...
 
 	$("#tache-registro").on("tap", function(){
 		setPaginaActiva('pagina-principal');
 		esconderPaginaShadow('pagina-registro');
 		$("#header-back").hide();
 		localStorage.setItem("previa", "");
-	});
+	}); // $("#tache-registro").on("tap"...
 
 	$("#boton-guardar-evento").on('tap',function(){
 		validarEventoNuevo();
-	});
+	}); // $("#boton-guardar-evento").on('tap'...
 	
 	$("#cerrar-evento-nuevo").on('tap',function(){
 		activarBotonBack('pagina-evento', true);
 		esconderPaginaShadow('pagina-evento-nuevo');
-	});
+	}); // $("#cerrar-evento-nuevo").on('tap'...
 
 	$("#repetir-evento img").on('tap',function(){	
 		var hoy = new Date($("#input-anio-escondido").val(), $("#input-mes-escondido").val(), $("#input-dia-escondido").val());
 		$("#dias-repetir").show();
-		//$("#dias-repetir select option").each(function(){ $(this).removeAttr("selected");})
 		$("#dias-repetir select").val(0);
 		$(this).hide();
-	});
+	}); // $("#repetir-evento img").on('tap'...
 
 	$("#dias-repetir select").on('change', function(){
 		if($(this).find("option:selected").val() == '-1'){
 			$("#dias-repetir").hide();
 			$("#repetir-evento img").show();
-		}
-	});
+		}//if
+	});// $("#dias-repetir select").on('change'...
 
 	$("#enviar-inicio-s").on('tap', function(){
 		validarInicioSesion();
-	});
+	}); // $("#enviar-inicio-s").on('tap'...
 
 	$("#enviar-registro-s").on('tap', function(){
 		validarRegistro();
-	});
-	/*$("#repetir-evento li").on('tap',function(){
-		if($(this).attr('data-active') == 'true'){
-			$(this).attr('data-active', 'false');
-			var activos= false;
-			$("#repetir-evento li").each(function(){
-				if($(this).attr('data-active') == 'true'){
-					activos = true;
-				}
-			});
-			if(!activos){
-				$("#dias-repetir").hide();
-				$("#repetir-evento img").show();
-			}
-		}else{
-			$(this).attr('data-active', 'true');
-		}
-	});*/
+	}); // $("#enviar-registro-s").on('tap'...
 
 	$("#boton-agregar-evento").on('tap',function(){
 		var actual =  localStorage.getItem('activa');
@@ -169,7 +149,7 @@ function onDeviceReady(){
 		activarBotonBack('pagina-evento-nuevo', true);
 		cargarDatosEventoNuevo(fechaInicio, fechaFinal);
 		desplegarPaginaShadow('pagina-evento-nuevo');
-	});
+	}); // $("#boton-agregar-evento").on('tap'...
 
 	$("#slider-dias-lunas").on("swipeleft", function(e){
 		if(!objetoLunas.movimiento){
@@ -178,8 +158,8 @@ function onDeviceReady(){
 			$("#slider-dias-lunas").transition({x: '-=' + anchoIndiv});		
 			var nuevoOrden = parseInt(orden) + 1;
 			cambiarFechaSlider(orden, nuevoOrden);
-		}
-	});
+		}//if
+	}); // $("#slider-dias-lunas").on("swipeleft"...
 
 	$("#slider-dias-lunas").on("swiperight", function(e){
 		if(!objetoLunas.movimiento){
@@ -188,8 +168,8 @@ function onDeviceReady(){
 			$("#slider-dias-lunas").transition({x: '+=' + anchoIndiv});
 			var nuevoOrden = parseInt(orden) - 1;
 			cambiarFechaSlider(orden, nuevoOrden);
-		}
-	});
+		}//if
+	}); // $("#slider-dias-lunas").on("swiperight", function(e){...
 	
 
 	$("#sub-menu-footer .icono-selector-detalles").on('tap',function(){
@@ -202,21 +182,21 @@ function onDeviceReady(){
 			allowTransitionChange = false;
 			cambiarSubPaginaModal(orden_prox, orden_act, "contenedor-detalles-principal", function(){
 				allowTransitionChange = true;
-			});
+			}); // cambiarSubPaginaModal
 			cambiarIconoFooter(orden_prox, orden_act, "contenedor-detalles-principal");
-		}
+		}//if
 		
 		
-	});
+	}); // $("#sub-menu-footer .icono-selector-detalles").on('tap',function(){...
 
 	$("#barra-footer-principal").on("swipedown", function(e){
 		cerrarMooonaGeneral();
 		$(this).removeAttr("style");
-	});
+	}); // $("#barra-footer-principal").on("swipedown", function(e){...
 
 	$(document).on('tap', '.cerrar-menu', function(e){
 		cerrarMenu();
-	});
+	}); // 
 
 	$(document).on("swiperight", '.cerrar-menu, .menu', function(e){
 		cerrarMenu();
@@ -364,7 +344,46 @@ function onDeviceReady(){
 	$("#campo-texto-siento").on("keyup", function(){
 		guardarComentarioSiento();
 	});
-}
+
+	$(document).on("tap", ".evento-cerrado", function(){
+		$(".evento-abierto").each(function(){
+			$(this).removeClass("evento-abierto");
+			$(this).addClass("evento-cerrado");
+		});
+		$(this).removeClass("evento-cerrado");
+		$(this).addClass("evento-abierto");
+
+	});
+
+	$(document).on("tap", ".evento-abierto .flechita-evento", function(){
+		$(".evento-abierto").each(function(){
+			$(this).removeClass("evento-abierto");
+			$(this).addClass("evento-cerrado");
+		});
+	});
+
+	cordova.plugins.notification.local.hasPermission(function (granted) {
+		if(granted){
+			alert("SI TIENE PERMISO");
+			var fecha = new Date();
+			fecha.setMinutes(fecha.getMinutes() + 1);
+				schedule({
+				    id: 1,
+				    title: "Message Title",
+				    message: "Message Text",
+				    at: fecha,
+				    sound: sound,
+				    icon: "http://domain.com/icon.png"
+				});
+		}else{
+			alert("NO TIENE PERMISO");
+		}
+	});
+
+
+
+
+}	
 
 function cambiarFechaSiento(direc){
 	var attr = $("#attr-siento-actual").val();
@@ -630,6 +649,10 @@ function selectorPaginas(id){
 				desplegarPaginaProductos('pagina-productos', 'nutricion');
 			});
 			break;
+		case 'opcion-about':
+			cerrarTodo('pagina-acerca-de', desplegarPaginaShadow);
+			activarBotonBack('pagina-acerca-de', true);
+			break;
 		case 'cerrar-sesion':
 			navigator.notification.confirm(
 				'¿Esta seguro que desea cerrar sesión?',
@@ -746,6 +769,7 @@ function inicializarContenido(){
 	inicializarBD();
 	inicializarBases();
 	resolverRespaldosInicial();
+	inicializarAcercaDe();
 
 	$("#slider-dias-lunas").html('');
 	cargarFechaPrincipal();
@@ -766,6 +790,17 @@ function inicializarContenido(){
 		}
 	});
 
+}
+
+function inicializarAcercaDe(){
+	db.transaction(function(tx){	
+		tx.executeSql("SELECT * FROM categorias c LEFT JOIN posts p ON c.id_categoria=p.id_categoria WHERE c.nombre ='Acerca de';", [] , function(tx, results){
+			console.log(results);
+			$("#pagina-acerca-de p").html(results.rows[0].contenido);
+		}, function(tx, err){
+			console.log(err);
+		});
+	});
 }
 
 function cargarFechaPrincipal(){

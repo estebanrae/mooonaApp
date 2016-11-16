@@ -62,6 +62,9 @@
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="LocalNotification">
+        <param name="android-package" value="de.appplant.cordova.plugin.localnotification.LocalNotification" />
+    </feature>
     <icon density="ldpi" src="www/res/icon/android/icon.png" />
     <icon density="mdpi" src="www/res/icon/android/icon.png" />
     <icon density="hdpi" src="www/res/icon/android/icon.png" />

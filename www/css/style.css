@@ -219,6 +219,7 @@ input#enviar-inicio-s {
     position: fixed;
     width: 100%;
     top: 7%;
+    overflow-y: auto;
 }
 
 .contenedor-formulario .titulo,
@@ -929,9 +930,30 @@ textarea#campo-texto-siento {
 	display: inline-block;
 }
 
+
 .evento {
+	position: relative;
     background-color: #f0f9fe;
     margin: 1% 0 0% 1%;
+}
+
+.flechita-evento{
+	position: absolute;
+    left: 0;
+    top: 0;
+    width: 50px;
+    height: 50px;
+	background-image: url('../img/flechita-arriba.png');
+	background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.evento-abierto .plegable-evento{
+	display: block;
+}
+.evento-cerrado .plegable-evento{
+	display: none;
 }
 
 .dia-hay-evento{
@@ -1343,6 +1365,20 @@ img.marcador-evento {
 
 .dia-escondido{
 	display: none;
+}
+
+.pagina-acerca-de h1{
+	height: 8%;
+	text-align: center;
+}
+
+.pagina-acerca-de h1,
+.pagina-acerca-de p{
+	color: #fff;
+}
+
+.pagina-acerca-de img{
+	width: 100%;
 }
 
 
