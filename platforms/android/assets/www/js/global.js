@@ -649,6 +649,7 @@ function selectorPaginas(id){
 			});
 			break;
 		case 'opcion-about':
+			inicializarAcercaDe();
 			cerrarTodo('pagina-acerca-de', desplegarPaginaShadow);
 			activarBotonBack('pagina-acerca-de', true);
 			break;
