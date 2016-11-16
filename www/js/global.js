@@ -18,8 +18,8 @@ var MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Ag
 
 function onDeviceReady(){
 	console.log("Device is ready...");
-	physicalScreenWidth = window.screen.width;
-	physicalScreenHeight = window.screen.height;
+	physicalScreenWidth = $(window).width();
+	physicalScreenHeight = $(window).height();
 	allowTransitionChange = true;
 	productosCargados = false;
 	window.addEventListener("orientationchange", function(){
@@ -855,8 +855,6 @@ function cargarSlider(dia, mes, anio){
 	}
 	var ancho = 0;
 	var anchoIndiv = physicalScreenWidth/7;
-	alert(physicalScreenWidth);
-	alert($(window).width());
 	$(".contenedor-bordes").width(anchoIndiv);
 	$("#slider-dias-lunas div").width(anchoIndiv);
 	$("#slider-dias-lunas div").each(function(){
