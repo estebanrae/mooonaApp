@@ -367,13 +367,13 @@ function onDeviceReady(){
 			alert("SI TIENE PERMISO");
 			var fecha = new Date();
 			fecha.setSeconds(fecha.getSeconds() + 10);
-				schedule({
+				cordova.plugins.notification.local.schedule({
 				    id: 1,
 				    title: "Message Title",
 				    message: "Message Text",
-				    at: fecha,
-				    icon: "icon.png"
+				    at: fecha
 				});
+				alert("LLEGA");
 		}else{
 			alert("NO TIENE PERMISO");
 		}
