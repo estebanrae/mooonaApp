@@ -10,7 +10,7 @@ var physicalScreenHeight;
 var allowTransitionChange;
 var objetoLunas;
 var db;
-var coneccion;
+var conexion;
 var productosCargados;
 var NUM_LUNAS = 30;
 var linkTienda = "http://canteraestudio.com/mooona/talleres-y-planes/";
@@ -361,6 +361,27 @@ function onDeviceReady(){
 			$(this).addClass("evento-cerrado");
 		});
 	});
+
+	cordova.plugins.notification.local.hasPermission(function (granted) {
+		if(granted){
+			alert("SI TIENE PERMISO");
+			var fecha = new Date();
+			fecha.setSeconds(fecha.getSeconds() + 10);
+				schedule({
+				    id: 1,
+				    title: "Message Title",
+				    message: "Message Text",
+				    at: fecha,
+				    icon: "icon.png"
+				});
+		}else{
+			alert("NO TIENE PERMISO");
+		}
+	});
+
+
+
+
 }	
 
 function cambiarFechaSiento(direc){
@@ -1050,7 +1071,7 @@ function validarInicioSesion(){
 	//if(navigator.network.connection.type == 'none' || !coneccion){
 	$("#tache-registro, #header-back").hide();
 	$("#enviar-inicio-s").prop("disabled", true);
-	if(!coneccion){
+	if(!conexion){
 		alert("No está conectado a internet");
 		return;
 	}else{
@@ -1093,7 +1114,7 @@ function validarRegistro(){
 
 	// ACTIVAR PARA MOVIL
 	//if(navigator.network.connection.type == 'none' || !coneccion){
-	if(!coneccion){
+	if(!conexion){
 		alert("No está conectado a internet");
 		return;
 	}else{
