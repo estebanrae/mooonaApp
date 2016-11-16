@@ -855,6 +855,8 @@ function cargarSlider(dia, mes, anio){
 	}
 	var ancho = 0;
 	var anchoIndiv = physicalScreenWidth/7;
+	alert(physicalScreenWidth);
+	alert($(window).width());
 	$(".contenedor-bordes").width(anchoIndiv);
 	$("#slider-dias-lunas div").width(anchoIndiv);
 	$("#slider-dias-lunas div").each(function(){
