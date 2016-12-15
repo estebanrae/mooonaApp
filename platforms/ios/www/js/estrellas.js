@@ -31,8 +31,8 @@ function consultarSientoBase(fecha, attr){
 						if(results.rows.length == 0){
 							magnitudActual = 1;
 						}else{
-							magnitudActual = results.rows[0].magnitud;
-							comentarioActual = results.rows[0].comentarios;
+							magnitudActual = results.rows.item(0).magnitud;
+							comentarioActual = results.rows.item(0).comentarios;
 						}
 						activarEstrella(magnitudActual);
 						cargarComentarioSiento(comentarioActual);
@@ -107,11 +107,11 @@ function desplegarGrafica(tx, results, mes, anio){
 			break;
 		}
 		var mag = 1;
-		$.each(results.rows, function(key, res){
-			if(fechaTemp.toString() == fechaDBaJS(res.fecha).toString()){
-				mag = res.magnitud;
+		for(var jj = 0; jj < results.rows.length; jj++){
+			if(fechaTemp.toString() == fechaDBaJS(results.rows.item(jj).fecha).toString()){
+				mag = results.rows.item(jj).magnitud;
 			}
-		});
+		}
 		if(fechaTemp > hoy){
 			span.setAttribute("data-magnitud", 0);
 			span.className = 'futuro';

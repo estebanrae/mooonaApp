@@ -538,7 +538,7 @@ input#enviar-inicio-s {
 
 div#modal-siento-notas {
   width: 100%;
-  height: 100%;
+  height: 93%;
 }
 
 .modal{
@@ -713,6 +713,7 @@ textarea#campo-texto-siento {
 	top: 0;
 	height: 100%;
 	opacity: 0.5;
+	float: left;
 	/*-webkit-transform: translateY(-50%);
 	-moz-transform: translateY(-50%);
   	transform: translateY(-50%);*/

@@ -55,10 +55,10 @@ function guardarEnBase(tx, results, data){
 }
 
 function guardarImagen(tx, results, data){
-	/*window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+	window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
  	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
  		success(fileSystem, data);
- 	}, fail); */
+ 	}, fail); 
 }
 
 function success(fileSystem, data){
@@ -113,13 +113,14 @@ function desplegarHtmlProducto(tx, results){
 		$("#contenedor-productos").hide();
 	}else{
 		var htmlProductos  = '';
-
-		$.each(results.rows, function(key, producto){
+		for(var ii = 0; ii < results.rows.length; ii++){
+			var producto = results.rows.item(ii);
 			htmlProductos += '<div class="producto" data-id="' + producto.id + '">';
 			htmlProductos += '<img src="' + producto.imgPath + '" />';
 			htmlProductos += '<h1>' + producto.titulo + '</h1>';
 			htmlProductos += '</div><!--/producto-->';
-		});
+		}
+
 		$("#contenedor-productos").html(htmlProductos);
 		$(".mensaje-no-hay").hide();
 		$("#contenedor-productos").show();
@@ -133,8 +134,8 @@ function abrirProducto(id){
 	},errorCargarProductos, successGuardarProductos);
 }
 function desplegarHtmlProductoActual(tx, results){
-	$("#producto-abierto h1").html(results.rows[0].titulo);
-	$("#producto-abierto p").html(results.rows[0].contenido);
+	$("#producto-abierto h1").html(results.rows.item(0).titulo);
+	$("#producto-abierto p").html(results.rows.item(0).contenido);
 	$("#contenedor-productos").hide();
 	$("#producto-abierto").show();
 	activarBotonBack('producto-abierto', true);

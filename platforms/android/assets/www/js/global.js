@@ -225,23 +225,39 @@ function onDeviceReady(){
 	$('.contenedor-boton-siento').on('tap',function(e){
 		var id = $(this).attr('id');
 		var attr = $("#" + id).attr("data-attr");
-		cargarSiento(attr, new Date(), desplegarPaginaModal);
+		cargarSiento(attr, new Date(), "estrella", desplegarPaginaModal);
 	});
 
 	$("#barra-fechas-siento").on("swipeleft", function(){
-		cambiarFechaSiento(1);
+		cambiarFechaSiento(1, "estrella");
 	});
 
 	$("#barra-fechas-siento").on("swiperight", function(){
-		cambiarFechaSiento(-1);
+		cambiarFechaSiento(-1, "estrella");
 	});
 
 	$("#barra-siento-next").on("tap", function(){
-		cambiarFechaSiento(1);
+		cambiarFechaSiento(1, "estrella");
 	});
 
 	$("#barra-siento-back").on("tap", function(){
-		cambiarFechaSiento(-1);
+		cambiarFechaSiento(-1, "estrella");
+	});
+
+	$("#barra-fechas-siento.txt").on("swipeleft", function(){
+		cambiarFechaSiento(1, "texto");
+	});
+
+	$("#barra-fechas-siento-txt").on("swiperight", function(){
+		cambiarFechaSiento(-1, "texto");
+	});
+
+	$("#barra-siento-txt-next").on("tap", function(){
+		cambiarFechaSiento(1, "texto");
+	});
+
+	$("#barra-siento-txt-back").on("tap", function(){
+		cambiarFechaSiento(-1, "texto");
 	});
 
 	$("#barra-fechas-graph").on("swipeleft", function(){
@@ -314,12 +330,12 @@ function onDeviceReady(){
 		cambiarDiaCalendario(-1);
 	});
 
-	$(document).on("click", ".producto", function(){
+	$(document).on("tap", ".producto", function(){
 		var id = $(this).attr("data-id");
 		abrirProducto(id);
 	});
 
-	$(".estrella").click(function(){
+	$(".estrella").on("tap", function(){
 		var magnitud = $(this).attr('data-magnitud');
 		activarEstrella(magnitud, '');
 	});
@@ -361,34 +377,34 @@ function onDeviceReady(){
 			$(this).addClass("evento-cerrado");
 		});
 	});
-
-	cordova.plugins.notification.local.hasPermission(function (granted) {
+	/*cordova.plugins.notification.local.hasPermission(function (granted) {
 		if(granted){
-			alert("SI TIENE PERMISO");
-			var fecha = new Date();
-			fecha.setSeconds(fecha.getSeconds() + 10);
+			alert("SI TIENE PERMISO");*/
+			var fechanow = new Date();
+			fechanow.setSeconds(fechanow.getSeconds() + 10);
 				cordova.plugins.notification.local.schedule({
 				    id: 1,
 				    title: "Message Title",
 				    message: "Message Text",
-				    at: fecha
+				    at: fechanow
 				});
-				alert("LLEGA");
+/*				alert("LLEGA");
 		}else{
 			alert("NO TIENE PERMISO");
 		}
-	});
+	});*/
 
+	
 
 
 
 }	
 
-function cambiarFechaSiento(direc){
+function cambiarFechaSiento(direc, pagina){
 	var attr = $("#attr-siento-actual").val();
 	var fechaVieja = new Date($("#fecha-siento-actual").val());
 	var fechaNueva = new Date(fechaVieja.getFullYear(), fechaVieja.getMonth(), parseInt(fechaVieja.getDate()) + direc);
-	cargarSiento(attr, fechaNueva, function(){});
+	cargarSiento(attr, fechaNueva, pagina, function(){});
 }
 
 function cambiarFechaGraph(direc){
@@ -718,12 +734,12 @@ function cambiarIconoFooter(orden_prox, orden_act, id){
 	menuActual.removeClass("icono-activo");
 }
 
-function cargarSiento(attr, fechaForm, callback){
+function cargarSiento(attr, fechaForm, pagina, callback){
 	var fecha = obtenerFecha(fechaForm);
-	$("#barra-fechas-siento .dia-semana").html(fecha.dia_semana.toUpperCase());
-	$("#barra-fechas-siento .dia-mes").html(fecha.dia);
-	$("#barra-fechas-siento .mes").html(fecha.mes.toUpperCase());
-	$("#barra-fechas-siento .anio").html(fecha.anio);
+	$("#barra-fechas-siento .dia-semana, #barra-fechas-siento-txt .dia-semana").html(fecha.dia_semana.toUpperCase());
+	$("#barra-fechas-siento .dia-mes, #barra-fechas-siento-txt .dia-mes").html(fecha.dia);
+	$("#barra-fechas-siento .mes, #barra-fechas-siento-txt .mes").html(fecha.mes.toUpperCase());
+	$("#barra-fechas-siento .anio, #barra-fechas-siento-txt .anio").html(fecha.anio);
 	infoSiento(attr,function(obj){
 		
 		$("#contenedor-datos-siento img").attr("src", obj.imagen);
@@ -732,7 +748,11 @@ function cargarSiento(attr, fechaForm, callback){
 		$("#pagina-siento .sub-activa").each(function(){
 			$(this).removeClass("sub-activa");
 		});
-		$("#modal-siento-estrella").addClass("sub-activa").transition({x:0});
+		if(pagina == "estrella"){
+			$("#modal-siento-estrella").addClass("sub-activa").transition({x:0});
+		}else if(pagina == "texto"){
+			$("#modal-siento-notas").addClass("sub-activa").transition({x:0});
+		}
 		cargarSientoActual(fechaForm, attr);
 		callback("pagina-siento");
 	});
@@ -780,7 +800,7 @@ function inicializarContenido(){
 	syncDetalles();
 	inicializarFooter(new Date());
 
-	$("#slider-dias-lunas div").on("click", function(e){
+	$("#slider-dias-lunas div").on("tap", function(e){
 		if(!objetoLunas.movimiento && !$(this).hasClass('contenedor-fecha-activa')){
 			var anchoIndiv = physicalScreenWidth/7;
 			var orden = $("#slider-dias-lunas .contenedor-fecha-activa").attr("data-orden");
@@ -796,7 +816,7 @@ function inicializarAcercaDe(){
 	db.transaction(function(tx){	
 		tx.executeSql("SELECT * FROM categorias c LEFT JOIN posts p ON c.id_categoria=p.id_categoria WHERE c.nombre ='Acerca de';", [] , function(tx, results){
 			console.log(results);
-			$("#pagina-acerca-de p").html(results.rows[0].contenido);
+			$("#pagina-acerca-de p").html(results.rows.item(0).contenido);
 		}, function(tx, err){
 			console.log(err);
 		});
@@ -1253,10 +1273,10 @@ function continuarGuardarCategorias(tx, results, categoria){
 }
 
 function guardarImgPost(post, imagen){
-	/*window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+	window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
  	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem){
  		successImgPost(fileSystem, post, imagen);
- 	}, fail); /**/ //ACTIVAR PARA MOVIL
+ 	}, fail);  //ACTIVAR PARA MOVIL
 }
 
 function successImgPost(fileSystem, post, imagen){
@@ -1295,8 +1315,8 @@ function inicializarFooter(fecha){
 	});
 	recuperarSubPostsFooter(moona.etapa);*/
 	recuperarPost("virgen", function(res){							//CAMBIAR POR LINEAS DE ARRIBA CUANDO SE PUBLIQUEN 
-		$("#contenedor-mooona-principal img").attr("src", res[0].imgPath);	//TODOS LOS POSTS
-		$("#contenedor-mooona-principal h4").html(res[0].contenido);		//
+		$("#contenedor-mooona-principal img").attr("src", res.item(0).imgPath);	//TODOS LOS POSTS
+		$("#contenedor-mooona-principal h4").html(res.item(0).contenido);		//
 	});																	//
 	recuperarSubPostsFooter("virgen", fecha); 									// 
 
@@ -1367,16 +1387,17 @@ function recuperarSubPostsFooter(etapa, fecha){
 
 function recuperarSubPostsFoco(etapa){
 	recuperarPost("foco-" + etapa, function(res){
-		$("#pagina-foco-principal h2").html(res[0].descripcion);
-		$("#pagina-foco-principal p").html(res[0].contenido);
-		$("#selector-detalles-foco img").attr("src", res[0].imgPath);
+		$("#pagina-foco-principal h2").html(res.item(0).descripcion);
+		$("#pagina-foco-principal p").html(res.item(0).contenido);
+		$("#selector-detalles-foco img").attr("src", res.item(0).imgPath);
 	});
 }
 
 function recuperarSubPostsManzana(etapa, fecha){
 	$("#fechas-manzana, #contenedor-tips, #contenedor-alimentos").html("");
 	recuperarPost("manzana-" + etapa, function(res){
-		$("#selector-detalles-manzana img").attr("src", res[0].imgPath);
+		//alert(JSON.stringify(res.item(0)));
+		$("#selector-detalles-manzana img").attr("src", res.item(0).imgPath);
 		recuperarDivLunas(etapa, fecha);
 		switch(etapa){
 			case "madre": 
@@ -1392,11 +1413,10 @@ function recuperarSubPostsManzana(etapa, fecha){
 				var descEtapa = "Pre-ovulación";
 				break;
 		}
-
-		recuperarTipsManzana(res[0].id_categoria);
+		recuperarTipsManzana(res.item(0).id_categoria);
 
 		$("#pagina-manzana-principal h2").html(descEtapa);
-		$("#pagina-manzana-principal .contenedor-info-manzana p").html(res[0].contenido);
+		$("#pagina-manzana-principal .contenedor-info-manzana p").html(res.item(0).contenido);
 		$("#pagina-manzana-principal h1 span").html(etapa);
 	});
 }
@@ -1404,32 +1424,33 @@ function recuperarSubPostsManzana(etapa, fecha){
 function recuperarTipsManzana(ID){
 	db.transaction(function(tx){
 		tx.executeSql('SELECT * FROM categorias WHERE padre = "' +  ID + '"', [], function(tx, results){
-			$.each(results.rows, function(key, val){
-				recuperarPost(val.nombre, function(res){
-					$.each(res, function(key2, val2){
-						var html = "<div id='" + val2.nombre + "' class='contenedor-tip'>";
+			for(var ii = 0; ii < results.rows.length; ii++){
+				recuperarPost(results.rows.item(ii).nombre, function(res){
+					for(var jj = 0; jj < res.length; jj++){
+						var html = "<div id='" + res.item(jj).nombre + "' class='contenedor-tip'>";
 						html += "<div class='titulo'>";
-						html += "<img class='logo' src='" + val2.imgPath + "'/>";
-						html += "<h2>" + val2.titulo + "</h2>";
+						html += "<img class='logo' src='" + res.item(jj).imgPath + "'/>";
+						html += "<h2>" + res.item(jj).titulo + "</h2>";
 						html += "<span>+</span>";
 						html += "</div>";
-						html += "<p>" + val2.resumen + "</p>";
-						html += "<input type='hidden' class='contenido-completo' value='" + val2.contenido + "'/>";
+						html += "<p>" + res.item(jj).resumen + "</p>";
+						html += "<input type='hidden' class='contenido-completo' value='" + res.item(jj).contenido + "'/>";
 						html += "</div>";
-						if(val2.nombre.indexOf('alimentos') !== -1){
+						if(res.item(jj).nombre.indexOf('alimentos') !== -1){
 							$("#contenedor-alimentos").append(html);
 						}else{
 							$("#contenedor-tips").append(html);
 						}
-					});
+					}
 
 				});
-			});
+			}
 		},funcionErrorBase2);
 	}, errorRecuperarPost);
 }
 
 function recuperarDivLunas(etapa, fecha){
+
 	var fechasFase = recuperarFechasFaseAct(etapa, fecha);
 	var cnt = 0;
 	$.each(fechasFase.fechas, function(key, val){
@@ -1452,46 +1473,46 @@ function recuperarDivLunas(etapa, fecha){
 
 function recuperarSubPostsArpa(etapa){
 	recuperarPost("arpa-" + etapa, function(res){
-		$("#pagina-arpa-principal h2").html(res[0].descripcion);
-		$("#pagina-arpa-principal .contenido-arpa p").html(res[0].contenido);
-		$("#selector-detalles-arpa img").attr("src", res[0].imgPath);
+		$("#pagina-arpa-principal h2").html(res.item(0).descripcion);
+		$("#pagina-arpa-principal .contenido-arpa p").html(res.item(0).contenido);
+		$("#selector-detalles-arpa img").attr("src", res.item(0).imgPath);
 	});
 	recuperarPost("diosa-" + etapa, function(res){
 		var cnt = 1;
-		$.each(res, function(key, diosa){
-			$(".contenedor-diosas  #diosa-" + cnt + " h5").html(diosa.titulo);
-			$(".contenedor-diosas  #diosa-" + cnt + " h6").html(diosa.descripcion);
-			$(".contenedor-diosas  #diosa-" + cnt + " .contenido").val(diosa.contenido);
-			$("#pagina-arpa-principal #diosa-" + cnt + " img").attr("src", diosa.imgPath);
+		for(var ii = 0; ii < res.length; ii++ ){
+
+			$(".contenedor-diosas  #diosa-" + ii + " h5").html(res.item(ii).titulo);
+			$(".contenedor-diosas  #diosa-" + ii + " h6").html(res.item(ii).descripcion);
+			$(".contenedor-diosas  #diosa-" + ii + " .contenido").val(res.item(ii).contenido);
+			$("#pagina-arpa-principal #diosa-" + ii + " img").attr("src", res.item(ii).imgPath);
 			//$("#pagina-arpa-principal #diosa-" + cnt + " h5").attr("src", diosa.imgPath);
-			cnt++;
-		});
+		}
 	});
 
 }
 function recuperarSubPostsPesa(etapa){
 	recuperarPost("pesa-" + etapa, function(res){
-		$("#pagina-pesa-principal h2").html(res[0].descripcion);
-		$("#pagina-pesa-principal img").attr("src", res[0].imgPathExtra);
-		$("#pagina-pesa-principal p").html(res[0].contenido);
-		$("#selector-detalles-pesa img").attr("src", res[0].imgPath);
+		$("#pagina-pesa-principal h2").html(res.item(0).descripcion);
+		$("#pagina-pesa-principal img").attr("src", res.item(0).imgPathExtra);
+		$("#pagina-pesa-principal p").html(res.item(0).contenido);
+		$("#selector-detalles-pesa img").attr("src", res.item(0).imgPath);
 	});
 }
 function recuperarSubPostsFlor(etapa){
 	recuperarPost("flor-" + etapa, function(res){
-		$("#selector-detalles-flor img").attr("src", res[0].imgPath);
-		$("#pagina-flor-principal .contenido-flor p").html(res[0].contenido);
+		$("#selector-detalles-flor img").attr("src", res.item(0).imgPath);
+		$("#pagina-flor-principal .contenido-flor p").html(res.item(0).contenido);
 	});
 
 	recuperarPost("fertilidad biologica", function(res){
-		$("#boton-fertilidad-biologica img").attr("src", res[0].imgPath);
-		$("#boton-fertilidad-biologica h5").html(res[0].titulo);
+		$("#boton-fertilidad-biologica img").attr("src", res.item(0).imgPath);
+		$("#boton-fertilidad-biologica h5").html(res.item(0).titulo);
 		$("#boton-fertilidad-biologica .contenido").val(recuperarFertilidadBiologica());
 
 	});
 	recuperarPost("fertilidad lunar", function(res){
-		$("#boton-fertilidad-lunar img").attr("src", res[0].imgPath);
-		$("#boton-fertilidad-lunar h5").html(res[0].titulo);
+		$("#boton-fertilidad-lunar img").attr("src", res.item(0).imgPath);
+		$("#boton-fertilidad-lunar h5").html(res.item(0).titulo);
 		$("#boton-fertilidad-lunar .contenido").val(recuperarFertilidadLunar());
 	});
 }
@@ -1511,7 +1532,7 @@ function recuperarFertilidadLunar(){
 
 function continuacionRecuperarPostPrincipal(tx, contador){
 }
-function funcionErrorBase2(tx, err){
+function funcionErrorBase2(err){
 	alert("1: ERROR-" + err.code + ": " + err.message);
 }
 

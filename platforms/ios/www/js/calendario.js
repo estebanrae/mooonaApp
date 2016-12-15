@@ -212,7 +212,9 @@ function generarEventos(tx, results, fecha){
 		$(".mensaje-eventos").show();
 	}else{
 		var html = '';
-		$.each(results.rows, function(key, result){
+		for(var ii = 0; ii < results.rows.length; ii++){
+			var result = results.rows.item(ii);
+		//$.each(results.rows, function(key, result){
 			html += '<div class="evento evento-cerrado" data-id="' + result.idEvento + '" id="evento-' + result.idEvento + '"><img src="img/diosa-' + calculoFechasMooona(fecha).etapa + '.png" class="icono-evento"/><h1>' + result.titulo + '</h1><div class="flechita-evento"></div>';
 			if(result.descripcion !== ''){
 				html += '<h2>' + result.descripcion + '</h2>';
@@ -242,7 +244,7 @@ function generarEventos(tx, results, fecha){
 				//'De ' + arrCHora[0] + ':' + arrCHora[1] + ' a ' + arrTHora[0] + ':' + arrTHora[1] + ' Hrs</p>';
 			html += '<h3 class="boton-editar">Editar</h3>'	+ '<img src="img/basurero.png" class="boton-eliminar"/><input type="hidden" class="info-fecha-inicio" value="' + result.fechaInicio + '"><input type="hidden" class="info-fecha-final" value="' + result.fechaFin + '"><input type="hidden" class="repeticion-evento" value="' + result.repeticion + '" /></div><!--/plegable-evento--></div><!--/evento-->';
 
-		});
+		}
 
 		$("#eventos-actuales").html(html);
 
@@ -569,9 +571,9 @@ function guardarFechaEvento(tx, datos, idEvento, callback){
 					jj++;
 					if(jj == 365){
 						tx.executeSql("SELECT * FROM fechas_calendario WHERE idEvento = " + idEvento, [], function(tx, res){
-							$.each(res.rows, function(key, val){
-								datosBase.push(val);
-							});
+							for(var kk = 0; kk < res.rows.length; kk++){
+								datosBase.push(res.rows.item(kk));
+							}
 							callback("insert", "fechas_calendario", datosBase);
 						}, function(tx, err){
 							console.log("Hubo un error 471");
@@ -592,9 +594,9 @@ function guardarFechaEvento(tx, datos, idEvento, callback){
 					jj++;
 					if(jj == 53){
 						tx.executeSql("SELECT * FROM fechas_calendario WHERE idEvento = " + idEvento, [], function(tx, res){
-							$.each(res.rows, function(key, val){
-								datosBase.push(val);
-							});
+							for(var kk = 0; kk < res.rows.length; kk++){
+								datosBase.push(res.rows.item(kk));
+							}
 							callback("insert", "fechas_calendario", datosBase);
 						}, function(tx, err){
 							console.log("Hubo un error 471");
@@ -615,9 +617,9 @@ function guardarFechaEvento(tx, datos, idEvento, callback){
 					jj++;
 					if(jj == 20){
 						tx.executeSql("SELECT * FROM fechas_calendario WHERE idEvento = " + idEvento, [], function(tx, res){
-							$.each(res.rows, function(key, val){
-								datosBase.push(val);
-							});
+							for(var kk = 0; kk < res.rows.length; kk++){
+								datosBase.push(res.rows.item(kk));
+							}
 							callback("insert", "fechas_calendario", datosBase);
 						}, function(tx, err){
 							console.log("Hubo un error 471");
